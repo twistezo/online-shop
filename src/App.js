@@ -1,27 +1,31 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+
+import "./App.css";
+
+import Data from "./data/Data";
+import Layout from "./components/Layout";
 
 class App extends Component {
+  static dataQuantity = 20;
+
+  constructor() {
+    super();
+    this.data = {
+      items: [],
+      categories: []
+    };
+    this.generateData();
+  }
+
+  generateData() {
+    const data = new Data();
+    data.generate(App.dataQuantity);
+    this.data.items = data.getItems();
+    this.data.categories = data.getCategories();
+  }
+
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+    return <Layout data={this.data} />;
   }
 }
 

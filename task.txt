@@ -1,0 +1,23 @@
+Development task:
+Design and implement modern frontend application for online shop. Resulting application should be available and fully functional on both desktops and mobile devices.
+
+Assume that backend server has everything you need (you can stub out backend calls if you need). Also there is no need to implement a login mechanism and users management capabilities. Simply assume there is only one, an anonymous user.
+
+Core requirements:
+- view, navigate, search and filter through product list, categories.
+- view products details (product details, photos, reviews)
+- add products to cart
+- view cart and checkout (with all the details: address, payments, delivery options)
+- summary/confirmation page
+
+Please keep in mind future development and project maintenance.
+
+Questions (answers in English please):
+1) Explain your choices regarding stack used as well as alternatives and their pros and cons
+2) How would you go with application internationalisation?
+3) What could impact this application's performance most in longer term and what would be your ways to optimize it?
+4) What if you had to make it work on lower-end devices? What trade-offs would have to be made?
+5) How would you report and collect errors from application?
+6) How long did it take you to code this app?
+
+Please write answers in the ReadMe file in your repositor
