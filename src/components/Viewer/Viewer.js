@@ -5,14 +5,14 @@ import CustomPagination from "./CustomPagination";
 import CustomCardGroups from "./CustomCardGroups";
 
 const style = {
-  backgroundColor: "lightGray"
+  backgroundColor: "lightGray",
+  padding: "15px 15px 15px 15px"
 };
 
 class Viewer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: this.props.items,
       cardsData: {
         rows: 2,
         columns: 2,
@@ -32,11 +32,11 @@ class Viewer extends Component {
     return (
       <Container style={style}>
         <CustomCardGroups
-          items={this.state.items}
+          items={this.props.filteredItems}
           cardsData={this.state.cardsData}
         />
         <CustomPagination
-          itemsLength={this.state.items.length}
+          itemsLength={this.props.filteredItems.length}
           cardsData={this.state.cardsData}
           onItemClick={this.handleActivepage}
         />

@@ -2,18 +2,10 @@ import React, { Component } from "react";
 import { Pagination } from "react-bootstrap";
 
 class CustomPagination extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      itemsLength: props.itemsLength,
-      cardsData: props.cardsData
-    };
-  }
-
   getFirstItemNumOnActivePage() {
-    let itemsPerPage = this.state.cardsData.rows * this.state.cardsData.columns;
-    let activePage = this.state.cardsData.activePage;
-    let firstItemOnActivePage = this.state.cardsData.firstItemNumOnActivePage;
+    let itemsPerPage = this.props.cardsData.rows * this.props.cardsData.columns;
+    let activePage = this.props.cardsData.activePage;
+    let firstItemOnActivePage = this.props.cardsData.firstItemNumOnActivePage;
 
     if (activePage === 0) {
       firstItemOnActivePage = 0;
@@ -26,24 +18,24 @@ class CustomPagination extends Component {
   getPagesLen() {
     return (
       Math.ceil(
-        this.state.itemsLength /
-          (this.state.cardsData.rows * this.state.cardsData.columns)
+        this.props.itemsLength /
+          (this.props.cardsData.rows * this.props.cardsData.columns)
       ) - 1
     );
   }
 
   handleFirstPage = () => {
-    let cardsData = this.state.cardsData;
+    let cardsData = this.props.cardsData;
     this.handlePrevNextPage(cardsData, 0);
   };
 
   handleLastPage = () => {
-    let cardsData = this.state.cardsData;
+    let cardsData = this.props.cardsData;
     this.handlePrevNextPage(cardsData, this.getPagesLen());
   };
 
   handlePrevPage = () => {
-    let cardsData = this.state.cardsData;
+    let cardsData = this.props.cardsData;
     if (cardsData.activePage > 0) {
       let newActivPage = cardsData.activePage - 1;
       this.handlePrevNextPage(cardsData, newActivPage);
@@ -51,7 +43,7 @@ class CustomPagination extends Component {
   };
 
   handleNextPage = () => {
-    let cardsData = this.state.cardsData;
+    let cardsData = this.props.cardsData;
     if (cardsData.activePage < this.getPagesLen()) {
       let newActivPage = cardsData.activePage + 1;
       this.handlePrevNextPage(cardsData, newActivPage);
@@ -63,15 +55,12 @@ class CustomPagination extends Component {
     cardsData.firstItemNumOnActivePage = this.getFirstItemNumOnActivePage(
       newActivPage
     );
-    this.setState(() => ({
-      cardsData
-    }));
     this.props.onItemClick(cardsData);
   }
 
   render() {
-    let isFirstPage = this.state.cardsData.activePage === 0;
-    let isLastPage = this.state.cardsData.activePage === this.getPagesLen();
+    let isFirstPage = this.props.cardsData.activePage === 0;
+    let isLastPage = this.props.cardsData.activePage === this.getPagesLen();
     return (
       <div>
         <Pagination>
@@ -84,7 +73,7 @@ class CustomPagination extends Component {
             onClick={this.handlePrevPage}
           />
           <Pagination.Item active>
-            {this.state.cardsData.activePage + 1}
+            {this.props.cardsData.activePage + 1}
           </Pagination.Item>
           <Pagination.Ellipsis disabled />
           <Pagination.Item onClick={this.handleLastPage}>

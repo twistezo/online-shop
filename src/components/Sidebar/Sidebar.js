@@ -4,7 +4,8 @@ import CategoryList from "./CategoryList";
 import FilterList from "./FilterList";
 
 const style = {
-  backgroundColor: "lightGray"
+  backgroundColor: "lightGray",
+  padding: "15px 15px 15px 15px"
 };
 
 class Sidebar extends Component {
@@ -37,20 +38,38 @@ class Sidebar extends Component {
       .getFilters();
   }
 
+  resetFilters(filters) {
+    filters.forEach(f => {
+      f.setState(false);
+    });
+  }
+
   handleClickOnCategory = activeCategory => {
+    let filters = this.getFiltersFromActiveCategory(
+      this.state.categories,
+      activeCategory
+    );
+    if (this.state.activeCategory !== activeCategory) {
+      this.resetFilters(filters);
+    }
     this.setState(() => ({
       activeCategory,
-      filters: this.getFiltersFromActiveCategory(
-        this.state.categories,
-        activeCategory
-      )
-    }));
-  };
-
-  handleClickOnFilter = filters => {
-    this.setState(() => ({
       filters
     }));
+    this.props.onSidebarChange(activeCategory, filters);
+  };
+
+  handleClickOnFilter = filterToSwitch => {
+    let newFilters = this.state.filters;
+    newFilters
+      .find(f => {
+        return f.name === filterToSwitch;
+      })
+      .switchState();
+    this.setState(() => ({
+      filters: newFilters
+    }));
+    this.props.onSidebarChange(this.state.activeCategory);
   };
 
   render() {

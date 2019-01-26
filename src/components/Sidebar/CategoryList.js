@@ -6,21 +6,21 @@ class CategoryList extends Component {
     super(props);
     this.state = {
       data: props.data,
-      activeItem: null
+      activeCategory: null
     };
   }
 
-  handleClick = activeItem => {
-    this.props.onItemClick(activeItem);
+  handleClick = activeCategory => {
     this.setState(() => ({
-      activeItem
+      activeCategory
     }));
+    this.props.onItemClick(activeCategory);
   };
 
   handleActive(value, index) {
     if (
-      this.state.activeItem === value ||
-      (this.state.activeItem === null && index === 0)
+      this.state.activeCategory === value ||
+      (this.state.activeCategory === null && index === 0)
     )
       return "active";
   }

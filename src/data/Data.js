@@ -74,6 +74,10 @@ class Item {
     return this.price;
   }
 
+  getCategory() {
+    return this.category;
+  }
+
   getDescription() {
     return this.description;
   }
@@ -102,6 +106,14 @@ class Filter {
 
   getName() {
     return this.name;
+  }
+
+  getState() {
+    return this.state;
+  }
+
+  setState(state) {
+    this.state = state;
   }
 
   switchState() {
