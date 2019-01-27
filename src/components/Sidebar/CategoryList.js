@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { ListGroup } from "react-bootstrap";
 
 class CategoryList extends Component {
@@ -29,5 +30,11 @@ class CategoryList extends Component {
     ));
   }
 }
+
+CategoryList.propTypes = {
+  categoriesNames: PropTypes.arrayOf(PropTypes.string),
+  activeCategory: PropTypes.string,
+  onItemClick: PropTypes.func
+};
 
 export default CategoryList;

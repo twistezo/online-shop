@@ -1,8 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Container } from "react-bootstrap";
-
 import Pagination from "./Pagination";
 import CardGroups from "./CardGroups";
+import { Item } from "../../data/DataGenerator";
 
 const style = {
   backgroundColor: "lightGray",
@@ -49,5 +50,12 @@ class Viewer extends Component {
     );
   }
 }
+
+Viewer.propTypes = {
+  viewerRows: PropTypes.number,
+  viewerColumns: PropTypes.number,
+  filteredItems: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
+  onItemClick: PropTypes.func
+};
 
 export default Viewer;

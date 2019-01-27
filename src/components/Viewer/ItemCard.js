@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { Item } from "../../data/DataGenerator";
 
 class ItemCard extends Component {
   constructor(props) {
@@ -45,5 +47,10 @@ class ItemCard extends Component {
     );
   }
 }
+
+ItemCard.propTypes = {
+  item: PropTypes.instanceOf(Item),
+  onItemClick: PropTypes.func
+};
 
 export default ItemCard;

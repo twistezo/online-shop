@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Pagination as BootstrapPagination } from "react-bootstrap";
 
 class Pagination extends Component {
@@ -88,5 +89,16 @@ class Pagination extends Component {
     );
   }
 }
+
+Pagination.propTypes = {
+  itemsLength: PropTypes.number,
+  cardsData: PropTypes.shape({
+    rows: PropTypes.number,
+    columns: PropTypes.number,
+    activePage: PropTypes.number,
+    firstItemNumOnActivePage: PropTypes.num
+  }),
+  onItemClick: PropTypes.func
+};
 
 export default Pagination;

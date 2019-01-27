@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Row, Col, Button, Container, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -57,5 +58,11 @@ class Menu extends Component {
     );
   }
 }
+
+Menu.propTypes = {
+  searchValue: PropTypes.string,
+  onSearchChange: PropTypes.func,
+  onHomeClick: PropTypes.func
+};
 
 export default Menu;

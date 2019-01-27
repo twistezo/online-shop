@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-class Cart extends Component {
+import PropTypes from "prop-types";
+import { Item } from "../data/DataGenerator";
+
+class ItemDetails extends Component {
   render() {
     return (
       <div>
@@ -16,4 +19,8 @@ class Cart extends Component {
   }
 }
 
-export default Cart;
+ItemDetails.propTypes = {
+  item: PropTypes.instanceOf(Item)
+};
+
+export default ItemDetails;

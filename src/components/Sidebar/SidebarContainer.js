@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Container, Form, ListGroup } from "react-bootstrap";
 import CategoryList from "./CategoryList";
 import FeatureList from "./FeatureList";
+import { Category } from "../../data/DataGenerator";
 
 const style = {
   backgroundColor: "lightGray",
@@ -79,5 +81,11 @@ class SidebarContainer extends Component {
     );
   }
 }
+
+SidebarContainer.propTypes = {
+  categories: PropTypes.arrayOf(PropTypes.instanceOf(Category)),
+  activeCategory: PropTypes.string,
+  onSidebarChange: PropTypes.func
+};
 
 export default SidebarContainer;

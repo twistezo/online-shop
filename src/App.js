@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-
-import "./App.css";
-
-import Data from "./data/Data";
+import { DataGenerator } from "./data/DataGenerator";
 import Layout from "./components/Layout";
+import "./App.css";
 
 class App extends Component {
   static dataQuantity = 200;
@@ -18,10 +16,10 @@ class App extends Component {
   }
 
   generateData() {
-    const data = new Data();
-    data.generate(App.dataQuantity);
-    this.data.items = data.getItems();
-    this.data.categories = data.getCategories();
+    const dataGenerator = new DataGenerator();
+    dataGenerator.generate(App.dataQuantity);
+    this.data.items = dataGenerator.getItems();
+    this.data.categories = dataGenerator.getCategories();
   }
 
   render() {

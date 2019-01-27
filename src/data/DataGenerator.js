@@ -7,7 +7,7 @@ import {
 import uuidv1 from "uuid/v1";
 import Chance from "chance";
 
-class Data {
+class DataGenerator {
   constructor() {
     this.data = [];
     this.categories = [
@@ -103,4 +103,4 @@ class Feature {
   }
 }
 
-export default Data;
+export { DataGenerator, Item, Category, Feature };

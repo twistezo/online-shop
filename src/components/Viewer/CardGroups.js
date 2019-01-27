@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { CardGroup as BootstrapCardGroup } from "react-bootstrap";
 import ItemCard from "./ItemCard";
+import { Item } from "../../data/DataGenerator";
 
 class CardGroups extends Component {
   handleItemClick = item => {
@@ -40,5 +42,15 @@ class CardGroups extends Component {
     return <this.CardGroups />;
   }
 }
+
+CardGroups.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
+  cardsData: PropTypes.shape({
+    rows: PropTypes.number,
+    columns: PropTypes.number,
+    activePage: PropTypes.number,
+    firstItemNumOnActivePage: PropTypes.num
+  })
+};
 
 export default CardGroups;

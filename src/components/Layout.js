@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import DataFilter from "./DataFilter";
@@ -7,6 +8,7 @@ import ViewerContainer from "./Viewer/ViewerContainer";
 import ItemDetails from "./ItemDetails";
 import Menu from "./Menu";
 import Cart from "./Cart";
+import { Item, Category } from "../data/DataGenerator";
 
 class Layout extends Component {
   constructor(props) {
@@ -198,5 +200,12 @@ class Layout extends Component {
     );
   }
 }
+
+Layout.propTypes = {
+  data: PropTypes.shape({
+    items: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
+    categories: PropTypes.arrayOf(PropTypes.instanceOf(Category))
+  })
+};
 
 export default Layout;
