@@ -1,44 +1,54 @@
 import {
   randomBetween,
   roundToTwoDecimalPlaces,
-  randomArrayItem
+  randomArrayItem,
+  arrayFromArrayRandomItems
 } from "./Utils";
 import uuidv1 from "uuid/v1";
+import Chance from "chance";
 
 class Data {
   constructor() {
     this.data = [];
     this.categories = [
       new Category("Category 0", [
-        new Filter("C0 filter 0"),
-        new Filter("C0 filter 1"),
-        new Filter("C0 filter 2")
+        new Feature("C0 feature 0"),
+        new Feature("C0 feature 1"),
+        new Feature("C0 feature 2")
       ]),
       new Category("Category 1", [
-        new Filter("C1 filter 0"),
-        new Filter("C1 filter 1"),
-        new Filter("C1 filter 2"),
-        new Filter("C1 filter 3")
+        new Feature("C1 feature 0"),
+        new Feature("C1 feature 1"),
+        new Feature("C1 feature 2"),
+        new Feature("C1 feature 3")
       ]),
       new Category("Category 2", [
-        new Filter("C2 filter 0"),
-        new Filter("C2 filter 1"),
-        new Filter("C2 filter 2"),
-        new Filter("C2 filter 3"),
-        new Filter("C2 filter 4")
+        new Feature("C2 feature 0"),
+        new Feature("C2 feature 1"),
+        new Feature("C2 feature 2"),
+        new Feature("C2 feature 3"),
+        new Feature("C2 feature 4")
       ])
     ];
   }
 
   generate(quantity) {
+    let chance = new Chance();
     for (let i = 0; i < quantity; i++) {
+      let category = randomArrayItem(this.categories);
       this.data.push(
         new Item(
           uuidv1(),
-          "Product " + i,
+          chance.capitalize(chance.word({ syllables: 2, lenth: 6 })) + " #" + i,
           roundToTwoDecimalPlaces(randomBetween(1, 1000)),
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut diam magna.",
-          randomArrayItem(this.categories)
+          chance.sentence(),
+          category.getName(),
+          arrayFromArrayRandomItems(
+            category.getFeatures().map(f => f.getName())
+          ),
+          "https://avatars.dicebear.com/v2/identicon/" +
+            chance.word({ length: 15 }) +
+            ".svg"
         )
       );
     }
@@ -54,12 +64,22 @@ class Data {
 }
 
 class Item {
-  constructor(id, name, price, description, category) {
+  constructor(
+    id,
+    name,
+    price,
+    description,
+    categoryName,
+    featuresNames,
+    imageSrc
+  ) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.description = description;
-    this.category = category;
+    this.categoryName = categoryName;
+    this.featuresNames = featuresNames;
+    this.imageSrc = imageSrc;
   }
 
   getId() {
@@ -74,31 +94,39 @@ class Item {
     return this.price;
   }
 
-  getCategory() {
-    return this.category;
-  }
-
   getDescription() {
     return this.description;
+  }
+
+  getCategoryName() {
+    return this.categoryName;
+  }
+
+  getFeaturesNames() {
+    return this.featuresNames;
+  }
+
+  getImageSrc() {
+    return this.imageSrc;
   }
 }
 
 class Category {
-  constructor(name, filters) {
+  constructor(name, features) {
     this.name = name;
-    this.filters = filters;
+    this.features = features;
   }
 
   getName() {
     return this.name;
   }
 
-  getFilters() {
-    return this.filters;
+  getFeatures() {
+    return this.features;
   }
 }
 
-class Filter {
+class Feature {
   constructor(name) {
     this.name = name;
     this.state = false;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Pagination } from "react-bootstrap";
+import { Pagination as BootstrapPagination } from "react-bootstrap";
 
-class CustomPagination extends Component {
+class Pagination extends Component {
   getFirstItemNumOnActivePage() {
     let itemsPerPage = this.props.cardsData.rows * this.props.cardsData.columns;
     let activePage = this.props.cardsData.activePage;
@@ -63,30 +63,30 @@ class CustomPagination extends Component {
     let isLastPage = this.props.cardsData.activePage === this.getPagesLen();
     return (
       <div>
-        <Pagination>
-          <Pagination.First
+        <BootstrapPagination>
+          <BootstrapPagination.First
             disabled={isFirstPage}
             onClick={this.handleFirstPage}
           />
-          <Pagination.Prev
+          <BootstrapPagination.Prev
             disabled={isFirstPage}
             onClick={this.handlePrevPage}
           />
-          <Pagination.Item active>
+          <BootstrapPagination.Item active>
             {this.props.cardsData.activePage + 1}
-          </Pagination.Item>
-          <Pagination.Ellipsis disabled />
-          <Pagination.Item onClick={this.handleLastPage}>
+          </BootstrapPagination.Item>
+          <BootstrapPagination.Ellipsis disabled />
+          <BootstrapPagination.Item onClick={this.handleLastPage}>
             {this.getPagesLen() + 1}
-          </Pagination.Item>
-          <Pagination.Next
+          </BootstrapPagination.Item>
+          <BootstrapPagination.Next
             disabled={isLastPage}
             onClick={this.handleNextPage}
           />
-        </Pagination>
+        </BootstrapPagination>
       </div>
     );
   }
 }
 
-export default CustomPagination;
+export default Pagination;

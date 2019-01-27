@@ -1,27 +1,52 @@
+import { arrayContainsAllElementsFromAnother } from "../data/Utils";
+
 class DataFilter {
-  constructor(initialItems, activeCategory, filters) {
+  constructor(initialItems) {
     this.initialItems = initialItems;
-    this.activeCategory = activeCategory;
-    this.filters = filters;
   }
 
-  filter() {
-    // console.log(this.initialItems);
-    // console.log(this.activeCategory);
-    // console.log(this.filters);
+  filterByCategoryAndFeature(activeCategory, activeFeatures) {
+    let allFeaturesAreOff = activeFeatures.every(
+      filter => filter.getState() === false
+    );
 
-    let initialItems = this.initialItems;
+    if (allFeaturesAreOff) {
+      return Object.values(
+        this.initialItems.filter(item => {
+          return item.getCategoryName() === activeCategory;
+        })
+      );
+    } else {
+      return this.initialItems.filter(item => {
+        return (
+          arrayContainsAllElementsFromAnother(
+            item.getFeaturesNames(),
+            activeFeatures
+              .filter(f => f.getState() === true)
+              .map(f => f.getName())
+          ) && item.getCategoryName() === activeCategory
+        );
+      });
+    }
+  }
 
-    // let allFiltersAreOff = this.filters.every(
-    //   filter => filter.getState() === false
-    // );
-
-    // if (allFiltersAreOff) {
-    let a = initialItems.filter(item => {
-      return item.getCategory().getName() === this.activeCategory;
-    });
-    return Object.values(a);
-    // }
+  filterBySearchValue(value) {
+    let searchedValue = value.toLowerCase();
+    return this.initialItems.filter(
+      item =>
+        item
+          .getName()
+          .toLowerCase()
+          .startsWith(searchedValue) ||
+        item
+          .getDescription()
+          .toLowerCase()
+          .startsWith(searchedValue) ||
+        item
+          .getPrice()
+          .toString()
+          .startsWith(searchedValue)
+    );
   }
 }
 

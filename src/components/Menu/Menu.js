@@ -19,6 +19,7 @@ class Menu extends Component {
       searchValue: event.target.value
     }));
     this.props.onSearchChange(event.target.value);
+    event.persist();
     event.preventDefault();
   };
 

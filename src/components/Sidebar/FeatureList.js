@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Form } from "react-bootstrap";
 
-class FilterList extends Component {
-  handleClick = filterName => {
-    this.props.onItemClick(filterName);
+class FeatureList extends Component {
+  handleClick = featureName => {
+    this.props.onItemClick(featureName);
   };
 
   render() {
@@ -20,4 +20,4 @@ class FilterList extends Component {
   }
 }
 
-export default FilterList;
+export default FeatureList;

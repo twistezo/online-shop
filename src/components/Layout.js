@@ -15,61 +15,63 @@ class Layout extends Component {
       },
       receivedData: {
         searchValue: "",
-        activeCategory: props.data.categories[0].getName(),
-        filters: []
+        activeCategory: "",
+        activeFeatures: []
       },
       filteredData: {
-        items: props.data.items
+        items: this.filterByCategoryAndFeature(
+          props.data.items,
+          props.data.categories[0].getName(),
+          []
+        )
       }
     };
   }
 
-  // handleSearchChange = searchValue => {
-  //   let receivedData = this.state.receivedData;
-  //   receivedData.searchValue = searchValue;
-  //   let filteredData = this.filterData(
-  //     this.state.initialData.items,
-  //     this.state.filteredData.activeCategory,
-  //     this.state.filteredData.filters
-  //   );
-  //   this.setState(() => ({
-  //     receivedData,
-  //     filteredData
-  //   }));
-  //   console.log("handleSearchChange");
-  // };
-
-  handleSidebarChange = (activeCategory, filters) => {
+  handleSearchChange = searchValue => {
     let receivedData = this.state.receivedData;
-    receivedData.activeCategory = activeCategory;
-    receivedData.filters = filters;
-    // let filteredData = this.filterData(activeCategory, filters);
+    receivedData.searchValue = searchValue;
 
     let filteredData = this.state.filteredData;
-    filteredData.items = new DataFilter(
+    filteredData.items = this.filterBySearchValue(
       this.state.initialData.items,
-      activeCategory,
-      filters
-    ).filter();
+      searchValue
+    );
 
     this.setState(() => ({
       receivedData,
       filteredData
     }));
-    // console.log(
-    //   "--handleSidebarChange " + this.state.filteredData.items.length
-    // );
   };
 
-  // filterData(activeCategory, filters) {
-  //   let filteredData = this.state.filteredData;
-  //   filteredData.items = new DataFilter(
-  //     this.state.initialData.items,
-  //     activeCategory,
-  //     filters
-  //   ).filter();
-  //   return filteredData;
-  // }
+  handleSidebarChange = (activeCategory, activeFeatures) => {
+    let receivedData = this.state.receivedData;
+    receivedData.activeCategory = activeCategory;
+    receivedData.activeFeatures = activeFeatures;
+
+    let filteredData = this.state.filteredData;
+    filteredData.items = this.filterByCategoryAndFeature(
+      this.state.initialData.items,
+      activeCategory,
+      activeFeatures
+    );
+
+    this.setState(() => ({
+      receivedData,
+      filteredData
+    }));
+  };
+
+  filterByCategoryAndFeature(initialItems, activeCategory, activefeatures) {
+    return new DataFilter(initialItems).filterByCategoryAndFeature(
+      activeCategory,
+      activefeatures
+    );
+  }
+
+  filterBySearchValue(initialItems, itemName) {
+    return new DataFilter(initialItems).filterBySearchValue(itemName);
+  }
 
   render() {
     return (

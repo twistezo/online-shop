@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { CardGroup } from "react-bootstrap";
+import { CardGroup as BootstrapCardGroup } from "react-bootstrap";
 import ItemCard from "./ItemCard";
 
-class CustomCardGroups extends Component {
+class CardGroups extends Component {
   CardGroups = () => {
     let rows = this.props.cardsData.rows;
     let firstItemOnActivePage = this.props.cardsData.firstItemNumOnActivePage;
@@ -17,7 +17,9 @@ class CustomCardGroups extends Component {
           firstItemOnActivePage += 1;
         }
         if (itemNum % rows === 0) {
-          cardGroups.push(<CardGroup key={rowNum}>{itemsGroup}</CardGroup>);
+          cardGroups.push(
+            <BootstrapCardGroup key={rowNum}>{itemsGroup}</BootstrapCardGroup>
+          );
         }
       }
     }
@@ -29,4 +31,4 @@ class CustomCardGroups extends Component {
   }
 }
 
-export default CustomCardGroups;
+export default CardGroups;

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Container } from "react-bootstrap";
 
-import CustomPagination from "./CustomPagination";
-import CustomCardGroups from "./CustomCardGroups";
+import Pagination from "./Pagination";
+import CustomCardGroups from "./CardGroups";
 
 const style = {
   backgroundColor: "lightGray",
@@ -35,7 +35,7 @@ class Viewer extends Component {
           items={this.props.filteredItems}
           cardsData={this.state.cardsData}
         />
-        <CustomPagination
+        <Pagination
           itemsLength={this.props.filteredItems.length}
           cardsData={this.state.cardsData}
           onItemClick={this.handleActivepage}

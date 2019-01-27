@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Container, Form, ListGroup } from "react-bootstrap";
 import CategoryList from "./CategoryList";
-import FilterList from "./FilterList";
+import FeatureList from "./FeatureList";
 
 const style = {
   backgroundColor: "lightGray",
@@ -15,7 +15,7 @@ class Sidebar extends Component {
     this.state = {
       categories: props.categories,
       activeCategory: this.initialActiveCategory,
-      filters: this.getFiltersFromActiveCategory(
+      features: this.getFeaturesFromActiveCategory(
         props.categories,
         this.initialActiveCategory
       )
@@ -26,50 +26,52 @@ class Sidebar extends Component {
     return categories.map(c => c.getName());
   }
 
-  getFiltersNames(filters) {
-    return filters.map(f => f.getName());
+  getFeaturesNames(features) {
+    return features.map(f => f.getName());
   }
 
-  getFiltersFromActiveCategory(categories, activeCategory) {
+  getFeaturesFromActiveCategory(categories, activeCategory) {
     return categories
       .find(c => {
         return c.getName() === activeCategory;
       })
-      .getFilters();
+      .getFeatures();
   }
 
-  resetFilters(filters) {
-    filters.forEach(f => {
+  resetFeatures(features) {
+    features.forEach(f => {
       f.setState(false);
     });
   }
 
   handleClickOnCategory = activeCategory => {
-    let filters = this.getFiltersFromActiveCategory(
+    let features = this.getFeaturesFromActiveCategory(
       this.state.categories,
       activeCategory
     );
     if (this.state.activeCategory !== activeCategory) {
-      this.resetFilters(filters);
+      this.resetFeatures(features);
     }
+    
     this.setState(() => ({
       activeCategory,
-      filters
+      features
     }));
-    this.props.onSidebarChange(activeCategory, filters);
+    this.props.onSidebarChange(activeCategory, features);
   };
 
-  handleClickOnFilter = filterToSwitch => {
-    let newFilters = this.state.filters;
-    newFilters
+  handleClickOnFeature = featureToSwitch => {
+    let newFeatures = this.state.features;
+    newFeatures
       .find(f => {
-        return f.name === filterToSwitch;
+        return f.name === featureToSwitch;
       })
       .switchState();
+
     this.setState(() => ({
-      filters: newFilters
+      features: newFeatures
     }));
-    this.props.onSidebarChange(this.state.activeCategory);
+    this.props.onSidebarChange(this.state.activeCategory, newFeatures);
   };
 
   render() {
@@ -84,9 +86,9 @@ class Sidebar extends Component {
         <hr />
         <Form>
           <Form.Group>
-            <FilterList
-              data={this.state.filters}
-              onItemClick={this.handleClickOnFilter}
+            <FeatureList
+              data={this.state.features}
+              onItemClick={this.handleClickOnFeature}
             />
           </Form.Group>
         </Form>
