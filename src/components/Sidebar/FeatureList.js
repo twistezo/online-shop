@@ -10,10 +10,10 @@ class FeatureList extends Component {
     return this.props.data.map(f => (
       <Form.Check
         type="checkbox"
-        label={f.getName()}
-        key={f.getName()}
+        label={f.name}
+        key={f.name}
         onChange={() => {
-          this.handleClick(f.getName());
+          this.handleClick(f.name);
         }}
       />
     ));

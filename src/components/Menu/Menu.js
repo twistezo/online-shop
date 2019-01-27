@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, Button, Container, Form } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const style = {
   backgroundColor: "lightblue",
@@ -28,7 +29,9 @@ class Menu extends Component {
       <Container style={style}>
         <Row>
           <Col>
-            <Button variant="primary">Home</Button>
+            <Link to="/">
+              <Button variant="primary">Home</Button>
+            </Link>
           </Col>
           <Col>
             <Form.Control
@@ -39,7 +42,9 @@ class Menu extends Component {
             />
           </Col>
           <Col>
-            <Button variant="primary">Cart</Button>
+            <Link to="/cart">
+              <Button variant="primary">Cart</Button>
+            </Link>
           </Col>
         </Row>
       </Container>

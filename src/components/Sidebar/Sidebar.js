@@ -11,7 +11,7 @@ const style = {
 class Sidebar extends Component {
   constructor(props) {
     super(props);
-    this.initialActiveCategory = props.categories[0].getName();
+    this.initialActiveCategory = props.categories[0].name;
     this.state = {
       categories: props.categories,
       activeCategory: this.initialActiveCategory,
@@ -23,19 +23,17 @@ class Sidebar extends Component {
   }
 
   getCategoriesNames(categories) {
-    return categories.map(c => c.getName());
+    return categories.map(c => c.name);
   }
 
   getFeaturesNames(features) {
-    return features.map(f => f.getName());
+    return features.map(f => f.name);
   }
 
   getFeaturesFromActiveCategory(categories, activeCategory) {
-    return categories
-      .find(c => {
-        return c.getName() === activeCategory;
-      })
-      .getFeatures();
+    return categories.find(c => {
+      return c.name === activeCategory;
+    }).features;
   }
 
   resetFeatures(features) {
@@ -52,7 +50,7 @@ class Sidebar extends Component {
     if (this.state.activeCategory !== activeCategory) {
       this.resetFeatures(features);
     }
-    
+
     this.setState(() => ({
       activeCategory,
       features

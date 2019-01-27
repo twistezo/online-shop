@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
 import Menu from "./Menu/Menu";
 import Sidebar from "./Sidebar/Sidebar";
 import Viewer from "./Viewer/Viewer";
 import DataFilter from "./DataFilter";
-import { Container, Row, Col } from "react-bootstrap";
+import Cart from "./Cart/Cart";
+import ItemDetails from "./ItemDetails/ItemDetails";
 
 class Layout extends Component {
   constructor(props) {
@@ -16,16 +19,21 @@ class Layout extends Component {
       receivedData: {
         searchValue: "",
         activeCategory: "",
-        activeFeatures: []
+        activeFeatures: [],
+        activeItem: {}
       },
       filteredData: {
         items: this.filterByCategoryAndFeature(
           props.data.items,
-          props.data.categories[0].getName(),
+          props.data.categories[0].name,
           []
         )
       }
     };
+  }
+
+  componentDidUpdate() {
+    console.log(this.state.receivedData.activeItem);
   }
 
   handleSearchChange = searchValue => {
@@ -62,6 +70,14 @@ class Layout extends Component {
     }));
   };
 
+  handleItemClick = item => {
+    let receivedData = this.state.receivedData;
+    receivedData.activeItem = item;
+    this.setState(() => ({
+      receivedData
+    }));
+  };
+
   filterByCategoryAndFeature(initialItems, activeCategory, activefeatures) {
     return new DataFilter(initialItems).filterByCategoryAndFeature(
       activeCategory,
@@ -73,26 +89,47 @@ class Layout extends Component {
     return new DataFilter(initialItems).filterBySearchValue(itemName);
   }
 
+  View = () => {
+    return (
+      <Row>
+        <Col sm={4}>
+          <Sidebar
+            categories={this.state.initialData.categories}
+            onSidebarChange={this.handleSidebarChange}
+          />
+        </Col>
+        <Col sm={8}>
+          <Viewer
+            filteredItems={this.state.filteredData.items}
+            onItemClick={this.handleItemClick}
+          />
+        </Col>
+      </Row>
+    );
+  };
+
+  ItemDetails = () => {
+    return <ItemDetails item={this.state.receivedData.activeItem} />;
+  };
+
   render() {
     return (
-      <Container>
-        <Row>
-          <Col sm={12}>
-            <Menu onSearchChange={this.handleSearchChange} />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={4}>
-            <Sidebar
-              categories={this.state.initialData.categories}
-              onSidebarChange={this.handleSidebarChange}
-            />
-          </Col>
-          <Col sm={8}>
-            <Viewer filteredItems={this.state.filteredData.items} />
-          </Col>
-        </Row>
-      </Container>
+      <Router>
+        <Container>
+          <Row>
+            <Col sm={12}>
+              <Menu onSearchChange={this.handleSearchChange} />
+            </Col>
+          </Row>
+          <Route exact path="/" component={this.View} />
+          <Route path="/cart" component={Cart} />
+          <Route
+            // path={"/item-id="}
+            path={"/item-id=" + this.state.receivedData.activeItem.id}
+            component={this.ItemDetails}
+          />
+        </Container>
+      </Router>
     );
   }
 }

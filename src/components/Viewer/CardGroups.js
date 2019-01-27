@@ -3,6 +3,10 @@ import { CardGroup as BootstrapCardGroup } from "react-bootstrap";
 import ItemCard from "./ItemCard";
 
 class CardGroups extends Component {
+  handleItemClick = item => {
+    this.props.onItemClick(item);
+  };
+
   CardGroups = () => {
     let rows = this.props.cardsData.rows;
     let firstItemOnActivePage = this.props.cardsData.firstItemNumOnActivePage;
@@ -13,7 +17,13 @@ class CardGroups extends Component {
       for (let itemNum = 0; itemNum < this.props.cardsData.columns; itemNum++) {
         let item = this.props.items[firstItemOnActivePage];
         if (item !== undefined) {
-          itemsGroup.push(<ItemCard item={item} key={item.getId()} />);
+          itemsGroup.push(
+            <ItemCard
+              item={item}
+              key={item.id}
+              onItemClick={this.handleItemClick}
+            />
+          );
           firstItemOnActivePage += 1;
         }
         if (itemNum % rows === 0) {

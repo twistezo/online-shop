@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Container } from "react-bootstrap";
 
 import Pagination from "./Pagination";
-import CustomCardGroups from "./CardGroups";
+import CardGroups from "./CardGroups";
 
 const style = {
   backgroundColor: "lightGray",
@@ -22,6 +22,10 @@ class Viewer extends Component {
     };
   }
 
+  handleItemClick = item => {
+    this.props.onItemClick(item);
+  };
+
   handleActivepage = cardsData => {
     this.setState(() => ({
       cardsData
@@ -31,9 +35,10 @@ class Viewer extends Component {
   render() {
     return (
       <Container style={style}>
-        <CustomCardGroups
+        <CardGroups
           items={this.props.filteredItems}
           cardsData={this.state.cardsData}
+          onItemClick={this.handleItemClick}
         />
         <Pagination
           itemsLength={this.props.filteredItems.length}

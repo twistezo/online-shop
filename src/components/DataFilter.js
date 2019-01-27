@@ -7,24 +7,22 @@ class DataFilter {
 
   filterByCategoryAndFeature(activeCategory, activeFeatures) {
     let allFeaturesAreOff = activeFeatures.every(
-      filter => filter.getState() === false
+      filter => filter.state === false
     );
 
     if (allFeaturesAreOff) {
       return Object.values(
         this.initialItems.filter(item => {
-          return item.getCategoryName() === activeCategory;
+          return item.categoryName === activeCategory;
         })
       );
     } else {
       return this.initialItems.filter(item => {
         return (
           arrayContainsAllElementsFromAnother(
-            item.getFeaturesNames(),
-            activeFeatures
-              .filter(f => f.getState() === true)
-              .map(f => f.getName())
-          ) && item.getCategoryName() === activeCategory
+            item.featuresNames,
+            activeFeatures.filter(f => f.state === true).map(f => f.name)
+          ) && item.categoryName === activeCategory
         );
       });
     }
@@ -34,18 +32,9 @@ class DataFilter {
     let searchedValue = value.toLowerCase();
     return this.initialItems.filter(
       item =>
-        item
-          .getName()
-          .toLowerCase()
-          .startsWith(searchedValue) ||
-        item
-          .getDescription()
-          .toLowerCase()
-          .startsWith(searchedValue) ||
-        item
-          .getPrice()
-          .toString()
-          .startsWith(searchedValue)
+        item.name.toLowerCase().startsWith(searchedValue) ||
+        item.description.toLowerCase().startsWith(searchedValue) ||
+        item.price.toString().startsWith(searchedValue)
     );
   }
 }

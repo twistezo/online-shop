@@ -42,10 +42,8 @@ class Data {
           chance.capitalize(chance.word({ syllables: 2, lenth: 6 })) + " #" + i,
           roundToTwoDecimalPlaces(randomBetween(1, 1000)),
           chance.sentence(),
-          category.getName(),
-          arrayFromArrayRandomItems(
-            category.getFeatures().map(f => f.getName())
-          ),
+          category.name,
+          arrayFromArrayRandomItems(category.features.map(f => f.name)),
           "https://avatars.dicebear.com/v2/identicon/" +
             chance.word({ length: 15 }) +
             ".svg"
@@ -81,34 +79,6 @@ class Item {
     this.featuresNames = featuresNames;
     this.imageSrc = imageSrc;
   }
-
-  getId() {
-    return this.id;
-  }
-
-  getName() {
-    return this.name;
-  }
-
-  getPrice() {
-    return this.price;
-  }
-
-  getDescription() {
-    return this.description;
-  }
-
-  getCategoryName() {
-    return this.categoryName;
-  }
-
-  getFeaturesNames() {
-    return this.featuresNames;
-  }
-
-  getImageSrc() {
-    return this.imageSrc;
-  }
 }
 
 class Category {
@@ -116,28 +86,12 @@ class Category {
     this.name = name;
     this.features = features;
   }
-
-  getName() {
-    return this.name;
-  }
-
-  getFeatures() {
-    return this.features;
-  }
 }
 
 class Feature {
   constructor(name) {
     this.name = name;
     this.state = false;
-  }
-
-  getName() {
-    return this.name;
-  }
-
-  getState() {
-    return this.state;
   }
 
   setState(state) {

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 class ItemCard extends Component {
   constructor(props) {
@@ -9,22 +10,35 @@ class ItemCard extends Component {
     };
   }
 
+  handleDetailsClick = () => {
+    this.props.onItemClick(this.state.item);
+  };
+
+  handleAddToCart = () => {};
+
   render() {
     return (
       <Card style={{ width: "18rem" }}>
         <Card.Img
           style={{ width: "5rem" }}
           variant="top"
-          src={this.state.item.getImageSrc()}
+          src={this.state.item.imageSrc}
         />
         <Card.Body>
-          <Card.Title>{this.state.item.getName()}</Card.Title>
-          <Card.Text>{this.state.item.getDescription()}</Card.Text>
+          <Card.Title>{this.state.item.name}</Card.Title>
+          <Card.Text>{this.state.item.description}</Card.Text>
           <Row>
             <Col>
-              <Button variant="primary">Add to cart</Button>
+              <Link to={"/item-id=" + this.state.item.id}>
+                <Button variant="primary" onClick={this.handleDetailsClick}>
+                  Details
+                </Button>
+              </Link>
+              <Button variant="primary" onClick={this.handleAddToCart}>
+                Add to cart
+              </Button>
             </Col>
-            <Col>{this.state.item.getPrice() + " EUR"}</Col>
+            <Col>{this.state.item.price + " EUR"}</Col>
           </Row>
         </Card.Body>
       </Card>
