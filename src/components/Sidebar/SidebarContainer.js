@@ -8,58 +8,30 @@ const style = {
   padding: "15px 15px 15px 15px"
 };
 
-class Sidebar extends Component {
+class SidebarContainer extends Component {
   constructor(props) {
     super(props);
-    this.initialActiveCategory = props.categories[0].name;
     this.state = {
-      categories: props.categories,
-      activeCategory: this.initialActiveCategory,
-      features: this.getFeaturesFromActiveCategory(
-        props.categories,
-        this.initialActiveCategory
-      )
+      activeCategory: "",
+      activeFeatures: []
     };
   }
 
-  getCategoriesNames(categories) {
-    return categories.map(c => c.name);
-  }
-
-  getFeaturesNames(features) {
-    return features.map(f => f.name);
-  }
-
-  getFeaturesFromActiveCategory(categories, activeCategory) {
-    return categories.find(c => {
-      return c.name === activeCategory;
-    }).features;
-  }
-
-  resetFeatures(features) {
-    features.forEach(f => {
-      f.setState(false);
-    });
-  }
-
   handleClickOnCategory = activeCategory => {
-    let features = this.getFeaturesFromActiveCategory(
-      this.state.categories,
-      activeCategory
-    );
+    let activeFeatures = this.getFeaturesFromCategory(activeCategory);
     if (this.state.activeCategory !== activeCategory) {
-      this.resetFeatures(features);
+      this.resetFeatures(activeFeatures);
     }
 
     this.setState(() => ({
       activeCategory,
-      features
+      activeFeatures
     }));
-    this.props.onSidebarChange(activeCategory, features);
+    this.props.onSidebarChange(activeCategory, activeFeatures);
   };
 
   handleClickOnFeature = featureToSwitch => {
-    let newFeatures = this.state.features;
+    let newFeatures = this.state.activeFeatures;
     newFeatures
       .find(f => {
         return f.name === featureToSwitch;
@@ -67,17 +39,30 @@ class Sidebar extends Component {
       .switchState();
 
     this.setState(() => ({
-      features: newFeatures
+      activeFeatures: newFeatures
     }));
     this.props.onSidebarChange(this.state.activeCategory, newFeatures);
   };
+
+  getFeaturesFromCategory(activeCategory) {
+    return this.props.categories.find(c => {
+      return c.name === activeCategory;
+    }).features;
+  }
+
+  resetFeatures(activeFeatures) {
+    activeFeatures.forEach(f => {
+      f.setState(false);
+    });
+  }
 
   render() {
     return (
       <Container style={style}>
         <ListGroup variant="flush">
           <CategoryList
-            data={this.getCategoriesNames(this.state.categories)}
+            categoriesNames={this.props.categories.map(c => c.name)}
+            activeCategory={this.props.activeCategory}
             onItemClick={this.handleClickOnCategory}
           />
         </ListGroup>
@@ -85,7 +70,7 @@ class Sidebar extends Component {
         <Form>
           <Form.Group>
             <FeatureList
-              data={this.state.features}
+              features={this.getFeaturesFromCategory(this.props.activeCategory)}
               onItemClick={this.handleClickOnFeature}
             />
           </Form.Group>
@@ -95,4 +80,4 @@ class Sidebar extends Component {
   }
 }
 
-export default Sidebar;
+export default SidebarContainer;

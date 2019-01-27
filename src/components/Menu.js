@@ -15,6 +15,10 @@ class Menu extends Component {
     };
   }
 
+  handleHomeClick = () => {
+    this.props.onHomeClick();
+  };
+
   handleSearchChange = event => {
     this.setState(() => ({
       searchValue: event.target.value
@@ -30,14 +34,16 @@ class Menu extends Component {
         <Row>
           <Col>
             <Link to="/">
-              <Button variant="primary">Home</Button>
+              <Button variant="primary" onClick={this.handleHomeClick}>
+                Home
+              </Button>
             </Link>
           </Col>
           <Col>
             <Form.Control
               type="text"
               placeholder="Search"
-              value={this.state.searchValue}
+              value={this.props.searchValue}
               onChange={this.handleSearchChange}
             />
           </Col>

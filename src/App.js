@@ -6,7 +6,7 @@ import Data from "./data/Data";
 import Layout from "./components/Layout";
 
 class App extends Component {
-  static dataQuantity = 100;
+  static dataQuantity = 200;
 
   constructor() {
     super();

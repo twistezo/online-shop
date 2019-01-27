@@ -14,8 +14,8 @@ class Viewer extends Component {
     super(props);
     this.state = {
       cardsData: {
-        rows: 2,
-        columns: 2,
+        rows: props.viewerRows,
+        columns: props.viewerColumns,
         activePage: 0,
         firstItemNumOnActivePage: 0
       }

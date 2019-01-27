@@ -29,7 +29,7 @@ class ItemCard extends Component {
           <Card.Text>{this.state.item.description}</Card.Text>
           <Row>
             <Col>
-              <Link to={"/item-id=" + this.state.item.id}>
+              <Link to={"/item-id-" + this.state.item.id}>
                 <Button variant="primary" onClick={this.handleDetailsClick}>
                   Details
                 </Button>

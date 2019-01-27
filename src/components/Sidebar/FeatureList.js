@@ -7,7 +7,7 @@ class FeatureList extends Component {
   };
 
   render() {
-    return this.props.data.map(f => (
+    return this.props.features.map(f => (
       <Form.Check
         type="checkbox"
         label={f.name}

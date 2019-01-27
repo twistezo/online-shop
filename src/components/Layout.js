@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
-import Menu from "./Menu/Menu";
-import Sidebar from "./Sidebar/Sidebar";
-import Viewer from "./Viewer/Viewer";
 import DataFilter from "./DataFilter";
-import Cart from "./Cart/Cart";
-import ItemDetails from "./ItemDetails/ItemDetails";
+import SidebarContainer from "./Sidebar/SidebarContainer";
+import ViewerContainer from "./Viewer/ViewerContainer";
+import ItemDetails from "./ItemDetails";
+import Menu from "./Menu";
+import Cart from "./Cart";
 
 class Layout extends Component {
   constructor(props) {
@@ -23,33 +23,44 @@ class Layout extends Component {
         activeItem: {}
       },
       filteredData: {
-        items: this.filterByCategoryAndFeature(
-          props.data.items,
-          props.data.categories[0].name,
-          []
-        )
+        items: []
+      },
+      controllers: {
+        viewerRows: 2,
+        viewerColumns: 2,
+        shouldExpandViewer: false
       }
     };
   }
 
-  componentDidUpdate() {
-    console.log(this.state.receivedData.activeItem);
+  componentWillMount() {
+    this.resetReceivedandFilteredData();
   }
 
   handleSearchChange = searchValue => {
     let receivedData = this.state.receivedData;
     receivedData.searchValue = searchValue;
-
     let filteredData = this.state.filteredData;
     filteredData.items = this.filterBySearchValue(
       this.state.initialData.items,
       searchValue
     );
 
-    this.setState(() => ({
-      receivedData,
-      filteredData
-    }));
+    if (searchValue === "") {
+      this.resetReceivedandFilteredData();
+    } else {
+      let controllers = this.state.controllers;
+      controllers.shouldExpandViewer = true;
+      this.setState(() => ({
+        receivedData,
+        filteredData,
+        controllers
+      }));
+    }
+  };
+
+  handleHomeClick = () => {
+    this.resetReceivedandFilteredData();
   };
 
   handleSidebarChange = (activeCategory, activeFeatures) => {
@@ -71,6 +82,7 @@ class Layout extends Component {
   };
 
   handleItemClick = item => {
+    this.resetReceivedandFilteredData();
     let receivedData = this.state.receivedData;
     receivedData.activeItem = item;
     this.setState(() => ({
@@ -89,22 +101,65 @@ class Layout extends Component {
     return new DataFilter(initialItems).filterBySearchValue(itemName);
   }
 
+  resetReceivedandFilteredData() {
+    let receivedData = this.state.receivedData;
+    receivedData.searchValue = "";
+    receivedData.activeCategory = this.props.data.categories[0].name;
+    receivedData.activeFeatures = [];
+    receivedData.activeItem = {};
+    let filteredData = this.state.filteredData;
+    filteredData.items = this.filterByCategoryAndFeature(
+      this.props.data.items,
+      this.props.data.categories[0].name,
+      []
+    );
+    let controllers = this.state.controllers;
+    controllers.shouldExpandViewer = false;
+
+    this.setState(() => ({
+      receivedData,
+      filteredData,
+      controllers
+    }));
+  }
+
   View = () => {
     return (
       <Row>
         <Col sm={4}>
-          <Sidebar
-            categories={this.state.initialData.categories}
+          <SidebarContainer
+            categories={this.props.data.categories}
+            activeCategory={this.state.receivedData.activeCategory}
             onSidebarChange={this.handleSidebarChange}
           />
         </Col>
         <Col sm={8}>
-          <Viewer
-            filteredItems={this.state.filteredData.items}
-            onItemClick={this.handleItemClick}
+          <this.ViewerComponent
+            rows={this.state.controllers.viewerRows}
+            columns={this.state.controllers.viewerColumns}
           />
         </Col>
       </Row>
+    );
+  };
+
+  ViewerComponent = props => {
+    return (
+      <ViewerContainer
+        viewerRows={props.rows}
+        viewerColumns={props.columns}
+        filteredItems={this.state.filteredData.items}
+        onItemClick={this.handleItemClick}
+      />
+    );
+  };
+
+  SearchResult = () => {
+    return (
+      <ViewerContainer
+        filteredItems={this.state.filteredData.items}
+        onItemClick={this.handleItemClick}
+      />
     );
   };
 
@@ -118,14 +173,24 @@ class Layout extends Component {
         <Container>
           <Row>
             <Col sm={12}>
-              <Menu onSearchChange={this.handleSearchChange} />
+              <Menu
+                searchValue={this.state.receivedData.searchValue}
+                onSearchChange={this.handleSearchChange}
+                onHomeClick={this.handleHomeClick}
+              />
             </Col>
           </Row>
-          <Route exact path="/" component={this.View} />
+          {this.state.controllers.shouldExpandViewer ? (
+            <this.ViewerComponent
+              rows={this.state.controllers.viewerRows + 1}
+              columns={this.state.controllers.viewerColumns + 1}
+            />
+          ) : (
+            <Route exact path="/" component={this.View} />
+          )}
           <Route path="/cart" component={Cart} />
           <Route
-            // path={"/item-id="}
-            path={"/item-id=" + this.state.receivedData.activeItem.id}
+            path={"/item-id-" + this.state.receivedData.activeItem.id}
             component={this.ItemDetails}
           />
         </Container>

@@ -32,9 +32,9 @@ class DataFilter {
     let searchedValue = value.toLowerCase();
     return this.initialItems.filter(
       item =>
-        item.name.toLowerCase().startsWith(searchedValue) ||
-        item.description.toLowerCase().startsWith(searchedValue) ||
-        item.price.toString().startsWith(searchedValue)
+        item.name.toLowerCase().includes(searchedValue) ||
+        item.description.toLowerCase().includes(searchedValue) ||
+        item.price.toString().includes(searchedValue)
     );
   }
 }
