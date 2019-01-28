@@ -17,14 +17,13 @@ class DataFilter {
         })
       );
     } else {
-      return this.initialItems.filter(item => {
-        return (
+      return this.initialItems.filter(
+        item =>
           arrayContainsAllElementsFromAnother(
             item.featuresNames,
             activeFeatures.filter(f => f.state === true).map(f => f.name)
           ) && item.categoryName === activeCategory
-        );
-      });
+      );
     }
   }
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { DataGenerator } from "./data/DataGenerator";
-import Layout from "./components/Layout";
+import MainContainer from "./components/MainContainer";
 import "./App.css";
 
 class App extends Component {
@@ -23,7 +23,7 @@ class App extends Component {
   }
 
   render() {
-    return <Layout data={this.data} />;
+    return <MainContainer data={this.data} />;
   }
 }
 

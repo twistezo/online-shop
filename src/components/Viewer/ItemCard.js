@@ -16,7 +16,9 @@ class ItemCard extends Component {
     this.props.onItemClick(this.state.item);
   };
 
-  handleAddToCart = () => {};
+  handleAddToCartClick = () => {
+    this.props.onAddToCartClick(this.state.item.id);
+  };
 
   render() {
     return (
@@ -31,12 +33,12 @@ class ItemCard extends Component {
           <Card.Text>{this.state.item.descriptionShort}</Card.Text>
           <Row>
             <Col>
-              <Link to={"/item-id-" + this.state.item.id}>
+              <Link to={"/item-details/item-id-" + this.state.item.id}>
                 <Button variant="primary" onClick={this.handleDetailsClick}>
                   Details
                 </Button>
               </Link>
-              <Button variant="primary" onClick={this.handleAddToCart}>
+              <Button variant="primary" onClick={this.handleAddToCartClick}>
                 Add to cart
               </Button>
             </Col>

@@ -19,6 +19,13 @@ class SidebarContainer extends Component {
     };
   }
 
+  componentWillMount() {
+    this.setState({
+      activeCategory: "Category 0",
+      activeFeatures: this.getFeaturesFromCategory("Category 0")
+    });
+  }
+
   handleClickOnCategory = activeCategory => {
     let activeFeatures = this.getFeaturesFromCategory(activeCategory);
     if (this.state.activeCategory !== activeCategory) {
@@ -34,11 +41,7 @@ class SidebarContainer extends Component {
 
   handleClickOnFeature = featureToSwitch => {
     let newFeatures = this.state.activeFeatures;
-    newFeatures
-      .find(f => {
-        return f.name === featureToSwitch;
-      })
-      .switchState();
+    newFeatures.find(f => f.name === featureToSwitch).switchState();
 
     this.setState(() => ({
       activeFeatures: newFeatures
@@ -47,9 +50,7 @@ class SidebarContainer extends Component {
   };
 
   getFeaturesFromCategory(activeCategory) {
-    return this.props.categories.find(c => {
-      return c.name === activeCategory;
-    }).features;
+    return this.props.categories.find(c => c.name === activeCategory).features;
   }
 
   resetFeatures(activeFeatures) {

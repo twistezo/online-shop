@@ -59,6 +59,10 @@ class ItemDetails extends Component {
     event.preventDefault();
   };
 
+  handleAddToCartClick = () => {
+    this.props.onAddToCartClick(this.props.item.id);
+  };
+
   Images = props => {
     return (
       <Container>
@@ -147,6 +151,7 @@ class ItemDetails extends Component {
   };
 
   render() {
+    let isOutOfStock = this.props.item.quantityOnStock === 0;
     return (
       <Container style={style}>
         <Row>
@@ -159,11 +164,24 @@ class ItemDetails extends Component {
           <Col sm={6}>
             <Row>
               <h3>Name: {this.props.item.name}</h3>
-              <h5>id: {this.props.item.id}</h5>
+              <h5>Id: {this.props.item.id}</h5>
             </Row>
             <Row>
               <p>Description long:</p>
               <p>{this.props.item.descriptionLong}</p>
+            </Row>
+            <Row>
+              <Col>
+                <p>Quantity on stock: {this.props.item.quantityOnStock}</p>
+              </Col>
+              <Col>
+                <Button
+                  disabled={isOutOfStock}
+                  onClick={this.handleAddToCartClick}
+                >
+                  Add to cart
+                </Button>
+              </Col>
             </Row>
           </Col>
         </Row>

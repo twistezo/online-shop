@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Row, Col, Button, Container, Form } from "react-bootstrap";
+import { Row, Col, Button, Badge, Container, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const style = {
@@ -49,8 +49,10 @@ class Menu extends Component {
             />
           </Col>
           <Col>
-            <Link to="/cart">
-              <Button variant="primary">Cart</Button>
+            <Link to="/cart/info">
+              <Button variant="primary">
+                Cart <Badge variant="light">{this.props.cartItemsLength}</Badge>
+              </Button>
             </Link>
           </Col>
         </Row>

@@ -45,8 +45,9 @@ class DataGenerator {
           chance.paragraph(),
           category.name,
           arrayFromArrayRandomItems(category.features.map(f => f.name)),
-          this.generateRandomReviews(chance, Math.floor(randomBetween(1, 6))),
-          this.generateRandomImages(chance, Math.floor(randomBetween(1, 6)))
+          this.generateRandomReviews(chance, Math.floor(randomBetween(2, 6))),
+          this.generateRandomImages(chance, Math.floor(randomBetween(2, 6))),
+          Math.floor(randomBetween(1, 11))
         )
       );
     }
@@ -101,7 +102,8 @@ class Item {
     categoryName,
     featuresNames,
     reviews,
-    imagesSources
+    imagesSources,
+    quantityOnStock
   ) {
     this.id = id;
     this.name = name;
@@ -112,6 +114,7 @@ class Item {
     this.featuresNames = featuresNames;
     this.reviews = reviews;
     this.imagesSources = imagesSources;
+    this.quantityOnStock = quantityOnStock;
   }
 }
 
@@ -145,4 +148,19 @@ class Review {
   }
 }
 
-export { DataGenerator, Item, Category, Feature, Review };
+class CartItem {
+  constructor(itemId, price) {
+    this.itemId = itemId;
+    this.quantity = 0;
+    this.price = price;
+    this.deliveryCost = 0;
+    this.totalPrice = 0;
+  }
+
+  setQuantity(quantity) {
+    this.quantity = quantity;
+    this.totalPrice = roundToTwoDecimalPlaces(this.quantity * this.price);
+  }
+}
+
+export { DataGenerator, Item, Category, Feature, Review, CartItem };

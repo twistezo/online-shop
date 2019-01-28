@@ -33,6 +33,10 @@ class Viewer extends Component {
     }));
   };
 
+  handleAddToCartClick = itemId => {
+    this.props.onAddToCartClick(itemId);
+  };
+
   render() {
     return (
       <Container style={style}>
@@ -40,6 +44,7 @@ class Viewer extends Component {
           items={this.props.filteredItems}
           cardsData={this.state.cardsData}
           onItemClick={this.handleItemClick}
+          onAddToCartClick={this.handleAddToCartClick}
         />
         <Pagination
           itemsLength={this.props.filteredItems.length}
