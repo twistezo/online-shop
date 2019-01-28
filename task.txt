@@ -4,11 +4,11 @@ Design and implement modern frontend application for online shop. Resulting appl
 Assume that backend server has everything you need (you can stub out backend calls if you need). Also there is no need to implement a login mechanism and users management capabilities. Simply assume there is only one, an anonymous user.
 
 Core requirements:
-- view, navigate, search and filter through product list, categories.
-- view products details (product details, photos, reviews)
-- add products to cart
-- view cart and checkout (with all the details: address, payments, delivery options)
-- summary/confirmation page
+[x] - view, navigate, search and filter through product list, categories.
+[x] - view products details (product details, photos, reviews)
+[ ] - add products to cart
+[ ] - view cart and checkout (with all the details: address, payments, delivery options)
+[ ] - summary/confirmation page
 
 Please keep in mind future development and project maintenance.
 

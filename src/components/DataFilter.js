@@ -33,7 +33,8 @@ class DataFilter {
     return this.initialItems.filter(
       item =>
         item.name.toLowerCase().includes(searchedValue) ||
-        item.description.toLowerCase().includes(searchedValue) ||
+        item.descriptionShort.toLowerCase().includes(searchedValue) ||
+        item.descriptionLong.toLowerCase().includes(searchedValue) ||
         item.price.toString().includes(searchedValue)
     );
   }

@@ -92,6 +92,19 @@ class Layout extends Component {
     }));
   };
 
+  handleAddReview = (review, itemId) => {
+    let initialItems = this.state.initialData.items;
+    let item = initialItems.find(item => {
+      return item.id === itemId;
+    });
+    if (
+      item.reviews.find(r => {
+        return r.name === review.name;
+      }) === undefined
+    )
+      item.reviews.push(review);
+  };
+
   filterByCategoryAndFeature(initialItems, activeCategory, activefeatures) {
     return new DataFilter(initialItems).filterByCategoryAndFeature(
       activeCategory,
@@ -166,7 +179,12 @@ class Layout extends Component {
   };
 
   ItemDetails = () => {
-    return <ItemDetails item={this.state.receivedData.activeItem} />;
+    return (
+      <ItemDetails
+        item={this.state.receivedData.activeItem}
+        onAddReview={this.handleAddReview}
+      />
+    );
   };
 
   render() {

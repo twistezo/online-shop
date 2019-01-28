@@ -42,14 +42,44 @@ class DataGenerator {
           chance.capitalize(chance.word({ syllables: 2, lenth: 6 })) + " #" + i,
           roundToTwoDecimalPlaces(randomBetween(1, 1000)),
           chance.sentence(),
+          chance.paragraph(),
           category.name,
           arrayFromArrayRandomItems(category.features.map(f => f.name)),
-          "https://avatars.dicebear.com/v2/identicon/" +
-            chance.word({ length: 15 }) +
-            ".svg"
+          this.generateRandomReviews(chance, Math.floor(randomBetween(1, 6))),
+          this.generateRandomImages(chance, Math.floor(randomBetween(1, 6)))
         )
       );
     }
+  }
+
+  generateRandomImages(chance, imagesNum) {
+    let images = [];
+    for (let j = 0; j < imagesNum; j++) {
+      images.push(
+        "https://avatars.dicebear.com/v2/identicon/" +
+          chance.word({ length: 15 }) +
+          ".svg"
+      );
+    }
+    return images;
+  }
+
+  generateRandomReviews(chance, reviewsNum) {
+    let reviews = [];
+    for (let i = 0; i < reviewsNum; i++) {
+      reviews.push(
+        new Review(
+          chance.name(),
+          chance.date({
+            string: false,
+            american: false,
+            year: 2018
+          }),
+          chance.sentence()
+        )
+      );
+    }
+    return reviews;
   }
 
   getItems() {
@@ -66,18 +96,22 @@ class Item {
     id,
     name,
     price,
-    description,
+    descriptionShort,
+    descriptionLong,
     categoryName,
     featuresNames,
-    imageSrc
+    reviews,
+    imagesSources
   ) {
     this.id = id;
     this.name = name;
     this.price = price;
-    this.description = description;
+    this.descriptionShort = descriptionShort;
+    this.descriptionLong = descriptionLong;
     this.categoryName = categoryName;
     this.featuresNames = featuresNames;
-    this.imageSrc = imageSrc;
+    this.reviews = reviews;
+    this.imagesSources = imagesSources;
   }
 }
 
@@ -103,4 +137,12 @@ class Feature {
   }
 }
 
-export { DataGenerator, Item, Category, Feature };
+class Review {
+  constructor(name, date, text) {
+    this.name = name;
+    this.date = date;
+    this.text = text;
+  }
+}
+
+export { DataGenerator, Item, Category, Feature, Review };

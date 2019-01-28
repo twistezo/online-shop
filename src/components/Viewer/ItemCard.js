@@ -24,11 +24,11 @@ class ItemCard extends Component {
         <Card.Img
           style={{ width: "5rem" }}
           variant="top"
-          src={this.state.item.imageSrc}
+          src={this.state.item.imagesSources[0]}
         />
         <Card.Body>
           <Card.Title>{this.state.item.name}</Card.Title>
-          <Card.Text>{this.state.item.description}</Card.Text>
+          <Card.Text>{this.state.item.descriptionShort}</Card.Text>
           <Row>
             <Col>
               <Link to={"/item-id-" + this.state.item.id}>
