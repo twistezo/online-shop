@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Container, Col, Button, Form } from "react-bootstrap";
+import { Container, Col, Row, Button, Form } from "react-bootstrap";
 import { roundToTwoDecimalPlaces } from "../../data/Utils";
 
 class Checkout extends Component {
@@ -214,7 +214,7 @@ class Checkout extends Component {
   CheckoutView = () => {
     return (
       <Container>
-        <Col sm={6}>
+        <Col sm={5} className="col-centered">
           <Form validated={this.state.isFieldValidated}>
             <Form.Group>
               <Form.Label>Full name</Form.Label>
@@ -272,6 +272,7 @@ class Checkout extends Component {
                   type="text"
                   placeholder="Ex. 5500000000000004"
                   pattern={this.state.regex.creditCardNumber}
+                  required
                   onChange={this.handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -287,6 +288,7 @@ class Checkout extends Component {
                   type="text"
                   placeholder="Ex. 02/19"
                   pattern={this.state.regex.creditCardExpirationDate}
+                  required
                   onChange={this.handleInputChange}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -304,19 +306,25 @@ class Checkout extends Component {
               </Form.Control>
             </Form.Group>
             {this.state.controllers.showTotalPrice && (
-              <p>Sum: {this.state.totalPrice} EUR</p>
+              <h5 className="text-center">{this.state.totalPrice} EUR</h5>
             )}
-            <Link to={`info`}>
-              <Button>Back</Button>
-            </Link>
-            <Link to={`summary`}>
-              <Button
-                disabled={!this.state.isFormValid}
-                onClick={this.handleConfirmButton}
-              >
-                Confirm
-              </Button>
-            </Link>
+            <Row className="text-center pt-2">
+              <Col>
+                <Link to={`info`}>
+                  <Button>Back</Button>
+                </Link>
+              </Col>
+              <Col>
+                <Link to={`summary`}>
+                  <Button
+                    disabled={!this.state.isFormValid}
+                    onClick={this.handleConfirmButton}
+                  >
+                    Confirm
+                  </Button>
+                </Link>
+              </Col>
+            </Row>
           </Form>
         </Col>
       </Container>

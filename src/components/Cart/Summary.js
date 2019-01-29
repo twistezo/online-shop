@@ -32,7 +32,7 @@ class Summary extends Component {
         </Modal.Body>
         <Modal.Footer>
           <Link to="/">
-            <Button variant="secondary" onClick={this.handleCloseModal}>
+            <Button variant="primary" onClick={this.handleCloseModal}>
               Ok
             </Button>
           </Link>
@@ -47,49 +47,83 @@ class Summary extends Component {
       checkoutData.paymentMethod === "Credit Card";
     return (
       <Container>
-        <Col sm={6}>
+        <Col xs={12} sm={5} className="col-centered text-center">
           <Row>
-            <Col sm={6}>Name:</Col>
-            <Col sm={6}>{checkoutData.name}</Col>
+            <Col className="text-right">
+              <h6>Name:</h6>
+            </Col>
+            <Col className="text-left">
+              <h6>{checkoutData.name}</h6>
+            </Col>
           </Row>
           <Row>
-            <Col sm={6}>Email:</Col>
-            <Col sm={6}>{checkoutData.email}</Col>
+            <Col className="text-right">
+              <h6>Email:</h6>
+            </Col>
+            <Col className="text-left">
+              <h6>{checkoutData.email}</h6>
+            </Col>
           </Row>
           <Row>
-            <Col sm={6}>Address:</Col>
-            <Col sm={6}>{checkoutData.address}</Col>
+            <Col className="text-right">
+              <h6>Address:</h6>
+            </Col>
+            <Col className="text-left">
+              <h6>{checkoutData.address}</h6>
+            </Col>
           </Row>
           <Row>
-            <Col sm={6}>Payment method:</Col>
-            <Col sm={6}>{checkoutData.paymentMethod}</Col>
+            <Col className="text-right">
+              <h6>Payment method:</h6>
+            </Col>
+            <Col className="text-left">
+              <h6>{checkoutData.paymentMethod}</h6>
+            </Col>
           </Row>
           {showCreditCardExtraFields ? (
             <div>
               <Row>
-                <Col sm={6}>Credit card number:</Col>
-                <Col sm={6}>{checkoutData.creditCardNumber}</Col>
+                <Col className="text-right">
+                  <h6>Credit card number:</h6>
+                </Col>
+                <Col className="text-left">
+                  <h6>{checkoutData.creditCardNumber}</h6>
+                </Col>
               </Row>
               <Row>
-                <Col sm={6}>Credit card expiration date:</Col>
-                <Col sm={6}>{checkoutData.creditCardExpirationDate}</Col>
+                <Col className="text-right">
+                  <h6>Credit card expiration date:</h6>
+                </Col>
+                <Col className="text-left">
+                  <h6>{checkoutData.creditCardExpirationDate}</h6>
+                </Col>
               </Row>
             </div>
           ) : (
             ""
           )}
           <Row>
-            <Col sm={6}>Delivery option:</Col>
-            <Col sm={6}>
-              {checkoutData.deliveryOption.name +
-                " - " +
-                checkoutData.deliveryOption.price}
+            <Col className="text-right">
+              <h6>Delivery option:</h6>
+            </Col>
+            <Col className="text-left">
+              <h6>
+                {checkoutData.deliveryOption.name +
+                  " - " +
+                  checkoutData.deliveryOption.price}
+              </h6>
             </Col>
           </Row>
-          <Link to={`checkout`}>
-            <Button>Back</Button>
-          </Link>
-          <Button onClick={this.handleShowModal}>Buy</Button>
+          <Row className="text-center pt-2">
+            <Col>
+              <Link to={`checkout`}>
+                <Button>Back</Button>
+              </Link>
+            </Col>
+            <Col>
+              <Button onClick={this.handleShowModal}>Buy</Button>
+            </Col>
+          </Row>
         </Col>
         <this.EndOfDemoModal />
       </Container>

@@ -64,7 +64,7 @@ class Pagination extends Component {
     let isLastPage = this.props.cardsData.activePage === this.getPagesLen();
     return (
       <div>
-        <BootstrapPagination>
+        <BootstrapPagination className="pt-2 float-right">
           <BootstrapPagination.First
             disabled={isFirstPage}
             onClick={this.handleFirstPage}

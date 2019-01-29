@@ -5,11 +5,6 @@ import CategoryList from "./CategoryList";
 import FeatureList from "./FeatureList";
 import { Category } from "../../data/DataGenerator";
 
-const style = {
-  backgroundColor: "lightGray",
-  padding: "15px 15px 15px 15px"
-};
-
 class SidebarContainer extends Component {
   constructor(props) {
     super(props);
@@ -61,16 +56,15 @@ class SidebarContainer extends Component {
 
   render() {
     return (
-      <Container style={style}>
-        <ListGroup variant="flush">
+      <Container>
+        <ListGroup className="pb-3" variant="flush">
           <CategoryList
             categoriesNames={this.props.categories.map(c => c.name)}
             activeCategory={this.props.activeCategory}
             onItemClick={this.handleClickOnCategory}
           />
         </ListGroup>
-        <hr />
-        <Form>
+        <Form className="pl-3">
           <Form.Group>
             <FeatureList
               features={this.getFeaturesFromCategory(this.props.activeCategory)}

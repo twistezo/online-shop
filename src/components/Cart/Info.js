@@ -40,51 +40,77 @@ class Info extends Component {
       let item = initialItems.find(item => item.id === cartItem.itemId);
       cartItemsComponents.push(
         <Container key={i}>
-          <Row>
-            <Col sm={4}>{item.name}</Col>
-            <Col sm={2}>
+          <Row className="text-center">
+            <Col xs={6} sm={2} className="pb-4 pb-sm-0">
+              <img
+                className="cartItemImage"
+                alt=""
+                src={item.imagesSources[0]}
+              />
+            </Col>
+            <Col xs={6} sm={3} className="pb-4 pb-sm-0 align-self-center">
+              {item.name}
+            </Col>
+            <Col xs={12} sm={2} className="pb-4 pb-sm-0">
               <Row>
-                <Col sm={4}>
+                <Col xs={4} sm={4}>
                   <Button
+                    className="float-left@"
                     disabled={cartItemQuantityIsZero}
                     onClick={() => this.handleDecreaseQuantity(cartItem)}
                   >
-                    &#60;
+                    <i className="fas fa-minus" />
                   </Button>
                 </Col>
-                <Col sm={4}>{cartItem.quantity}</Col>
-                <Col sm={4}>
-                  <Button onClick={() => this.handleIncreaseQuantity(cartItem)}>
-                    &#62;
+                <Col xs={4} sm={4} className="align-self-center text-center@">
+                  {cartItem.quantity}
+                </Col>
+                <Col xs={4} sm={4}>
+                  <Button
+                    className="float-none@ float-sm-right@"
+                    onClick={() => this.handleIncreaseQuantity(cartItem)}
+                  >
+                    <i className="fas fa-plus" />
                   </Button>
                 </Col>
               </Row>
             </Col>
-            <Col sm={2}>Price per unit: {cartItem.price} EUR</Col>
-            <Col sm={2}>Total price: {cartItem.totalPrice} EUR</Col>
-            <Col sm={2}>
+            <Col xs={12} sm={2} className="pb-4 pb-sm-0 align-self-center">
+              {cartItem.price} EUR per unit
+            </Col>
+            <Col xs={12} sm={2} className="pb-4 pb-sm-0 align-self-center">
+              Total: {cartItem.totalPrice} EUR
+            </Col>
+            <Col xs={12} sm={1}>
               <Button onClick={() => this.handleRemoveCartItem(cartItem)}>
-                x
+                <i className="fas fa-trash-alt" />
               </Button>
             </Col>
           </Row>
+          <hr />
         </Container>
       );
     }
-    
+
     let sumIsZero = this.props.cartItemsSum === 0;
     return (
       <Container>
         <Row>{cartItemsComponents}</Row>
-        <Row>
+        <Row className="pt-2">
           <Container>
             <Row>
-              <h5>Sum: {this.props.cartItemsSum} EUR</h5>
+              <Col>
+                <h4 className="float-right">{this.props.cartItemsSum} EUR</h4>
+              </Col>
             </Row>
-            <Row>
-              <Link to={`checkout`}>
-                <Button disabled={sumIsZero}>Checkout</Button>
-              </Link>
+            <Row className="pt-1">
+              <Col>
+                <Link to={`checkout`}>
+                  <Button className="float-right" disabled={sumIsZero}>
+                    Checkout
+                  </Button>
+                </Link>
+              </Col>
             </Row>
           </Container>
         </Row>
@@ -93,7 +119,11 @@ class Info extends Component {
   };
 
   EmptyCartView = () => {
-    return "Cart is empty. Pick something.";
+    return (
+      <div className="text-center">
+        <h2>Cart is empty. Pick something.</h2>
+      </div>
+    );
   };
 
   render() {

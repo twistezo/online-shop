@@ -4,11 +4,6 @@ import { Item } from "../data/DataGenerator";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { Review } from "../data/DataGenerator";
 
-const style = {
-  backgroundColor: "lightGray",
-  padding: "15px 15px 15px 15px"
-};
-
 class ItemDetails extends Component {
   constructor(props) {
     super(props);
@@ -103,7 +98,7 @@ class ItemDetails extends Component {
             src={props.imagesSources[props.activeImageNum]}
           />
         </Row>
-        <Row>
+        <Row className="pt-4 align-items-center">
           <this.Thumbnails sources={props.imagesSources} />
         </Row>
       </Container>
@@ -115,7 +110,7 @@ class ItemDetails extends Component {
     for (let i = 0; i < props.sources.length; i++) {
       result.push(
         <Col key={i}>
-          <Button onClick={() => this.handleThumbnailClick(i)}>
+          <Button variant="light" onClick={() => this.handleThumbnailClick(i)}>
             <img alt="" style={{ height: "20px" }} src={props.sources[i]} />
           </Button>
         </Col>
@@ -131,8 +126,8 @@ class ItemDetails extends Component {
     let reviews = [];
     for (let i = 0; i < itemWithUpdatedReviews.reviews.length; i++) {
       reviews.push(
-        <Row key={i}>
-          <Container>
+        <div key={i}>
+          <Container className="pt-3">
             <Row>
               {itemWithUpdatedReviews.reviews[i].name} -{" "}
               {itemWithUpdatedReviews.reviews[i].date.toLocaleString("pl-PL", {
@@ -143,7 +138,7 @@ class ItemDetails extends Component {
             </Row>
             <Row>{itemWithUpdatedReviews.reviews[i].text}</Row>
           </Container>
-        </Row>
+        </div>
       );
     }
     return reviews;
@@ -151,90 +146,98 @@ class ItemDetails extends Component {
 
   FormToAddReview = () => {
     return (
-      <Container>
-        <h5>Add your review</h5>
-        <Form validated={this.state.isFieldValidated}>
-          <Form.Group>
-            <Form.Control
-              name="name"
-              value={this.state.formData.name}
-              type="text"
-              placeholder="Your name"
-              required
-              minLength="5"
-              onChange={this.handleInputChange}
-            />
-            <Form.Control.Feedback type="invalid">
-              This field is required. Min. characters is 5.
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group>
-            <Form.Control
-              name="review"
-              value={this.state.formData.review}
-              as="textarea"
-              placeholder="Your review"
-              rows="3"
-              minLength="10"
-              maxLength="250"
-              required
-              onChange={this.handleInputChange}
-            />
-            <Form.Control.Feedback type="invalid">
-              This field is required. Min. characters: 10, max. 250.
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group>
-            <Button
-              disabled={!this.state.isFormValid}
-              onClick={this.handleAddReviewClick}
-            >
-              Submit
-            </Button>
-          </Form.Group>
-        </Form>
-      </Container>
+      <div>
+        <Col sm={6} className="pt-4 pl-0">
+          <h4>Add your review</h4>
+          <Form className="pt-3" validated={this.state.isFieldValidated}>
+            <Form.Group>
+              <Form.Control
+                name="name"
+                value={this.state.formData.name}
+                type="text"
+                placeholder="Your name"
+                required
+                minLength="5"
+                onChange={this.handleInputChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                This field is required. Min. characters is 5.
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group>
+              <Form.Control
+                name="review"
+                value={this.state.formData.review}
+                as="textarea"
+                placeholder="Your review"
+                rows="3"
+                minLength="10"
+                maxLength="250"
+                required
+                onChange={this.handleInputChange}
+              />
+              <Form.Control.Feedback type="invalid">
+                This field is required. Min. characters: 10, max. 250.
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group>
+              <Button
+                disabled={!this.state.isFormValid}
+                onClick={this.handleAddReviewClick}
+              >
+                Submit
+              </Button>
+            </Form.Group>
+          </Form>
+        </Col>
+      </div>
     );
   };
 
   render() {
     let isOutOfStock = this.props.item.quantityOnStock === 0;
     return (
-      <Container style={style}>
+      <Container>
         <Row>
-          <Col sm={6}>
+          <Col className="pb-3" sm={6}>
             <this.Images
               imagesSources={this.props.item.imagesSources}
               activeImageNum={this.state.activeImageNum}
             />
           </Col>
           <Col sm={6}>
-            <Row>
-              <h3>Name: {this.props.item.name}</h3>
-              <h5>Id: {this.props.item.id}</h5>
-            </Row>
-            <Row>
-              <p>Description long:</p>
-              <p>{this.props.item.descriptionLong}</p>
-            </Row>
-            <Row>
-              <Col>
-                <p>Quantity on stock: {this.props.item.quantityOnStock}</p>
-              </Col>
-              <Col>
-                <Button
-                  disabled={isOutOfStock}
-                  onClick={this.handleAddToCartClick}
-                >
-                  Add to cart
-                </Button>
-              </Col>
-            </Row>
+            <Container>
+              <Row>
+                <h3>{this.props.item.name}</h3>
+              </Row>
+              <Row>
+                <p>Id: {this.props.item.id}</p>
+              </Row>
+              <Row className="text-justify">
+                <p>{this.props.item.descriptionLong}</p>
+              </Row>
+              <Row>
+                <Col className="align-self-center pl-0">
+                  <span className="float-left">
+                    On stock: {this.props.item.quantityOnStock}
+                  </span>
+                </Col>
+                <Col className="pr-0">
+                  <Button
+                    className="float-right"
+                    disabled={isOutOfStock}
+                    onClick={this.handleAddToCartClick}
+                  >
+                    Add &nbsp; <i className="fas fa-cart-arrow-down" />
+                  </Button>
+                </Col>
+              </Row>
+            </Container>
           </Col>
         </Row>
-        <Row>
-          <Container>
-            <h5>Reviews</h5>
+        <Row className="pt-3">
+          <Container className="pl-15">
+            <h4>Reviews</h4>
             <this.Reviews
               item={this.props.item}
               initialItems={this.props.initialItems}

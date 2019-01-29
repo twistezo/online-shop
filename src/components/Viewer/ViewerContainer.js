@@ -5,11 +5,6 @@ import Pagination from "./Pagination";
 import CardGroups from "./CardGroups";
 import { Item } from "../../data/DataGenerator";
 
-const style = {
-  backgroundColor: "lightGray",
-  padding: "15px 15px 15px 15px"
-};
-
 class Viewer extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +34,7 @@ class Viewer extends Component {
 
   render() {
     return (
-      <Container style={style}>
+      <Container>
         <CardGroups
           items={this.props.filteredItems}
           cardsData={this.state.cardsData}

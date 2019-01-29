@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { DataGenerator } from "./data/DataGenerator";
 import MainContainer from "./components/MainContainer";
-import "./App.css";
+import "./App.scss";
 
 class App extends Component {
   static dataQuantity = 200;

@@ -239,14 +239,14 @@ class MainContainer extends Component {
   View = () => {
     return (
       <Row>
-        <Col sm={4}>
+        <Col sm={3}>
           <SidebarContainer
             categories={this.props.data.categories}
             activeCategory={this.state.receivedData.activeCategory}
             onSidebarChange={this.handleSidebarChange}
           />
         </Col>
-        <Col sm={8}>
+        <Col sm={9}>
           <this.ViewerComponent
             rows={this.state.controllers.viewerRows}
             columns={this.state.controllers.viewerColumns}
@@ -304,20 +304,19 @@ class MainContainer extends Component {
   };
 
   render() {
+    let shouldExpandViewer = this.state.controllers.shouldExpandViewer;
     return (
       <Router>
         <Container>
           <Row>
-            <Col sm={12}>
-              <Menu
-                searchValue={this.state.receivedData.searchValue}
-                onSearchChange={this.handleSearchChange}
-                onHomeClick={this.handleHomeClick}
-                cartItemsLength={this.state.cartData.cartItems.length}
-              />
-            </Col>
+            <Menu
+              searchValue={this.state.receivedData.searchValue}
+              onSearchChange={this.handleSearchChange}
+              onHomeClick={this.handleHomeClick}
+              cartItemsLength={this.state.cartData.cartItems.length}
+            />
           </Row>
-          {this.state.controllers.shouldExpandViewer ? (
+          {shouldExpandViewer ? (
             <this.ViewerComponent
               rows={this.state.controllers.viewerRows + 1}
               columns={this.state.controllers.viewerColumns + 1}

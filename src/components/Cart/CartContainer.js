@@ -7,11 +7,6 @@ import Checkout from "./Checkout";
 import Summary from "./Summary";
 import { Container } from "react-bootstrap";
 
-const style = {
-  backgroundColor: "lightGray",
-  padding: "15px 15px 15px 15px"
-};
-
 class CartContainer extends Component {
   constructor(props) {
     super(props);
@@ -82,7 +77,7 @@ class CartContainer extends Component {
 
   render() {
     return (
-      <Container style={style}>
+      <Container>
         <Route
           exact
           path={`${this.props.routeUrl}/info`}

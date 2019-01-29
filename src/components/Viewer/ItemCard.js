@@ -22,28 +22,42 @@ class ItemCard extends Component {
 
   render() {
     return (
-      <Card style={{ width: "18rem" }}>
+      <Card>
         <Card.Img
-          style={{ width: "5rem" }}
+          className="mx-auto d-block cardImage"
           variant="top"
           src={this.state.item.imagesSources[0]}
         />
-        <Card.Body>
+        <Card.Body className="d-flex flex-column">
           <Card.Title>{this.state.item.name}</Card.Title>
           <Card.Text>{this.state.item.descriptionShort}</Card.Text>
-          <Row>
-            <Col>
-              <Link to={"/item-details/item-id-" + this.state.item.id}>
-                <Button variant="primary" onClick={this.handleDetailsClick}>
-                  Details
+          <div className="mt-auto">
+            <Row>
+              <Col>
+                <Link to={"/item-details/item-id-" + this.state.item.id}>
+                  <Button
+                    className="float-left"
+                    variant="primary"
+                    onClick={this.handleDetailsClick}
+                  >
+                    <i className="fas fa-info" /> &nbsp; Details
+                  </Button>
+                </Link>
+              </Col>
+              <Col>
+                <Button
+                  className="float-right"
+                  variant="primary"
+                  onClick={this.handleAddToCartClick}
+                >
+                  <i className="fas fa-cart-arrow-down" />
                 </Button>
-              </Link>
-              <Button variant="primary" onClick={this.handleAddToCartClick}>
-                Add to cart
-              </Button>
-            </Col>
-            <Col>{this.state.item.price + " EUR"}</Col>
-          </Row>
+              </Col>
+            </Row>
+            <Row className="pt-3 text-center">
+              <Col>{this.state.item.price + " EUR"}</Col>
+            </Row>
+          </div>
         </Card.Body>
       </Card>
     );

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { CardGroup as BootstrapCardGroup } from "react-bootstrap";
-import ItemCard from "./ItemCard";
+import { CardDeck } from "react-bootstrap";
 import { Item } from "../../data/DataGenerator";
+import PropTypes from "prop-types";
+import ItemCard from "./ItemCard";
 
 class CardGroups extends Component {
   handleItemClick = item => {
@@ -35,7 +35,9 @@ class CardGroups extends Component {
         }
         if (itemNum % rows === 0) {
           cardGroups.push(
-            <BootstrapCardGroup key={rowNum}>{itemsGroup}</BootstrapCardGroup>
+            <CardDeck className="pb-2" key={rowNum}>
+              {itemsGroup}
+            </CardDeck>
           );
         }
       }
