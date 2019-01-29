@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Route } from "react-router-dom";
-import { CartItem } from "../../data/DataGenerator";
+import { CartItem, Item } from "../../data/DataGenerator";
 import Info from "./Info";
 import Checkout from "./Checkout";
 import Summary from "./Summary";
 import { Container } from "react-bootstrap";
-import { runInThisContext } from "vm";
 
 const style = {
   backgroundColor: "lightGray",
@@ -16,7 +15,9 @@ const style = {
 class CartContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      checkoutData: {}
+    };
   }
 
   handleItemQuantityChange = (
@@ -33,6 +34,16 @@ class CartContainer extends Component {
 
   handleRemoveCartItem = cartItem => {
     this.props.onRemoveCartItem(cartItem);
+  };
+
+  handleConfirmCheckoutData = checkoutData => {
+    this.setState(() => ({
+      checkoutData
+    }));
+  };
+
+  handlePurchaseComplete = () => {
+    this.props.onPurchaseComplete();
   };
 
   InfoView = route => {
@@ -53,6 +64,7 @@ class CartContainer extends Component {
       <Checkout
         cartItemsSum={this.props.cartItemsSum}
         routeUrl={route.match.url}
+        onConfirmCheckoutData={this.handleConfirmCheckoutData}
       />
     );
   };
@@ -61,7 +73,9 @@ class CartContainer extends Component {
     return (
       <Summary
         cartItemsSum={this.props.cartItemsSum}
+        checkoutData={this.state.checkoutData}
         routeUrl={route.match.url}
+        onPurchaseComplete={this.handlePurchaseComplete}
       />
     );
   };
@@ -90,7 +104,13 @@ class CartContainer extends Component {
 }
 
 CartContainer.propTypes = {
-  cartItems: PropTypes.arrayOf(PropTypes.instanceOf(CartItem))
+  cartItems: PropTypes.arrayOf(PropTypes.instanceOf(CartItem)),
+  cartItemsSum: PropTypes.number,
+  initialItems: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
+  routeUrl: PropTypes.string,
+  onChangeItemQuantity: PropTypes.func,
+  onRemoveCartItem: PropTypes.func,
+  onPurchaseComplete: PropTypes.func
 };
 
 export default CartContainer;

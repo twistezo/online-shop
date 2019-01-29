@@ -14,8 +14,16 @@ class ItemDetails extends Component {
     super(props);
     this.state = {
       activeImageNum: 0,
-      newReviewName: "",
-      newReviewText: ""
+      formData: {
+        name: "",
+        review: ""
+      },
+      formValidation: {
+        name: false,
+        review: false
+      },
+      isFormValid: false,
+      isFieldValidated: false
     };
   }
 
@@ -25,43 +33,65 @@ class ItemDetails extends Component {
     }));
   };
 
-  handleAddReviewClick = event => {
-    if (this.state.newReviewName !== "" && this.state.newReviewText !== "") {
-      this.props.onAddReview(
-        new Review(
-          this.state.newReviewName,
-          new Date(),
-          this.state.newReviewText
-        ),
-        this.props.item.id
-      );
-      this.setState(() => ({
-        newReviewName: "",
-        newReviewText: ""
-      }));
-    }
-    event.preventDefault();
-  };
-
-  handleChangeReviewName = event => {
-    this.setState(() => ({
-      newReviewName: event.target.value
-    }));
-    event.persist();
-    event.preventDefault();
-  };
-
-  handleChangeReviewText = event => {
-    this.setState(() => ({
-      newReviewText: event.target.value
-    }));
-    event.persist();
-    event.preventDefault();
-  };
-
   handleAddToCartClick = () => {
     this.props.onAddToCartClick(this.props.item.id);
   };
+
+  handleAddReviewClick = () => {
+    this.props.onAddReview(
+      new Review(
+        this.state.formData.name,
+        new Date(),
+        this.state.formData.review
+      ),
+      this.props.item.id
+    );
+    this.setState(() => ({
+      formData: {
+        name: "",
+        review: ""
+      },
+      formValidation: {
+        name: false,
+        review: false
+      },
+      isFormValid: false,
+      isFieldValidated: false
+    }));
+  };
+
+  handleInputChange = e => {
+    let targetName = e.target.name;
+    let targetValue = e.target.value;
+    let isFieldValid = e.target.checkValidity() === true;
+    let formValidation = this.state.formValidation;
+
+    if (targetName === "name") {
+      formValidation.name = isFieldValid;
+      this.setState(() => ({
+        formData: {
+          ...this.state.formData,
+          name: targetValue
+        },
+        formValidation,
+        isFormValid: this.allFieldsAreValid(formValidation)
+      }));
+    } else if (targetName === "review") {
+      formValidation.review = isFieldValid;
+      this.setState(() => ({
+        formData: {
+          ...this.state.formData,
+          review: targetValue
+        },
+        formValidation,
+        isFormValid: this.allFieldsAreValid(formValidation)
+      }));
+    }
+    this.setState({ isFieldValidated: true });
+  };
+
+  allFieldsAreValid = formValidaton =>
+    Object.values(formValidaton).every(v => v === true);
 
   Images = props => {
     return (
@@ -95,20 +125,23 @@ class ItemDetails extends Component {
   };
 
   Reviews = props => {
+    let itemWithUpdatedReviews = props.initialItems.find(
+      i => i.id === props.item.id
+    );
     let reviews = [];
-    for (let i = 0; i < props.reviews.length; i++) {
+    for (let i = 0; i < itemWithUpdatedReviews.reviews.length; i++) {
       reviews.push(
         <Row key={i}>
           <Container>
             <Row>
-              {props.reviews[i].name} -{" "}
-              {props.reviews[i].date.toLocaleString("pl-PL", {
+              {itemWithUpdatedReviews.reviews[i].name} -{" "}
+              {itemWithUpdatedReviews.reviews[i].date.toLocaleString("pl-PL", {
                 day: "numeric",
                 month: "numeric",
                 year: "numeric"
               })}
             </Row>
-            <Row>{props.reviews[i].text}</Row>
+            <Row>{itemWithUpdatedReviews.reviews[i].text}</Row>
           </Container>
         </Row>
       );
@@ -120,30 +153,44 @@ class ItemDetails extends Component {
     return (
       <Container>
         <h5>Add your review</h5>
-        <Form>
+        <Form validated={this.state.isFieldValidated}>
           <Form.Group>
             <Form.Control
-              required
+              name="name"
+              value={this.state.formData.name}
               type="text"
               placeholder="Your name"
-              minLength="2"
-              maxLength="20"
-              onChange={this.handleChangeReviewName}
+              required
+              minLength="5"
+              onChange={this.handleInputChange}
             />
+            <Form.Control.Feedback type="invalid">
+              This field is required. Min. characters is 5.
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
             <Form.Control
-              required
+              name="review"
+              value={this.state.formData.review}
               as="textarea"
               placeholder="Your review"
               rows="3"
               minLength="10"
               maxLength="250"
-              onChange={this.handleChangeReviewText}
+              required
+              onChange={this.handleInputChange}
             />
+            <Form.Control.Feedback type="invalid">
+              This field is required. Min. characters: 10, max. 250.
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Button onClick={this.handleAddReviewClick}>Submit</Button>
+            <Button
+              disabled={!this.state.isFormValid}
+              onClick={this.handleAddReviewClick}
+            >
+              Submit
+            </Button>
           </Form.Group>
         </Form>
       </Container>
@@ -188,7 +235,10 @@ class ItemDetails extends Component {
         <Row>
           <Container>
             <h5>Reviews</h5>
-            <this.Reviews reviews={this.props.item.reviews} />
+            <this.Reviews
+              item={this.props.item}
+              initialItems={this.props.initialItems}
+            />
             <this.FormToAddReview />
           </Container>
         </Row>
@@ -198,8 +248,10 @@ class ItemDetails extends Component {
 }
 
 ItemDetails.propTypes = {
+  initialItems: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
   item: PropTypes.instanceOf(Item),
-  onAddReview: PropTypes.func
+  onAddReview: PropTypes.func,
+  onAddToCartClick: PropTypes.func
 };
 
 export default ItemDetails;

@@ -1,4 +1,4 @@
-import { arrayContainsAllElementsFromAnother } from "../data/Utils";
+import { arrayContainsAllElementsFromAnother } from "./Utils";
 
 class DataFilter {
   constructor(initialItems) {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { CartItem } from "../../data/DataGenerator";
+import { CartItem, Item } from "../../data/DataGenerator";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
 class Info extends Component {
@@ -36,18 +36,19 @@ class Info extends Component {
     let cartItemsComponents = [];
     for (let i = 0; i < cartItems.length; i++) {
       let cartItem = cartItems[i];
+      let cartItemQuantityIsZero = cartItem.quantity === 0;
       let item = initialItems.find(item => item.id === cartItem.itemId);
       cartItemsComponents.push(
         <Container key={i}>
           <Row>
-            <Col sm={4}>
-              {/* <Link to={"/item-id-" + item.id}>{item.name}</Link> */}
-              {item.name}
-            </Col>
+            <Col sm={4}>{item.name}</Col>
             <Col sm={2}>
               <Row>
                 <Col sm={4}>
-                  <Button onClick={() => this.handleDecreaseQuantity(cartItem)}>
+                  <Button
+                    disabled={cartItemQuantityIsZero}
+                    onClick={() => this.handleDecreaseQuantity(cartItem)}
+                  >
                     &#60;
                   </Button>
                 </Col>
@@ -70,7 +71,8 @@ class Info extends Component {
         </Container>
       );
     }
-
+    
+    let sumIsZero = this.props.cartItemsSum === 0;
     return (
       <Container>
         <Row>{cartItemsComponents}</Row>
@@ -81,7 +83,7 @@ class Info extends Component {
             </Row>
             <Row>
               <Link to={`checkout`}>
-                <Button>Checkout</Button>
+                <Button disabled={sumIsZero}>Checkout</Button>
               </Link>
             </Row>
           </Container>
@@ -90,13 +92,27 @@ class Info extends Component {
     );
   };
 
+  EmptyCartView = () => {
+    return "Cart is empty. Pick something.";
+  };
+
   render() {
-    return <this.InfoView />;
+    let cartIsEmpty = this.props.cartItems.length === 0;
+    return (
+      <Container>
+        {cartIsEmpty ? <this.EmptyCartView /> : <this.InfoView />}
+      </Container>
+    );
   }
 }
 
 Info.propTypes = {
-  cartItems: PropTypes.arrayOf(PropTypes.instanceOf(CartItem))
+  cartItems: PropTypes.arrayOf(PropTypes.instanceOf(CartItem)),
+  cartItemsSum: PropTypes.number,
+  initialItems: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
+  routeUrl: PropTypes.string,
+  onChangeItemQuantity: PropTypes.func,
+  onRemoveCartItem: PropTypes.func
 };
 
 export default Info;

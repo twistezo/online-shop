@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
-import DataFilter from "./DataFilter";
+import DataFilter from "../data/DataFilter";
 import SidebarContainer from "./Sidebar/SidebarContainer";
 import ViewerContainer from "./Viewer/ViewerContainer";
 import ItemDetails from "./ItemDetails";
 import Menu from "./Menu";
-import Cart from "./Cart/CartContainer";
+import CartContainer from "./Cart/CartContainer";
 import { Item, CartItem, Category } from "../data/DataGenerator";
+import { roundToTwoDecimalPlaces } from "../data/Utils";
 
 class MainContainer extends Component {
   constructor(props) {
@@ -168,7 +169,6 @@ class MainContainer extends Component {
     let changedCartItemIndex = cartData.cartItems
       .map(i => i.itemId)
       .indexOf(cartItem.itemId);
-    console.log(changedCartItemIndex);
     let changedCartItem = cartData.cartItems[changedCartItemIndex];
     let quantitiesToGiveBack = changedCartItem.quantity;
     cartData.cartItems.splice(changedCartItemIndex, 1);
@@ -183,11 +183,17 @@ class MainContainer extends Component {
     }));
   };
 
+  handlePurchaseComplete = () => {
+    this.resetCart();
+  };
+
   calculateCartItemsSum = () =>
     this.state.cartData.cartItems.length > 0
-      ? this.state.cartData.cartItems
-          .map(i => i.totalPrice)
-          .reduce((a, b) => a + b)
+      ? roundToTwoDecimalPlaces(
+          this.state.cartData.cartItems
+            .map(i => i.totalPrice)
+            .reduce((a, b) => a + b)
+        )
       : 0;
 
   filterByCategoryAndFeature = (initialItems, activeCategory, activefeatures) =>
@@ -217,6 +223,15 @@ class MainContainer extends Component {
       controllers: {
         ...this.state.controllers,
         shouldExpandViewer: false
+      }
+    }));
+  }
+
+  resetCart() {
+    this.setState(() => ({
+      cartData: {
+        cartItems: [],
+        cartItemsSum: 0
       }
     }));
   }
@@ -266,6 +281,7 @@ class MainContainer extends Component {
   ItemDetails = () => {
     return (
       <ItemDetails
+        initialItems={this.state.initialData.items}
         item={this.state.receivedData.activeItem}
         onAddReview={this.handleAddReview}
         onAddToCartClick={this.handleAddToCartClick}
@@ -273,15 +289,16 @@ class MainContainer extends Component {
     );
   };
 
-  Cart = route => {
+  CartContainer = route => {
     return (
-      <Cart
+      <CartContainer
         cartItems={this.state.cartData.cartItems}
         cartItemsSum={this.state.cartData.cartItemsSum}
         initialItems={this.state.initialData.items}
         routeUrl={route.match.url}
         onChangeItemQuantity={this.handleItemQuantityChange}
         onRemoveCartItem={this.handleRemoveCartItem}
+        onPurchaseComplete={this.handlePurchaseComplete}
       />
     );
   };
@@ -308,7 +325,7 @@ class MainContainer extends Component {
           ) : (
             <Route exact path="/" component={this.View} />
           )}
-          <Route path="/cart" component={this.Cart} />
+          <Route path="/cart" component={this.CartContainer} />
           <Route
             path={
               "/item-details/item-id-" + this.state.receivedData.activeItem.id
