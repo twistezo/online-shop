@@ -2,7 +2,7 @@
 
 ### Description
 
-Online-shop created with React and bootstrapped with Create React App.
+Online-shop created with React and bootstrapped with `create-react-app`.
 
 ### Features
 
@@ -21,6 +21,16 @@ npm
 
 ### Build, run
 
-To build: `npm install`
+Firstly: `npm install`
 
 To run in development mode: `npm start`
+
+To build in production mode: `npm run build`
+
+To run locally prod mode:
+
+```
+npm install -g serve
+serve -s build
+
+```

@@ -2,9 +2,11 @@
   "name": "online-shop",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://twistezo.github.io/online-shop",
   "dependencies": {
     "bootstrap": "^4.2.1",
     "chance": "^1.0.18",
+    "gh-pages": "^2.0.1",
     "node-sass": "^4.11.0",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
@@ -15,6 +17,8 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
