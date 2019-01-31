@@ -41,6 +41,19 @@ class Summary extends Component {
     );
   };
 
+  SummaryRow = props => {
+    return (
+      <Row>
+        <Col className="text-right">
+          <h6>{props.name}</h6>
+        </Col>
+        <Col className="text-left">
+          <h6>{props.value}</h6>
+        </Col>
+      </Row>
+    );
+  };
+
   render() {
     let checkoutData = this.props.checkoutData;
     let showCreditCardExtraFields =
@@ -48,72 +61,39 @@ class Summary extends Component {
     return (
       <Container>
         <Col xs={12} sm={5} className="col-centered text-center">
-          <Row>
-            <Col className="text-right">
-              <h6>Name:</h6>
-            </Col>
-            <Col className="text-left">
-              <h6>{checkoutData.name}</h6>
-            </Col>
-          </Row>
-          <Row>
-            <Col className="text-right">
-              <h6>Email:</h6>
-            </Col>
-            <Col className="text-left">
-              <h6>{checkoutData.email}</h6>
-            </Col>
-          </Row>
-          <Row>
-            <Col className="text-right">
-              <h6>Address:</h6>
-            </Col>
-            <Col className="text-left">
-              <h6>{checkoutData.address}</h6>
-            </Col>
-          </Row>
-          <Row>
-            <Col className="text-right">
-              <h6>Payment method:</h6>
-            </Col>
-            <Col className="text-left">
-              <h6>{checkoutData.paymentMethod}</h6>
-            </Col>
-          </Row>
+          <this.SummaryRow name={"Name:"} value={checkoutData.name} />
+          <this.SummaryRow name={"Email:"} value={checkoutData.email} />
+          <this.SummaryRow name={"Address:"} value={checkoutData.address} />
+          <this.SummaryRow
+            name={"Payment method:"}
+            value={checkoutData.paymentMethod}
+          />
           {showCreditCardExtraFields ? (
             <div>
-              <Row>
-                <Col className="text-right">
-                  <h6>Credit card number:</h6>
-                </Col>
-                <Col className="text-left">
-                  <h6>{checkoutData.creditCardNumber}</h6>
-                </Col>
-              </Row>
-              <Row>
-                <Col className="text-right">
-                  <h6>Credit card expiration date:</h6>
-                </Col>
-                <Col className="text-left">
-                  <h6>{checkoutData.creditCardExpirationDate}</h6>
-                </Col>
-              </Row>
+              <this.SummaryRow
+                name={"Credit card number:"}
+                value={checkoutData.creditCardNumber}
+              />
+              <this.SummaryRow
+                name={"Credit card expiration date:"}
+                value={checkoutData.creditCardExpirationDate}
+              />
             </div>
           ) : (
             ""
           )}
-          <Row>
-            <Col className="text-right">
-              <h6>Delivery option:</h6>
-            </Col>
-            <Col className="text-left">
-              <h6>
-                {checkoutData.deliveryOption.name +
-                  " - " +
-                  checkoutData.deliveryOption.price}
-              </h6>
-            </Col>
-          </Row>
+          <this.SummaryRow
+            name={"Delivery option:"}
+            value={
+              checkoutData.deliveryOption.name +
+              " - " +
+              checkoutData.deliveryOption.price
+            }
+          />
+          <this.SummaryRow
+            name={"Price to pay:"}
+            value={this.props.cartItemsSum + " EUR"}
+          />
           <Row className="text-center pt-2">
             <Col>
               <Link to={`checkout`}>

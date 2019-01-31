@@ -1,9 +1,4 @@
-import {
-  randomBetween,
-  roundToTwoDecimalPlaces,
-  randomArrayItem,
-  arrayFromArrayRandomItems
-} from "./Utils";
+import DataUtils from "./DataUtils";
 import uuidv1 from "uuid/v1";
 import Chance from "chance";
 
@@ -30,24 +25,47 @@ class DataGenerator {
         new Feature("C2 feature 4")
       ])
     ];
+    this.paymentMethods = ["Credit Card", "PayPal", "PayU"];
+    this.deliveryOptions = [
+      {
+        name: "UPS",
+        price: 14.99
+      },
+      {
+        name: "DHL",
+        price: 16.99
+      },
+      {
+        name: "DPD",
+        price: 18.99
+      }
+    ];
   }
 
   generate(quantity) {
     let chance = new Chance();
     for (let i = 0; i < quantity; i++) {
-      let category = randomArrayItem(this.categories);
+      let category = DataUtils.randomArrayItem(this.categories);
       this.data.push(
         new Item(
           uuidv1(),
           chance.capitalize(chance.word({ syllables: 2, lenth: 6 })) + " #" + i,
-          roundToTwoDecimalPlaces(randomBetween(1, 1000)),
+          DataUtils.roundToTwoDecimalPlaces(DataUtils.randomBetween(1, 1000)),
           chance.sentence(),
           chance.paragraph(),
           category.name,
-          arrayFromArrayRandomItems(category.features.map(f => f.name)),
-          this.generateRandomReviews(chance, Math.floor(randomBetween(2, 6))),
-          this.generateRandomImages(chance, Math.floor(randomBetween(2, 6))),
-          Math.floor(randomBetween(1, 11))
+          DataUtils.arrayFromArrayRandomItems(
+            category.features.map(f => f.name)
+          ),
+          this.generateRandomReviews(
+            chance,
+            Math.floor(DataUtils.randomBetween(2, 6))
+          ),
+          this.generateRandomImages(
+            chance,
+            Math.floor(DataUtils.randomBetween(2, 6))
+          ),
+          Math.floor(DataUtils.randomBetween(1, 11))
         )
       );
     }
@@ -89,6 +107,14 @@ class DataGenerator {
 
   getCategories() {
     return this.categories;
+  }
+
+  getPaymentMethods() {
+    return this.paymentMethods;
+  }
+
+  getDeliveryOptions() {
+    return this.deliveryOptions;
   }
 }
 
@@ -159,7 +185,9 @@ class CartItem {
 
   setQuantity(quantity) {
     this.quantity = quantity;
-    this.totalPrice = roundToTwoDecimalPlaces(this.quantity * this.price);
+    this.totalPrice = DataUtils.roundToTwoDecimalPlaces(
+      this.quantity * this.price
+    );
   }
 }
 

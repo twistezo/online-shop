@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Row, Col, Button, Badge, Container, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-class Menu extends Component {
+class MenuContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,17 +11,18 @@ class Menu extends Component {
     };
   }
 
-  handleHomeClick = () => {
-    this.props.onHomeClick();
-  };
-
   handleSearchChange = event => {
+    let searchValue = event.target.value;
     this.setState(() => ({
-      searchValue: event.target.value
+      searchValue
     }));
-    this.props.onSearchChange(event.target.value);
-    event.persist();
-    event.preventDefault();
+    if (searchValue === "") {
+      this.props.onResetReceivedandFilteredData();
+    } else {
+      this.props.onSearchChange(searchValue);
+      event.persist();
+      event.preventDefault();
+    }
   };
 
   render() {
@@ -33,7 +34,7 @@ class Menu extends Component {
               <Button
                 className="float-right"
                 variant="primary"
-                onClick={this.handleHomeClick}
+                onClick={() => this.props.onResetReceivedandFilteredData()}
               >
                 <i className="fas fa-home" />
               </Button>
@@ -63,10 +64,11 @@ class Menu extends Component {
   }
 }
 
-Menu.propTypes = {
+MenuContainer.propTypes = {
   searchValue: PropTypes.string,
   onSearchChange: PropTypes.func,
-  onHomeClick: PropTypes.func
+  cartItemsLength: PropTypes.number,
+  onResetReceivedandFilteredData: PropTypes.func
 };
 
-export default Menu;
+export default MenuContainer;

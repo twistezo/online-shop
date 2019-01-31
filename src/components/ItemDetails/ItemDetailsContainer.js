@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Item } from "../data/DataGenerator";
+import { Item } from "../../data/DataGenerator";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
-import { Review } from "../data/DataGenerator";
+import { Review } from "../../data/DataGenerator";
 
-class ItemDetails extends Component {
+class ItemDetailsContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +28,7 @@ class ItemDetails extends Component {
     }));
   };
 
-  handleAddToCartClick = () => {
+  handleAddToCart = () => {
     this.props.onAddToCartClick(this.props.item.id);
   };
 
@@ -41,6 +41,10 @@ class ItemDetails extends Component {
       ),
       this.props.item.id
     );
+    this.resetFormState();
+  };
+
+  resetFormState() {
     this.setState(() => ({
       formData: {
         name: "",
@@ -53,40 +57,25 @@ class ItemDetails extends Component {
       isFormValid: false,
       isFieldValidated: false
     }));
-  };
+  }
 
-  handleInputChange = e => {
+  handleFormInputChange = e => {
     let targetName = e.target.name;
     let targetValue = e.target.value;
     let isFieldValid = e.target.checkValidity() === true;
     let formValidation = this.state.formValidation;
+    formValidation[targetName] = isFieldValid;
 
-    if (targetName === "name") {
-      formValidation.name = isFieldValid;
-      this.setState(() => ({
-        formData: {
-          ...this.state.formData,
-          name: targetValue
-        },
-        formValidation,
-        isFormValid: this.allFieldsAreValid(formValidation)
-      }));
-    } else if (targetName === "review") {
-      formValidation.review = isFieldValid;
-      this.setState(() => ({
-        formData: {
-          ...this.state.formData,
-          review: targetValue
-        },
-        formValidation,
-        isFormValid: this.allFieldsAreValid(formValidation)
-      }));
-    }
-    this.setState({ isFieldValidated: true });
+    this.setState(() => ({
+      formData: {
+        ...this.state.formData,
+        [targetName]: targetValue
+      },
+      formValidation,
+      isFormValid: Object.values(formValidation).every(v => v === true),
+      isFieldValidated: true
+    }));
   };
-
-  allFieldsAreValid = formValidaton =>
-    Object.values(formValidaton).every(v => v === true);
 
   Images = props => {
     return (
@@ -107,15 +96,15 @@ class ItemDetails extends Component {
 
   Thumbnails = props => {
     let result = [];
-    for (let i = 0; i < props.sources.length; i++) {
+    props.sources.forEach((source, i) => {
       result.push(
         <Col key={i}>
           <Button variant="light" onClick={() => this.handleThumbnailClick(i)}>
-            <img alt="" style={{ height: "20px" }} src={props.sources[i]} />
+            <img alt="" style={{ height: "20px" }} src={source} />
           </Button>
         </Col>
       );
-    }
+    });
     return result;
   };
 
@@ -124,23 +113,23 @@ class ItemDetails extends Component {
       i => i.id === props.item.id
     );
     let reviews = [];
-    for (let i = 0; i < itemWithUpdatedReviews.reviews.length; i++) {
+    itemWithUpdatedReviews.reviews.forEach((review, i) => {
       reviews.push(
         <div key={i}>
           <Container className="pt-3">
             <Row>
-              {itemWithUpdatedReviews.reviews[i].name} -{" "}
-              {itemWithUpdatedReviews.reviews[i].date.toLocaleString("pl-PL", {
+              {review.name} -{" "}
+              {review.date.toLocaleString("pl-PL", {
                 day: "numeric",
                 month: "numeric",
                 year: "numeric"
               })}
             </Row>
-            <Row>{itemWithUpdatedReviews.reviews[i].text}</Row>
+            <Row>{review.text}</Row>
           </Container>
         </div>
       );
-    }
+    });
     return reviews;
   };
 
@@ -158,7 +147,7 @@ class ItemDetails extends Component {
                 placeholder="Your name"
                 required
                 minLength="5"
-                onChange={this.handleInputChange}
+                onChange={this.handleFormInputChange}
               />
               <Form.Control.Feedback type="invalid">
                 This field is required. Min. characters is 5.
@@ -174,7 +163,7 @@ class ItemDetails extends Component {
                 minLength="10"
                 maxLength="250"
                 required
-                onChange={this.handleInputChange}
+                onChange={this.handleFormInputChange}
               />
               <Form.Control.Feedback type="invalid">
                 This field is required. Min. characters: 10, max. 250.
@@ -226,7 +215,7 @@ class ItemDetails extends Component {
                   <Button
                     className="float-right"
                     disabled={isOutOfStock}
-                    onClick={this.handleAddToCartClick}
+                    onClick={this.handleAddToCart}
                   >
                     Add &nbsp; <i className="fas fa-cart-arrow-down" />
                   </Button>
@@ -250,11 +239,11 @@ class ItemDetails extends Component {
   }
 }
 
-ItemDetails.propTypes = {
+ItemDetailsContainer.propTypes = {
   initialItems: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
   item: PropTypes.instanceOf(Item),
   onAddReview: PropTypes.func,
   onAddToCartClick: PropTypes.func
 };
 
-export default ItemDetails;
+export default ItemDetailsContainer;

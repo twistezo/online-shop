@@ -5,11 +5,11 @@ import { Container, Row, Col } from "react-bootstrap";
 import DataFilter from "../data/DataFilter";
 import SidebarContainer from "./Sidebar/SidebarContainer";
 import ViewerContainer from "./Viewer/ViewerContainer";
-import ItemDetails from "./ItemDetails";
-import Menu from "./Menu";
+import ItemDetailsContainer from "./ItemDetails/ItemDetailsContainer";
+import MenuContainer from "./Menu/MenuContainer";
 import CartContainer from "./Cart/CartContainer";
-import { Item, CartItem, Category } from "../data/DataGenerator";
-import { roundToTwoDecimalPlaces } from "../data/Utils";
+import { Item, Category } from "../data/DataGenerator";
+import CartUtils from "./Cart/CartUtils";
 
 class MainContainer extends Component {
   constructor(props) {
@@ -17,7 +17,9 @@ class MainContainer extends Component {
     this.state = {
       initialData: {
         items: props.data.items,
-        categories: props.data.categories
+        categories: props.data.categories,
+        paymentMethods: props.data.paymentMethods,
+        deliveryOptions: props.data.deliveryOptions
       },
       receivedData: {
         searchValue: "",
@@ -41,36 +43,8 @@ class MainContainer extends Component {
   }
 
   componentWillMount() {
-    this.resetReceivedandFilteredData();
+    this.handleResetReceivedandFilteredData();
   }
-
-  handleSearchChange = searchValue => {
-    if (searchValue === "") {
-      this.resetReceivedandFilteredData();
-    } else {
-      this.setState(() => ({
-        receivedData: {
-          ...this.state.receivedData,
-          searchValue
-        },
-        filteredData: {
-          ...this.state.filteredData,
-          items: this.filterBySearchValue(
-            this.state.initialData.items,
-            searchValue
-          )
-        },
-        controllers: {
-          ...this.state.controllers,
-          shouldExpandViewer: true
-        }
-      }));
-    }
-  };
-
-  handleHomeClick = () => {
-    this.resetReceivedandFilteredData();
-  };
 
   handleSidebarChange = (activeCategory, activeFeatures) => {
     this.setState(() => ({
@@ -81,7 +55,7 @@ class MainContainer extends Component {
       },
       filteredData: {
         ...this.state.filteredData,
-        items: this.filterByCategoryAndFeature(
+        items: DataFilter.filterByCategoryAndFeature(
           this.state.initialData.items,
           activeCategory,
           activeFeatures
@@ -90,8 +64,28 @@ class MainContainer extends Component {
     }));
   };
 
+  handleSearchChange = searchValue => {
+    this.setState(() => ({
+      receivedData: {
+        ...this.state.receivedData,
+        searchValue
+      },
+      filteredData: {
+        ...this.state.filteredData,
+        items: DataFilter.filterBySearchValue(
+          this.state.initialData.items,
+          searchValue
+        )
+      },
+      controllers: {
+        ...this.state.controllers,
+        shouldExpandViewer: true
+      }
+    }));
+  };
+
   handleItemClick = activeItem => {
-    this.resetReceivedandFilteredData();
+    this.handleResetReceivedandFilteredData();
     this.setState(() => ({
       receivedData: {
         ...this.state.receivedData,
@@ -101,31 +95,37 @@ class MainContainer extends Component {
   };
 
   handleAddReview = (review, itemId) => {
-    let initialItems = this.state.initialData.items;
-    let item = initialItems.find(item => item.id === itemId);
+    let item = this.state.initialData.items.find(item => item.id === itemId);
     if (item.reviews.find(r => r.name === review.name) === undefined)
       item.reviews.push(review);
   };
 
-  handleAddToCartClick = itemId => {
-    let cartData = this.state.cartData;
-    if (
-      cartData.cartItems.find(cartItem => cartItem.itemId === itemId) ===
-      undefined
-    ) {
-      let item = this.state.initialData.items.find(item => item.id === itemId);
-
-      if (item.quantityOnStock !== 0) {
-        item.quantityOnStock -= 1;
-        let newCartItem = new CartItem(itemId, item.price);
-        newCartItem.setQuantity(1);
-        cartData.cartItems.push(newCartItem);
-        cartData.cartItemsSum = this.calculateCartItemsSum();
-        this.setState(() => ({
-          cartData
-        }));
-      }
+  handleAddToCart = itemId => {
+    let result = CartUtils.recalculateOnAdd(
+      itemId,
+      this.state.initialData.items,
+      this.state.cartData
+    );
+    if (result.isOk) {
+      this.setState(() => ({
+        cartData: result.cartData
+      }));
     }
+  };
+
+  handleRemoveFromCart = cartItem => {
+    let result = CartUtils.recalculateOnRemove(
+      cartItem,
+      this.state.cartData,
+      this.state.initialData.items
+    );
+    this.setState(() => ({
+      initialData: {
+        ...this.state.initialData,
+        items: result.items
+      },
+      cartData: result.cartData
+    }));
   };
 
   handleItemQuantityChange = (
@@ -133,53 +133,20 @@ class MainContainer extends Component {
     initialItemQuantyToAdd,
     cartItemQuantityToAdd
   ) => {
-    let items = this.state.initialData.items;
-    let cartData = this.state.cartData;
-    let initialItem = items.find(i => i.id === cartItem.itemId);
-    let changedCartItem = cartData.cartItems.find(
-      c => c.itemId === cartItem.itemId
+    let result = CartUtils.recalculateAllAfterItemQuantityChange(
+      this.state.initialData.items,
+      this.state.cartData,
+      cartItem,
+      initialItemQuantyToAdd,
+      cartItemQuantityToAdd
     );
 
-    if (
-      // decrease quantity
-      (initialItemQuantyToAdd > 0 && changedCartItem.quantity > 0) ||
-      // increase quantity
-      (initialItemQuantyToAdd < 0 && initialItem.quantityOnStock > 0)
-    ) {
-      initialItem.quantityOnStock += initialItemQuantyToAdd;
-      let newQuantityOfChangedItem =
-        changedCartItem.quantity + cartItemQuantityToAdd;
-      changedCartItem.setQuantity(newQuantityOfChangedItem);
-      cartData.cartItemsSum = this.calculateCartItemsSum();
-
-      this.setState(() => ({
-        initialData: {
-          ...this.state.initialData,
-          items
-        },
-        cartData
-      }));
-    }
-  };
-
-  handleRemoveCartItem = cartItem => {
-    let items = this.state.initialData.items;
-    let cartData = this.state.cartData;
-    let initialItem = items.find(i => i.id === cartItem.itemId);
-    let changedCartItemIndex = cartData.cartItems
-      .map(i => i.itemId)
-      .indexOf(cartItem.itemId);
-    let changedCartItem = cartData.cartItems[changedCartItemIndex];
-    let quantitiesToGiveBack = changedCartItem.quantity;
-    cartData.cartItems.splice(changedCartItemIndex, 1);
-    cartData.cartItemsSum = this.calculateCartItemsSum();
-    initialItem.quantityOnStock += quantitiesToGiveBack;
     this.setState(() => ({
       initialData: {
         ...this.state.initialData,
-        items
+        items: result.items
       },
-      cartData
+      cartData: result.cartData
     }));
   };
 
@@ -187,25 +154,7 @@ class MainContainer extends Component {
     this.resetCart();
   };
 
-  calculateCartItemsSum = () =>
-    this.state.cartData.cartItems.length > 0
-      ? roundToTwoDecimalPlaces(
-          this.state.cartData.cartItems
-            .map(i => i.totalPrice)
-            .reduce((a, b) => a + b)
-        )
-      : 0;
-
-  filterByCategoryAndFeature = (initialItems, activeCategory, activefeatures) =>
-    new DataFilter(initialItems).filterByCategoryAndFeature(
-      activeCategory,
-      activefeatures
-    );
-
-  filterBySearchValue = (initialItems, itemName) =>
-    new DataFilter(initialItems).filterBySearchValue(itemName);
-
-  resetReceivedandFilteredData() {
+  handleResetReceivedandFilteredData = () => {
     this.setState(() => ({
       receivedData: {
         searchValue: "",
@@ -214,7 +163,7 @@ class MainContainer extends Component {
         activeItem: {}
       },
       filteredData: {
-        items: this.filterByCategoryAndFeature(
+        items: DataFilter.filterByCategoryAndFeature(
           this.props.data.items,
           this.props.data.categories[0].name,
           []
@@ -225,7 +174,7 @@ class MainContainer extends Component {
         shouldExpandViewer: false
       }
     }));
-  }
+  };
 
   resetCart() {
     this.setState(() => ({
@@ -236,7 +185,7 @@ class MainContainer extends Component {
     }));
   }
 
-  View = () => {
+  StandardView = () => {
     return (
       <Row>
         <Col sm={3}>
@@ -247,7 +196,7 @@ class MainContainer extends Component {
           />
         </Col>
         <Col sm={9}>
-          <this.ViewerComponent
+          <this.ExpandView
             rows={this.state.controllers.viewerRows}
             columns={this.state.controllers.viewerColumns}
           />
@@ -256,49 +205,14 @@ class MainContainer extends Component {
     );
   };
 
-  ViewerComponent = props => {
+  ExpandView = props => {
     return (
       <ViewerContainer
         viewerRows={props.rows}
         viewerColumns={props.columns}
         filteredItems={this.state.filteredData.items}
         onItemClick={this.handleItemClick}
-        onAddToCartClick={this.handleAddToCartClick}
-      />
-    );
-  };
-
-  SearchResult = () => {
-    return (
-      <ViewerContainer
-        filteredItems={this.state.filteredData.items}
-        onItemClick={this.handleItemClick}
-        onAddToCartClick={this.handleAddToCartClick}
-      />
-    );
-  };
-
-  ItemDetails = () => {
-    return (
-      <ItemDetails
-        initialItems={this.state.initialData.items}
-        item={this.state.receivedData.activeItem}
-        onAddReview={this.handleAddReview}
-        onAddToCartClick={this.handleAddToCartClick}
-      />
-    );
-  };
-
-  CartContainer = route => {
-    return (
-      <CartContainer
-        cartItems={this.state.cartData.cartItems}
-        cartItemsSum={this.state.cartData.cartItemsSum}
-        initialItems={this.state.initialData.items}
-        routeUrl={route.match.url}
-        onChangeItemQuantity={this.handleItemQuantityChange}
-        onRemoveCartItem={this.handleRemoveCartItem}
-        onPurchaseComplete={this.handlePurchaseComplete}
+        onAddToCartClick={this.handleAddToCart}
       />
     );
   };
@@ -309,27 +223,49 @@ class MainContainer extends Component {
       <Router>
         <Container>
           <Row>
-            <Menu
+            <MenuContainer
               searchValue={this.state.receivedData.searchValue}
               onSearchChange={this.handleSearchChange}
-              onHomeClick={this.handleHomeClick}
               cartItemsLength={this.state.cartData.cartItems.length}
+              onResetReceivedandFilteredData={
+                this.handleResetReceivedandFilteredData
+              }
             />
           </Row>
           {shouldExpandViewer ? (
-            <this.ViewerComponent
+            <this.ExpandView
               rows={this.state.controllers.viewerRows + 1}
               columns={this.state.controllers.viewerColumns + 1}
             />
           ) : (
-            <Route exact path="/" component={this.View} />
+            <Route exact path="/" component={this.StandardView} />
           )}
-          <Route path="/cart" component={this.CartContainer} />
+          <Route
+            path="/cart"
+            component={route => (
+              <CartContainer
+                cartItems={this.state.cartData.cartItems}
+                cartItemsSum={this.state.cartData.cartItemsSum}
+                initialData={this.state.initialData}
+                routeUrl={route.match.url}
+                onChangeItemQuantity={this.handleItemQuantityChange}
+                onRemoveCartItem={this.handleRemoveFromCart}
+                onPurchaseComplete={this.handlePurchaseComplete}
+              />
+            )}
+          />
           <Route
             path={
               "/item-details/item-id-" + this.state.receivedData.activeItem.id
             }
-            component={this.ItemDetails}
+            component={() => (
+              <ItemDetailsContainer
+                initialItems={this.state.initialData.items}
+                item={this.state.receivedData.activeItem}
+                onAddReview={this.handleAddReview}
+                onAddToCartClick={this.handleAddToCart}
+              />
+            )}
           />
         </Container>
       </Router>
@@ -340,7 +276,14 @@ class MainContainer extends Component {
 MainContainer.propTypes = {
   data: PropTypes.shape({
     items: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
-    categories: PropTypes.arrayOf(PropTypes.instanceOf(Category))
+    categories: PropTypes.arrayOf(PropTypes.instanceOf(Category)),
+    paymentMethods: PropTypes.arrayOf(PropTypes.string),
+    deliveryOptions: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        price: PropTypes.num
+      })
+    )
   })
 };
 

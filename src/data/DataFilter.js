@@ -1,25 +1,25 @@
-import { arrayContainsAllElementsFromAnother } from "./Utils";
+import DataUtils from "./DataUtils";
 
 class DataFilter {
-  constructor(initialItems) {
-    this.initialItems = initialItems;
-  }
-
-  filterByCategoryAndFeature(activeCategory, activeFeatures) {
+  static filterByCategoryAndFeature(
+    initialItems,
+    activeCategory,
+    activeFeatures
+  ) {
     let allFeaturesAreOff = activeFeatures.every(
       filter => filter.state === false
     );
 
     if (allFeaturesAreOff) {
       return Object.values(
-        this.initialItems.filter(item => {
+        initialItems.filter(item => {
           return item.categoryName === activeCategory;
         })
       );
     } else {
-      return this.initialItems.filter(
+      return initialItems.filter(
         item =>
-          arrayContainsAllElementsFromAnother(
+          DataUtils.arrayContainsAllElementsFromAnother(
             item.featuresNames,
             activeFeatures.filter(f => f.state === true).map(f => f.name)
           ) && item.categoryName === activeCategory
@@ -27,9 +27,9 @@ class DataFilter {
     }
   }
 
-  filterBySearchValue(value) {
+  static filterBySearchValue(initialItems, value) {
     let searchedValue = value.toLowerCase();
-    return this.initialItems.filter(
+    return initialItems.filter(
       item =>
         item.name.toLowerCase().includes(searchedValue) ||
         item.descriptionShort.toLowerCase().includes(searchedValue) ||

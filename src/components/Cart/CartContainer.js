@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Route } from "react-router-dom";
-import { CartItem, Item } from "../../data/DataGenerator";
+import { CartItem, Item, Category } from "../../data/DataGenerator";
 import Info from "./Info";
 import Checkout from "./Checkout";
 import Summary from "./Summary";
@@ -11,11 +11,12 @@ class CartContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      checkoutData: {}
+      checkoutData: {},
+      totalPrice: 0
     };
   }
 
-  handleItemQuantityChange = (
+  handleQuantityChange = (
     cartItem,
     initialItemQuantyToAdd,
     cartItemQuantityToAdd
@@ -27,52 +28,19 @@ class CartContainer extends Component {
     );
   };
 
-  handleRemoveCartItem = cartItem => {
+  handleRemove = cartItem => {
     this.props.onRemoveCartItem(cartItem);
   };
 
-  handleConfirmCheckoutData = checkoutData => {
+  handleCheckoutConfirm = (checkoutData, totalPrice) => {
     this.setState(() => ({
-      checkoutData
+      checkoutData,
+      totalPrice
     }));
   };
 
   handlePurchaseComplete = () => {
     this.props.onPurchaseComplete();
-  };
-
-  InfoView = route => {
-    return (
-      <Info
-        cartItems={this.props.cartItems}
-        cartItemsSum={this.props.cartItemsSum}
-        initialItems={this.props.initialItems}
-        routeUrl={route.match.url}
-        onChangeItemQuantity={this.handleItemQuantityChange}
-        onRemoveCartItem={this.handleRemoveCartItem}
-      />
-    );
-  };
-
-  CheckoutView = route => {
-    return (
-      <Checkout
-        cartItemsSum={this.props.cartItemsSum}
-        routeUrl={route.match.url}
-        onConfirmCheckoutData={this.handleConfirmCheckoutData}
-      />
-    );
-  };
-
-  SummaryView = route => {
-    return (
-      <Summary
-        cartItemsSum={this.props.cartItemsSum}
-        checkoutData={this.state.checkoutData}
-        routeUrl={route.match.url}
-        onPurchaseComplete={this.handlePurchaseComplete}
-      />
-    );
   };
 
   render() {
@@ -81,17 +49,41 @@ class CartContainer extends Component {
         <Route
           exact
           path={`${this.props.routeUrl}/info`}
-          component={this.InfoView}
+          component={route => (
+            <Info
+              cartItems={this.props.cartItems}
+              cartItemsSum={this.props.cartItemsSum}
+              initialItems={this.props.initialData.items}
+              routeUrl={route.match.url}
+              onChangeItemQuantity={this.handleQuantityChange}
+              onRemoveCartItem={this.handleRemove}
+            />
+          )}
         />
         <Route
           eaxct
           path={`${this.props.routeUrl}/checkout`}
-          component={this.CheckoutView}
+          component={route => (
+            <Checkout
+              cartItemsSum={this.props.cartItemsSum}
+              paymentMethods={this.props.initialData.paymentMethods}
+              deliveryOptions={this.props.initialData.deliveryOptions}
+              routeUrl={route.match.url}
+              onConfirmCheckoutData={this.handleCheckoutConfirm}
+            />
+          )}
         />
         <Route
           eaxct
           path={`${this.props.routeUrl}/summary`}
-          component={this.SummaryView}
+          component={route => (
+            <Summary
+              cartItemsSum={this.state.totalPrice}
+              checkoutData={this.state.checkoutData}
+              routeUrl={route.match.url}
+              onPurchaseComplete={this.handlePurchaseComplete}
+            />
+          )}
         />
       </Container>
     );
@@ -101,7 +93,17 @@ class CartContainer extends Component {
 CartContainer.propTypes = {
   cartItems: PropTypes.arrayOf(PropTypes.instanceOf(CartItem)),
   cartItemsSum: PropTypes.number,
-  initialItems: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
+  initialData: PropTypes.shape({
+    items: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
+    categories: PropTypes.arrayOf(PropTypes.instanceOf(Category)),
+    paymentMethods: PropTypes.arrayOf(PropTypes.string),
+    deliveryOptions: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        price: PropTypes.num
+      })
+    )
+  }),
   routeUrl: PropTypes.string,
   onChangeItemQuantity: PropTypes.func,
   onRemoveCartItem: PropTypes.func,

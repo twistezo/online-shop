@@ -9,7 +9,7 @@ class CardGroups extends Component {
     this.props.onItemClick(item);
   };
 
-  handleAddToCartClick = itemId => {
+  handleAddToCart = itemId => {
     this.props.onAddToCartClick(itemId);
   };
 
@@ -28,7 +28,7 @@ class CardGroups extends Component {
               item={item}
               key={item.id}
               onItemClick={this.handleItemClick}
-              onAddToCartClick={this.handleAddToCartClick}
+              onAddToCartClick={this.handleAddToCart}
             />
           );
           firstItemOnActivePage += 1;

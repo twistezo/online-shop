@@ -1,88 +1,69 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Pagination as BootstrapPagination } from "react-bootstrap";
+import PaginationUtils from "./PaginationUtils";
 
 class Pagination extends Component {
-  getFirstItemNumOnActivePage() {
-    let itemsPerPage = this.props.cardsData.rows * this.props.cardsData.columns;
-    let activePage = this.props.cardsData.activePage;
-    let firstItemOnActivePage = this.props.cardsData.firstItemNumOnActivePage;
+  handlePage = (props, pageChoiceOpt) => {
+    let cardsData = props.cardsData;
+    let activePage = cardsData.activePage;
 
-    if (activePage === 0) {
-      firstItemOnActivePage = 0;
-    } else {
-      firstItemOnActivePage = itemsPerPage * activePage;
-    }
-    return firstItemOnActivePage;
-  }
-
-  getPagesLen() {
-    return (
-      Math.ceil(
-        this.props.itemsLength /
-          (this.props.cardsData.rows * this.props.cardsData.columns)
-      ) - 1
-    );
-  }
-
-  handleFirstPage = () => {
-    let cardsData = this.props.cardsData;
-    this.handlePrevNextPage(cardsData, 0);
-  };
-
-  handleLastPage = () => {
-    let cardsData = this.props.cardsData;
-    this.handlePrevNextPage(cardsData, this.getPagesLen());
-  };
-
-  handlePrevPage = () => {
-    let cardsData = this.props.cardsData;
-    if (cardsData.activePage > 0) {
-      let newActivPage = cardsData.activePage - 1;
-      this.handlePrevNextPage(cardsData, newActivPage);
+    switch (pageChoiceOpt) {
+      case "first":
+        props.onItemClick(PaginationUtils.handlePage(cardsData, 0));
+        break;
+      case "last":
+        props.onItemClick(
+          PaginationUtils.handlePage(
+            cardsData,
+            PaginationUtils.getPagesLen(props.itemsLength, cardsData)
+          )
+        );
+        break;
+      case "prev":
+        props.onItemClick(
+          PaginationUtils.handlePage(cardsData, activePage - 1)
+        );
+        break;
+      case "next":
+        props.onItemClick(
+          PaginationUtils.handlePage(cardsData, activePage + 1)
+        );
+        break;
+      default:
     }
   };
-
-  handleNextPage = () => {
-    let cardsData = this.props.cardsData;
-    if (cardsData.activePage < this.getPagesLen()) {
-      let newActivPage = cardsData.activePage + 1;
-      this.handlePrevNextPage(cardsData, newActivPage);
-    }
-  };
-
-  handlePrevNextPage(cardsData, newActivPage) {
-    cardsData.activePage = newActivPage;
-    cardsData.firstItemNumOnActivePage = this.getFirstItemNumOnActivePage(
-      newActivPage
-    );
-    this.props.onItemClick(cardsData);
-  }
 
   render() {
-    let isFirstPage = this.props.cardsData.activePage === 0;
-    let isLastPage = this.props.cardsData.activePage === this.getPagesLen();
+    let props = this.props;
+    let isFirstPage = props.cardsData.activePage === 0;
+    let isLastPage =
+      props.cardsData.activePage ===
+      PaginationUtils.getPagesLen(props.itemsLength, props.cardsData);
     return (
       <div>
         <BootstrapPagination className="pt-2 float-right">
           <BootstrapPagination.First
             disabled={isFirstPage}
-            onClick={this.handleFirstPage}
+            onClick={() => this.handlePage(props, "first")}
           />
           <BootstrapPagination.Prev
             disabled={isFirstPage}
-            onClick={this.handlePrevPage}
+            onClick={() => this.handlePage(props, "prev")}
           />
           <BootstrapPagination.Item active>
-            {this.props.cardsData.activePage + 1}
+            {props.cardsData.activePage + 1}
           </BootstrapPagination.Item>
           <BootstrapPagination.Ellipsis disabled />
-          <BootstrapPagination.Item onClick={this.handleLastPage}>
-            {this.getPagesLen() + 1}
+          <BootstrapPagination.Item
+            onClick={() => this.handlePage(props, "last")}
+          >
+            {PaginationUtils.getPagesLen(props.itemsLength, props.cardsData) +
+              1}
           </BootstrapPagination.Item>
           <BootstrapPagination.Next
             disabled={isLastPage}
-            onClick={this.handleNextPage}
+            onClick={() => this.handlePage(props, "next")}
           />
         </BootstrapPagination>
       </div>

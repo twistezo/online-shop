@@ -25,17 +25,16 @@ class Info extends Component {
     );
   };
 
-  handleRemoveCartItem = cartItem => {
+  handleRemoveFromCart = cartItem => {
     this.props.onRemoveCartItem(cartItem);
   };
 
   InfoView = () => {
     let initialItems = this.props.initialItems;
     let cartItems = this.props.cartItems;
-
     let cartItemsComponents = [];
-    for (let i = 0; i < cartItems.length; i++) {
-      let cartItem = cartItems[i];
+
+    cartItems.forEach((cartItem, i) => {
       let cartItemQuantityIsZero = cartItem.quantity === 0;
       let item = initialItems.find(item => item.id === cartItem.itemId);
       cartItemsComponents.push(
@@ -82,7 +81,7 @@ class Info extends Component {
               Total: {cartItem.totalPrice} EUR
             </Col>
             <Col xs={12} sm={1}>
-              <Button onClick={() => this.handleRemoveCartItem(cartItem)}>
+              <Button onClick={() => this.handleRemoveFromCart(cartItem)}>
                 <i className="fas fa-trash-alt" />
               </Button>
             </Col>
@@ -90,7 +89,7 @@ class Info extends Component {
           <hr />
         </Container>
       );
-    }
+    });
 
     let sumIsZero = this.props.cartItemsSum === 0;
     return (
@@ -118,19 +117,17 @@ class Info extends Component {
     );
   };
 
-  EmptyCartView = () => {
-    return (
-      <div className="text-center">
-        <h2>Cart is empty. Pick something.</h2>
-      </div>
-    );
-  };
-
   render() {
     let cartIsEmpty = this.props.cartItems.length === 0;
     return (
       <Container>
-        {cartIsEmpty ? <this.EmptyCartView /> : <this.InfoView />}
+        {cartIsEmpty ? (
+          <div className="text-center">
+            <h2>Cart is empty. Pick something.</h2>
+          </div>
+        ) : (
+          <this.InfoView />
+        )}
       </Container>
     );
   }

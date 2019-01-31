@@ -16,7 +16,7 @@ class ItemCard extends Component {
     this.props.onItemClick(this.state.item);
   };
 
-  handleAddToCartClick = () => {
+  handleAddToCart = () => {
     this.props.onAddToCartClick(this.state.item.id);
   };
 
@@ -48,7 +48,7 @@ class ItemCard extends Component {
                 <Button
                   className="float-right"
                   variant="primary"
-                  onClick={this.handleAddToCartClick}
+                  onClick={this.handleAddToCart}
                 >
                   <i className="fas fa-cart-arrow-down" />
                 </Button>

@@ -10,7 +10,9 @@ class App extends Component {
     super();
     this.data = {
       items: [],
-      categories: []
+      categories: [],
+      paymentMethods: [],
+      deliveryOptions: []
     };
     this.generateData();
   }
@@ -20,6 +22,8 @@ class App extends Component {
     dataGenerator.generate(App.dataQuantity);
     this.data.items = dataGenerator.getItems();
     this.data.categories = dataGenerator.getCategories();
+    this.data.paymentMethods = dataGenerator.getPaymentMethods();
+    this.data.deliveryOptions = dataGenerator.getDeliveryOptions();
   }
 
   render() {

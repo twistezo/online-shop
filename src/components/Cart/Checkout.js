@@ -2,27 +2,12 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Container, Col, Row, Button, Form } from "react-bootstrap";
-import { roundToTwoDecimalPlaces } from "../../data/Utils";
+import DataUtils from "../../data/DataUtils";
 
 class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      paymentMethods: ["Credit Card", "PayPal", "PayU"],
-      deliveryOptions: [
-        {
-          name: "UPS",
-          price: 14.99
-        },
-        {
-          name: "DHL",
-          price: 16.99
-        },
-        {
-          name: "DPD",
-          price: 18.99
-        }
-      ],
       totalPrice: 0,
       controllers: {
         showTotalPrice: false,
@@ -57,82 +42,54 @@ class Checkout extends Component {
   }
 
   handlePaymentMethodChange = e => {
-    let value = e.target.value;
+    const value = e.target.value;
     let formValidation = this.state.formValidation;
-    if (value !== "Choose...") {
-      formValidation.paymentMethod = true;
-      if (value === this.state.paymentMethods[0]) {
-        formValidation.creditCardExpirationDate = false;
-        formValidation.creditCardNumber = false;
-        this.setState(() => ({
-          formData: {
-            ...this.state.formData,
-            paymentMethod: value
-          },
-          showCreditCardExtraFields: true,
-          formValidation,
-          isFormValid: this.allFieldsAreValid(formValidation)
-        }));
-      } else {
-        formValidation.creditCardExpirationDate = true;
-        formValidation.creditCardNumber = true;
-        this.setState(() => ({
-          formData: {
-            ...this.state.formData,
-            paymentMethod: value
-          },
-          showCreditCardExtraFields: false,
-          formValidation,
-          isFormValid: this.allFieldsAreValid(formValidation)
-        }));
-      }
-    } else {
-      formValidation.paymentMethod = false;
-      formValidation.creditCardExpirationDate = false;
-      formValidation.creditCardNumber = false;
-      this.setState(() => ({
-        formValidation,
-        isFormValid: this.allFieldsAreValid(formValidation)
-      }));
-    }
+    formValidation.paymentMethod = value !== "Choose...";
+    formValidation.creditCardExpirationDate =
+      value !== "Choose..." && value !== "Credit Card";
+    formValidation.creditCardNumber = formValidation.creditCardExpirationDate;
+    const showCreditCardExtraFields = value === "Credit Card";
+
+    this.setState(() => ({
+      formData: {
+        ...this.state.formData,
+        paymentMethod: value
+      },
+      showCreditCardExtraFields,
+      formValidation,
+      isFormValid: this.allFieldsAreValid(formValidation)
+    }));
   };
 
   handleDeliveryOptionChange = e => {
-    let value = e.target.value;
+    const value = e.target.value;
     let formValidation = this.state.formValidation;
-    if (value !== "Choose...") {
-      formValidation.deliveryOption = true;
-      this.setState(() => ({
-        controllers: {
-          ...this.state.controllers,
-          showTotalPrice: true
-        },
-        formData: {
-          ...this.state.formData,
-          deliveryOption: value
-        },
-        formValidation,
-        isFormValid: this.allFieldsAreValid(formValidation)
-      }));
-    } else {
-      formValidation.deliveryOption = false;
-      this.setState(() => ({
-        controllers: {
-          ...this.state.controllers,
-          showTotalPrice: false
-        },
-        formValidation,
-        isFormValid: this.allFieldsAreValid(formValidation)
-      }));
-    }
+    formValidation.deliveryOption = value !== "Choose...";
+    const showTotalPrice = formValidation.deliveryOption;
 
-    let option = this.state.deliveryOptions.find(
-      o => o.name.substring(0, 2) === value.substring(0, 2)
+    this.setState(() => ({
+      controllers: {
+        ...this.state.controllers,
+        showTotalPrice
+      },
+      formData: {
+        ...this.state.formData,
+        deliveryOption: value
+      },
+      formValidation,
+      isFormValid: this.allFieldsAreValid(formValidation)
+    }));
+    this.recalculateTotalPriceWithDeliveryOption(value);
+  };
+
+  recalculateTotalPriceWithDeliveryOption = inputTargetValue => {
+    let option = this.props.deliveryOptions.find(
+      o => o.name.substring(0, 2) === inputTargetValue.substring(0, 2)
     );
     let newTotalPrice = this.props.cartItemsSum;
     if (option !== undefined) {
       newTotalPrice += option.price;
-      newTotalPrice = roundToTwoDecimalPlaces(newTotalPrice);
+      newTotalPrice = DataUtils.roundToTwoDecimalPlaces(newTotalPrice);
       this.setState(() => ({
         formData: {
           ...this.state.formData,
@@ -143,72 +100,55 @@ class Checkout extends Component {
     }
   };
 
-  handleInputChange = e => {
+  handleFormInputChange = e => {
     let targetName = e.target.name;
     let targetValue = e.target.value;
     let isFieldValid = e.target.checkValidity() === true;
     let formValidation = this.state.formValidation;
+    formValidation[targetName] = isFieldValid;
 
-    if (targetName === "name") {
-      formValidation.name = isFieldValid;
-      this.setState(() => ({
-        formData: {
-          ...this.state.formData,
-          name: targetValue
-        },
-        formValidation,
-        isFormValid: this.allFieldsAreValid(formValidation)
-      }));
-    } else if (targetName === "email") {
-      formValidation.email = isFieldValid;
-      this.setState(() => ({
-        formData: {
-          ...this.state.formData,
-          email: targetValue
-        },
-        formValidation,
-        isFormValid: this.allFieldsAreValid(formValidation)
-      }));
-    } else if (targetName === "address") {
-      formValidation.address = isFieldValid;
-      this.setState(() => ({
-        formData: {
-          ...this.state.formData,
-          address: targetValue
-        },
-        formValidation,
-        isFormValid: this.allFieldsAreValid(formValidation)
-      }));
-    } else if (targetName === "creditCardNumber") {
-      formValidation.creditCardNumber = isFieldValid;
-      this.setState(() => ({
-        formData: {
-          ...this.state.formData,
-          creditCardNumber: targetValue
-        },
-        formValidation,
-        isFormValid: this.allFieldsAreValid(formValidation)
-      }));
-    } else if (targetName === "creditCardExpirationDate") {
-      formValidation.creditCardExpirationDate = isFieldValid;
+    this.setState(() => ({
+      formData: {
+        ...this.state.formData,
+        [targetName]: targetValue
+      },
+      formValidation,
+      isFormValid: this.allFieldsAreValid(formValidation),
+      isFieldValidated: true
+    }));
+  };
 
-      this.setState(() => ({
-        formData: {
-          ...this.state.formData,
-          creditCardExpirationDate: targetValue
-        },
-        formValidation,
-        isFormValid: this.allFieldsAreValid(formValidation)
-      }));
-    }
-    this.setState({ isFieldValidated: true });
+  handleConfirmButton = () => {
+    this.props.onConfirmCheckoutData(
+      this.state.formData,
+      this.state.totalPrice
+    );
   };
 
   allFieldsAreValid = formValidaton =>
     Object.values(formValidaton).every(v => v === true);
 
-  handleConfirmButton = () => {
-    this.props.onConfirmCheckoutData(this.state.formData);
+  FormGroup = props => {
+    return (
+      <Form.Group>
+        <Form.Label>{props.label}</Form.Label>
+        <Form.Control
+          name={props.name}
+          type={props.type}
+          placeholder={props.placeholder}
+          required={props.required}
+          onChange={this.handleFormInputChange}
+          pattern={props.pattern}
+        />
+        {props.withFeedback ? (
+          <Form.Control.Feedback type="invalid">
+            {props.feedback}
+          </Form.Control.Feedback>
+        ) : (
+          ""
+        )}
+      </Form.Group>
+    );
   };
 
   CheckoutView = () => {
@@ -216,45 +156,36 @@ class Checkout extends Component {
       <Container>
         <Col sm={5} className="col-centered">
           <Form validated={this.state.isFieldValidated}>
-            <Form.Group>
-              <Form.Label>Full name</Form.Label>
-              <Form.Control
-                name="name"
-                type="text"
-                placeholder="Ex. John Smith"
-                required
-                onChange={this.handleInputChange}
-              />
-              <Form.Control.Feedback type="invalid">
-                This field is required.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                name="email"
-                type="email"
-                placeholder="example@gmail.com"
-                required
-                onChange={this.handleInputChange}
-              />
-              <Form.Control.Feedback type="invalid">
-                Incorrect email format.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Address</Form.Label>
-              <Form.Control
-                name="address"
-                type="text"
-                placeholder="Street, city, postalcode"
-                required
-                onChange={this.handleInputChange}
-              />
-              <Form.Control.Feedback type="invalid">
-                This field is required.
-              </Form.Control.Feedback>
-            </Form.Group>
+            <this.FormGroup
+              label={"Full name"}
+              name={"name"}
+              type={"text"}
+              placeholder={"Ex. John Smith"}
+              required={true}
+              withFeedback={true}
+              feedback={"This field is required."}
+              pattern={null}
+            />
+            <this.FormGroup
+              label={"Email"}
+              name={"email"}
+              type={"email"}
+              placeholder={"example@gmail.com"}
+              required={true}
+              withFeedback={true}
+              feedback={"Incorrect email format."}
+              pattern={null}
+            />
+            <this.FormGroup
+              label={"Address"}
+              name={"address"}
+              type={"text"}
+              placeholder={"Street, city, postalcode"}
+              required={true}
+              withFeedback={true}
+              feedback={"This field is required."}
+              pattern={null}
+            />
             <Form.Group>
               <Form.Label>Payment method</Form.Label>
               <Form.Control
@@ -265,36 +196,28 @@ class Checkout extends Component {
               </Form.Control>
             </Form.Group>
             {this.state.showCreditCardExtraFields && (
-              <Form.Group>
-                <Form.Label>Credit card number</Form.Label>
-                <Form.Control
-                  name="creditCardNumber"
-                  type="text"
-                  placeholder="Ex. 5500000000000004"
-                  pattern={this.state.regex.creditCardNumber}
-                  required
-                  onChange={this.handleInputChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Invalid format. Ex. 5500000000000004
-                </Form.Control.Feedback>
-              </Form.Group>
+              <this.FormGroup
+                label={"Credit card number"}
+                name={"creditCardNumber"}
+                type={"text"}
+                placeholder={"Ex. 5500000000000004"}
+                required={true}
+                withFeedback={true}
+                feedback={"Invalid format. Ex. 5500000000000004"}
+                pattern={this.state.regex.creditCardNumber}
+              />
             )}
             {this.state.showCreditCardExtraFields && (
-              <Form.Group>
-                <Form.Label>Credit card expiration date</Form.Label>
-                <Form.Control
-                  name="creditCardExpirationDate"
-                  type="text"
-                  placeholder="Ex. 02/19"
-                  pattern={this.state.regex.creditCardExpirationDate}
-                  required
-                  onChange={this.handleInputChange}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Invalid format. Ex. 02/19
-                </Form.Control.Feedback>
-              </Form.Group>
+              <this.FormGroup
+                label={"Credit card expiration date"}
+                name={"creditCardExpirationDate"}
+                type={"text"}
+                placeholder={"Ex. 02/19"}
+                required={true}
+                withFeedback={true}
+                feedback={"Invalid format. Ex. 02/19"}
+                pattern={this.state.regex.creditCardExpirationDate}
+              />
             )}
             <Form.Group>
               <Form.Label>Delivery option</Form.Label>
@@ -334,25 +257,22 @@ class Checkout extends Component {
   PaymentMethods = () => {
     let options = [];
     options.push(<option key={0}>Choose...</option>);
-    for (let i = 0; i < this.state.paymentMethods.length; i++) {
-      options.push(<option key={i + 1}>{this.state.paymentMethods[i]}</option>);
-    }
+    this.props.paymentMethods.forEach((paymentMethod, i) => {
+      options.push(<option key={i + 1}>{paymentMethod}</option>);
+    });
     return options;
   };
 
   DeliveryOptions = () => {
     let options = [];
     options.push(<option key={0}>Choose...</option>);
-    for (let i = 0; i < this.state.deliveryOptions.length; i++) {
+    this.props.deliveryOptions.forEach((deliveryOption, i) => {
       options.push(
         <option key={i + 1}>
-          {this.state.deliveryOptions[i].name +
-            " - " +
-            this.state.deliveryOptions[i].price +
-            " EUR"}
+          {deliveryOption.name + " - " + deliveryOption.price + " EUR"}
         </option>
       );
-    }
+    });
     return options;
   };
 
@@ -363,6 +283,13 @@ class Checkout extends Component {
 
 Checkout.propTypes = {
   cartItemsSum: PropTypes.number,
+  paymentMethods: PropTypes.arrayOf(PropTypes.string),
+  deliveryOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      price: PropTypes.num
+    })
+  ),
   routeUrl: PropTypes.string,
   onConfirmCheckoutData: PropTypes.func
 };
