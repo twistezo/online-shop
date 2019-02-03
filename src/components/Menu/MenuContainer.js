@@ -30,7 +30,7 @@ class MenuContainer extends Component {
       <Container className="menu">
         <Row>
           <Col xs={3} sm={4}>
-            <Link to="/">
+            <Link to="/online-shop/">
               <Button
                 className="float-right"
                 variant="primary"
@@ -41,7 +41,7 @@ class MenuContainer extends Component {
             </Link>
           </Col>
           <Col className="text-center" xs={6} sm={4}>
-            <Link to="/search">
+            <Link to="/online-shop/search">
               <Form.Control
                 type="text"
                 placeholder="Search"
@@ -51,7 +51,7 @@ class MenuContainer extends Component {
             </Link>
           </Col>
           <Col xs={3} sm={4}>
-            <Link to="/cart/info">
+            <Link to="online-shop/cart/info">
               <Button
                 variant="primary float-left"
                 onClick={() => this.props.onResetReceivedandFilteredData()}
