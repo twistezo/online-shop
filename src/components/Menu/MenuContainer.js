@@ -51,7 +51,7 @@ class MenuContainer extends Component {
             </Link>
           </Col>
           <Col xs={3} sm={4}>
-            <Link to="online-shop/cart/info">
+            <Link to="/online-shop/cart/info">
               <Button
                 variant="primary float-left"
                 onClick={() => this.props.onResetReceivedandFilteredData()}

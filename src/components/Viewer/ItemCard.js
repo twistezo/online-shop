@@ -34,7 +34,9 @@ class ItemCard extends Component {
           <div className="mt-auto">
             <Row>
               <Col>
-                <Link to={"/item-details/item-id-" + this.state.item.id}>
+                <Link
+                  to={"/online-shop/item-details/item-id-" + this.state.item.id}
+                >
                   <Button
                     className="float-left"
                     variant="primary"

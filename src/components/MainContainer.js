@@ -238,9 +238,13 @@ class MainContainer extends Component {
               }
             />
           </Row>
-          <Route exact path="online-shop/(|online-shop/search)" component={this.Viewer} />
           <Route
-            path="/cart"
+            exact
+            path="(/online-shop/|/online-shop/search)"
+            component={this.Viewer}
+          />
+          <Route
+            path="/online-shop/cart"
             component={route => (
               <CartContainer
                 cartItems={this.state.cartData.cartItems}
@@ -255,7 +259,8 @@ class MainContainer extends Component {
           />
           <Route
             path={
-              "online-shop/item-details/item-id-" + this.state.receivedData.activeItem.id
+              "/online-shop/item-details/item-id-" +
+              this.state.receivedData.activeItem.id
             }
             component={() => (
               <ItemDetailsContainer

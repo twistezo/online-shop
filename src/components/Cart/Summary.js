@@ -31,7 +31,7 @@ class Summary extends Component {
           will be redirected fo main page.
         </Modal.Body>
         <Modal.Footer>
-          <Link to="/">
+          <Link to="/online-shop/">
             <Button variant="primary" onClick={this.handleCloseModal}>
               Ok
             </Button>
