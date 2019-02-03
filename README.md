@@ -2,7 +2,7 @@
 
 ### Description
 
-Online-shop created with React and bootstrapped with `create-react-app`.
+Online-shop created with React.
 
 ### Features
 
