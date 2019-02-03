@@ -50,23 +50,23 @@ class Info extends Component {
             <Col xs={6} sm={3} className="pb-4 pb-sm-0 align-self-center">
               {item.name}
             </Col>
-            <Col xs={12} sm={2} className="pb-4 pb-sm-0">
+            <Col xs={12} sm={2} className="pb-4 pb-sm-0 align-self-center">
               <Row>
                 <Col xs={4} sm={4}>
                   <Button
-                    className="float-left@"
+                    className="float-left"
                     disabled={cartItemQuantityIsZero}
                     onClick={() => this.handleDecreaseQuantity(cartItem)}
                   >
                     <i className="fas fa-minus" />
                   </Button>
                 </Col>
-                <Col xs={4} sm={4} className="align-self-center text-center@">
+                <Col xs={4} sm={4} className="align-self-center">
                   {cartItem.quantity}
                 </Col>
                 <Col xs={4} sm={4}>
                   <Button
-                    className="float-none@ float-sm-right@"
+                    className="float-none float-sm-right"
                     onClick={() => this.handleIncreaseQuantity(cartItem)}
                   >
                     <i className="fas fa-plus" />
@@ -75,12 +75,12 @@ class Info extends Component {
               </Row>
             </Col>
             <Col xs={12} sm={2} className="pb-4 pb-sm-0 align-self-center">
-              {cartItem.price} EUR per unit
+              {cartItem.price} EUR/unit
             </Col>
             <Col xs={12} sm={2} className="pb-4 pb-sm-0 align-self-center">
               Total: {cartItem.totalPrice} EUR
             </Col>
-            <Col xs={12} sm={1}>
+            <Col xs={12} sm={1} className="align-self-center">
               <Button onClick={() => this.handleRemoveFromCart(cartItem)}>
                 <i className="fas fa-trash-alt" />
               </Button>

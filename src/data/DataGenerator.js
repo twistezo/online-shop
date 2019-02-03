@@ -51,7 +51,7 @@ class DataGenerator {
           uuidv1(),
           chance.capitalize(chance.word({ syllables: 2, lenth: 6 })) + " #" + i,
           DataUtils.roundToTwoDecimalPlaces(DataUtils.randomBetween(1, 1000)),
-          chance.sentence(),
+          chance.sentence({ words: 10 }),
           chance.paragraph(),
           category.name,
           DataUtils.arrayFromArrayRandomItems(

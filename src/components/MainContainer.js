@@ -185,40 +185,46 @@ class MainContainer extends Component {
     }));
   }
 
-  StandardView = () => {
-    return (
-      <Row>
-        <Col sm={3}>
-          <SidebarContainer
-            categories={this.props.data.categories}
-            activeCategory={this.state.receivedData.activeCategory}
-            onSidebarChange={this.handleSidebarChange}
-          />
-        </Col>
-        <Col sm={9}>
-          <this.ExpandView
-            rows={this.state.controllers.viewerRows}
-            columns={this.state.controllers.viewerColumns}
-          />
-        </Col>
-      </Row>
-    );
-  };
+  Viewer = () => {
+    let shouldExpandViewer = this.state.controllers.shouldExpandViewer;
+    let viewerRows = this.state.controllers.viewerRows;
+    let viewerColumns = this.state.controllers.viewerColumns;
+    let rows = shouldExpandViewer ? viewerRows + 1 : viewerRows;
+    let columns = shouldExpandViewer ? viewerColumns + 1 : viewerColumns;
 
-  ExpandView = props => {
-    return (
+    const ViewerComponent = () => (
       <ViewerContainer
-        viewerRows={props.rows}
-        viewerColumns={props.columns}
+        viewerRows={rows}
+        viewerColumns={columns}
         filteredItems={this.state.filteredData.items}
         onItemClick={this.handleItemClick}
         onAddToCartClick={this.handleAddToCart}
       />
     );
+
+    return (
+      <div>
+        {shouldExpandViewer ? (
+          <ViewerComponent />
+        ) : (
+          <Row>
+            <Col sm={3}>
+              <SidebarContainer
+                categories={this.props.data.categories}
+                activeCategory={this.state.receivedData.activeCategory}
+                onSidebarChange={this.handleSidebarChange}
+              />
+            </Col>
+            <Col sm={9}>
+              <ViewerComponent />
+            </Col>
+          </Row>
+        )}
+      </div>
+    );
   };
 
   render() {
-    let shouldExpandViewer = this.state.controllers.shouldExpandViewer;
     return (
       <Router>
         <Container>
@@ -232,14 +238,7 @@ class MainContainer extends Component {
               }
             />
           </Row>
-          {shouldExpandViewer ? (
-            <this.ExpandView
-              rows={this.state.controllers.viewerRows + 1}
-              columns={this.state.controllers.viewerColumns + 1}
-            />
-          ) : (
-            <Route exact path="/" component={this.StandardView} />
-          )}
+          <Route exact path="/(|search)" component={this.Viewer} />
           <Route
             path="/cart"
             component={route => (

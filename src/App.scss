@@ -37,15 +37,20 @@ html {
   margin: 0 auto;
 }
 
-.cardImage {
-  padding-top: 20px;
-  max-width: 30%;
-  height: auto;
+.itemDetailsImage {
+  height: 200px;
+}
+
+.viewerCardImage {
+  height: 120px;
 }
 
 .cartItemImage {
-  max-width: 30%;
-  height: auto;
+  height: 60px;
+}
+
+.viewerCardImage {
+  padding-top: 20px;
 }
 
 img {

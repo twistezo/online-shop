@@ -82,8 +82,8 @@ class ItemDetailsContainer extends Component {
       <Container>
         <Row>
           <img
+            className="itemDetailsImage"
             alt=""
-            style={{ height: "200px" }}
             src={props.imagesSources[props.activeImageNum]}
           />
         </Row>

@@ -24,7 +24,7 @@ class ItemCard extends Component {
     return (
       <Card>
         <Card.Img
-          className="mx-auto d-block cardImage"
+          className="mx-auto d-block viewerCardImage"
           variant="top"
           src={this.state.item.imagesSources[0]}
         />

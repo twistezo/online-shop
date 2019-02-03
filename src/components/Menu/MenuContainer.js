@@ -41,16 +41,21 @@ class MenuContainer extends Component {
             </Link>
           </Col>
           <Col className="text-center" xs={6} sm={4}>
-            <Form.Control
-              type="text"
-              placeholder="Search"
-              value={this.props.searchValue}
-              onChange={this.handleSearchChange}
-            />
+            <Link to="/search">
+              <Form.Control
+                type="text"
+                placeholder="Search"
+                value={this.props.searchValue}
+                onChange={this.handleSearchChange}
+              />
+            </Link>
           </Col>
           <Col xs={3} sm={4}>
             <Link to="/cart/info">
-              <Button variant="primary float-left">
+              <Button
+                variant="primary float-left"
+                onClick={() => this.props.onResetReceivedandFilteredData()}
+              >
                 <i className="fas fa-shopping-cart" />
                 "&nbsp;
                 <Badge variant="primary">{this.props.cartItemsLength}</Badge>
