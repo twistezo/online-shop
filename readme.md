@@ -34,3 +34,7 @@ npm install -g serve
 serve -s build
 
 ```
+
+### Latest version
+
+https://twistezo.github.io/online-shop/
