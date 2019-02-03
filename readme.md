@@ -12,7 +12,6 @@ Online-shop created with React.
 - cart view, checkout and summary/confirmation page
 
 ### Tools
-
 React, Bootstrap
 
 ### Requirements
