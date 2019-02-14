@@ -25,7 +25,7 @@ class DataGenerator {
         new Feature("C2 feature 4")
       ])
     ];
-    this.paymentMethods = ["Credit Card", "PayPal", "PayU"];
+    this.paymentMethods = ["PayPal", "PayU", "Credit Card"];
     this.deliveryOptions = [
       {
         name: "UPS",
@@ -43,9 +43,9 @@ class DataGenerator {
   }
 
   generate(quantity) {
-    let chance = new Chance();
+    const chance = new Chance();
     for (let i = 0; i < quantity; i++) {
-      let category = DataUtils.randomArrayItem(this.categories);
+      const category = DataUtils.randomArrayItem(this.categories);
       this.data.push(
         new Item(
           uuidv1(),
@@ -69,7 +69,26 @@ class DataGenerator {
         )
       );
     }
+
+    const isCreatedWithSuccess =
+      this.checkNullOrUndefinded(this.data) &&
+      this.checkNullOrUndefinded(this.categories) &&
+      this.checkNullOrUndefinded(this.paymentMethods) &&
+      this.checkNullOrUndefinded(this.deliveryOptions);
+    return isCreatedWithSuccess
+      ? {
+          items: this.data,
+          categories: this.categories,
+          paymentMethods: this.paymentMethods,
+          deliveryOptions: this.deliveryOptions
+        }
+      : new Error(
+          "Generated data is broken. Some field is null or undefinded."
+        );
   }
+
+  checkNullOrUndefinded = value =>
+    value !== null && value !== undefined && value !== [];
 
   generateRandomImages(chance, imagesNum) {
     let images = [];
@@ -99,22 +118,6 @@ class DataGenerator {
       );
     }
     return reviews;
-  }
-
-  getItems() {
-    return this.data;
-  }
-
-  getCategories() {
-    return this.categories;
-  }
-
-  getPaymentMethods() {
-    return this.paymentMethods;
-  }
-
-  getDeliveryOptions() {
-    return this.deliveryOptions;
   }
 }
 

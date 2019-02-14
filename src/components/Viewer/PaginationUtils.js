@@ -3,8 +3,8 @@ class PaginationUtils {
     Math.ceil(itemsLength / (cardsData.rows * cardsData.columns)) - 1;
 
   static getFirstItemNumOnActivePage = cardsData => {
-    let itemsPerPage = cardsData.rows * cardsData.columns;
-    let activePage = cardsData.activePage;
+    const itemsPerPage = cardsData.rows * cardsData.columns;
+    const activePage = cardsData.activePage;
     let firstItemOnActivePage = cardsData.firstItemNumOnActivePage;
 
     if (activePage === 0) {

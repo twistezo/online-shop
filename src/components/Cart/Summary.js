@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Container, Col, Row, Button, Modal } from "react-bootstrap";
+import DataUtils from "../../data/DataUtils";
 
 class Summary extends Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class Summary extends Component {
           will be redirected fo main page.
         </Modal.Body>
         <Modal.Footer>
-          <Link to="/online-shop/">
+          <Link to="/">
             <Button variant="primary" onClick={this.handleCloseModal}>
               Ok
             </Button>
@@ -55,9 +56,9 @@ class Summary extends Component {
   };
 
   render() {
-    let checkoutData = this.props.checkoutData;
-    let showCreditCardExtraFields =
-      checkoutData.paymentMethod === "Credit Card";
+    const checkoutData = this.props.checkoutData;
+    const showCreditCardExtraFields =
+      checkoutData.paymentMethod.value === "Credit Card";
     return (
       <Container>
         <Col xs={12} sm={5} className="col-centered text-center">
@@ -66,7 +67,7 @@ class Summary extends Component {
           <this.SummaryRow name={"Address:"} value={checkoutData.address} />
           <this.SummaryRow
             name={"Payment method:"}
-            value={checkoutData.paymentMethod}
+            value={checkoutData.paymentMethod.value}
           />
           {showCreditCardExtraFields ? (
             <div>
@@ -85,14 +86,19 @@ class Summary extends Component {
           <this.SummaryRow
             name={"Delivery option:"}
             value={
-              checkoutData.deliveryOption.name +
+              checkoutData.deliveryOption.value.name +
               " - " +
-              checkoutData.deliveryOption.price
+              checkoutData.deliveryOption.value.price
             }
           />
           <this.SummaryRow
             name={"Price to pay:"}
-            value={this.props.cartItemsSum + " EUR"}
+            value={
+              DataUtils.roundToTwoDecimalPlaces(
+                this.props.cartItemsSum +
+                  checkoutData.deliveryOption.value.price
+              ) + " EUR"
+            }
           />
           <Row className="text-center pt-2">
             <Col>
@@ -117,12 +123,18 @@ Summary.propTypes = {
     name: PropTypes.string,
     email: PropTypes.string,
     address: PropTypes.string,
-    paymentMethod: PropTypes.string,
+    paymentMethod: PropTypes.shape({
+      value: PropTypes.string,
+      selected: PropTypes.string
+    }),
     creditCardNumber: PropTypes.string,
     creditCardExpirationDate: PropTypes.string,
     deliveryOption: PropTypes.shape({
-      name: PropTypes.string,
-      price: PropTypes.number
+      value: PropTypes.shape({
+        name: PropTypes.string,
+        price: PropTypes.number
+      }),
+      selected: PropTypes.string
     })
   }),
   routeUrl: PropTypes.string,

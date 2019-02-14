@@ -12,7 +12,7 @@ class MenuContainer extends Component {
   }
 
   handleSearchChange = event => {
-    let searchValue = event.target.value;
+    const searchValue = event.target.value;
     this.setState(() => ({
       searchValue
     }));
@@ -30,7 +30,7 @@ class MenuContainer extends Component {
       <Container className="menu">
         <Row>
           <Col xs={3} sm={4}>
-            <Link to="/online-shop/">
+            <Link to="/">
               <Button
                 className="float-right"
                 variant="primary"
@@ -41,7 +41,7 @@ class MenuContainer extends Component {
             </Link>
           </Col>
           <Col className="text-center" xs={6} sm={4}>
-            <Link to="/online-shop/search">
+            <Link to="/search">
               <Form.Control
                 type="text"
                 placeholder="Search"
@@ -51,7 +51,7 @@ class MenuContainer extends Component {
             </Link>
           </Col>
           <Col xs={3} sm={4}>
-            <Link to="/online-shop/cart/info">
+            <Link to="/cart/info">
               <Button
                 variant="primary float-left"
                 onClick={() => this.props.onResetReceivedandFilteredData()}

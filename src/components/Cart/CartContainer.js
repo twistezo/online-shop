@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Route } from "react-router-dom";
 import { CartItem, Item, Category } from "../../data/DataGenerator";
 import Info from "./Info";
-import Checkout from "./Checkout";
+import CheckoutContainer from "./Checkout/CheckoutContainer";
 import Summary from "./Summary";
 import { Container } from "react-bootstrap";
 
@@ -11,8 +11,21 @@ class CartContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      checkoutData: {},
-      totalPrice: 0
+      checkoutData: {
+        name: "",
+        email: "",
+        address: "",
+        paymentMethod: {
+          value: this.props.initialData.paymentMethods[0],
+          selected: this.props.initialData.paymentMethods[0]
+        },
+        creditCardNumber: "",
+        creditCardExpirationDate: "",
+        deliveryOption: {
+          value: this.props.initialData.deliveryOptions[0],
+          selected: this.props.initialData.deliveryOptions[0].name
+        }
+      }
     };
   }
 
@@ -32,11 +45,8 @@ class CartContainer extends Component {
     this.props.onRemoveCartItem(cartItem);
   };
 
-  handleCheckoutConfirm = (checkoutData, totalPrice) => {
-    this.setState(() => ({
-      checkoutData,
-      totalPrice
-    }));
+  handleCheckoutDataChange = checkoutData => {
+    this.setState(() => ({ checkoutData }));
   };
 
   handlePurchaseComplete = () => {
@@ -64,12 +74,13 @@ class CartContainer extends Component {
           eaxct
           path={`${this.props.routeUrl}/checkout`}
           component={route => (
-            <Checkout
+            <CheckoutContainer
               cartItemsSum={this.props.cartItemsSum}
+              checkoutData={this.state.checkoutData}
               paymentMethods={this.props.initialData.paymentMethods}
               deliveryOptions={this.props.initialData.deliveryOptions}
               routeUrl={route.match.url}
-              onConfirmCheckoutData={this.handleCheckoutConfirm}
+              onCheckoutDataChange={this.handleCheckoutDataChange}
             />
           )}
         />
@@ -78,7 +89,7 @@ class CartContainer extends Component {
           path={`${this.props.routeUrl}/summary`}
           component={route => (
             <Summary
-              cartItemsSum={this.state.totalPrice}
+              cartItemsSum={this.props.cartItemsSum}
               checkoutData={this.state.checkoutData}
               routeUrl={route.match.url}
               onPurchaseComplete={this.handlePurchaseComplete}

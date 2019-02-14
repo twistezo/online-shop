@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import DataFilter from "../data/DataFilter";
 import SidebarContainer from "./Sidebar/SidebarContainer";
@@ -30,11 +30,6 @@ class MainContainer extends Component {
       filteredData: {
         items: []
       },
-      controllers: {
-        viewerRows: 2,
-        viewerColumns: 2,
-        shouldExpandViewer: false
-      },
       cartData: {
         cartItems: [],
         cartItemsSum: 0
@@ -55,8 +50,9 @@ class MainContainer extends Component {
       },
       filteredData: {
         ...this.state.filteredData,
-        items: DataFilter.filterByCategoryAndFeature(
+        items: DataFilter.filterByAllOptions(
           this.state.initialData.items,
+          this.state.receivedData.searchValue,
           activeCategory,
           activeFeatures
         )
@@ -72,14 +68,12 @@ class MainContainer extends Component {
       },
       filteredData: {
         ...this.state.filteredData,
-        items: DataFilter.filterBySearchValue(
+        items: DataFilter.filterByAllOptions(
           this.state.initialData.items,
-          searchValue
+          searchValue,
+          this.state.receivedData.activeCategory,
+          this.state.receivedData.activeFeatures
         )
-      },
-      controllers: {
-        ...this.state.controllers,
-        shouldExpandViewer: true
       }
     }));
   };
@@ -95,13 +89,21 @@ class MainContainer extends Component {
   };
 
   handleAddReview = (review, itemId) => {
-    let item = this.state.initialData.items.find(item => item.id === itemId);
-    if (item.reviews.find(r => r.name === review.name) === undefined)
+    let items = [...this.state.initialData.items];
+    let item = items.find(item => item.id === itemId);
+    if (item.reviews.find(r => r.name === review.name) === undefined) {
       item.reviews.push(review);
+      this.setState(() => ({
+        initialData: {
+          ...this.state.initialData,
+          items
+        }
+      }));
+    }
   };
 
   handleAddToCart = itemId => {
-    let result = CartUtils.recalculateOnAdd(
+    const result = CartUtils.recalculateOnAdd(
       itemId,
       this.state.initialData.items,
       this.state.cartData
@@ -114,7 +116,7 @@ class MainContainer extends Component {
   };
 
   handleRemoveFromCart = cartItem => {
-    let result = CartUtils.recalculateOnRemove(
+    const result = CartUtils.recalculateOnRemove(
       cartItem,
       this.state.cartData,
       this.state.initialData.items
@@ -133,7 +135,7 @@ class MainContainer extends Component {
     initialItemQuantyToAdd,
     cartItemQuantityToAdd
   ) => {
-    let result = CartUtils.recalculateAllAfterItemQuantityChange(
+    const result = CartUtils.recalculateAllAfterItemQuantityChange(
       this.state.initialData.items,
       this.state.cartData,
       cartItem,
@@ -168,10 +170,6 @@ class MainContainer extends Component {
           this.props.data.categories[0].name,
           []
         )
-      },
-      controllers: {
-        ...this.state.controllers,
-        shouldExpandViewer: false
       }
     }));
   };
@@ -186,43 +184,37 @@ class MainContainer extends Component {
   }
 
   Viewer = () => {
-    let shouldExpandViewer = this.state.controllers.shouldExpandViewer;
-    let viewerRows = this.state.controllers.viewerRows;
-    let viewerColumns = this.state.controllers.viewerColumns;
-    let rows = shouldExpandViewer ? viewerRows + 1 : viewerRows;
-    let columns = shouldExpandViewer ? viewerColumns + 1 : viewerColumns;
-
-    const ViewerComponent = () => (
-      <ViewerContainer
-        viewerRows={rows}
-        viewerColumns={columns}
-        filteredItems={this.state.filteredData.items}
-        onItemClick={this.handleItemClick}
-        onAddToCartClick={this.handleAddToCart}
-      />
-    );
-
     return (
-      <div>
-        {shouldExpandViewer ? (
-          <ViewerComponent />
-        ) : (
-          <Row>
-            <Col sm={3}>
-              <SidebarContainer
-                categories={this.props.data.categories}
-                activeCategory={this.state.receivedData.activeCategory}
-                onSidebarChange={this.handleSidebarChange}
-              />
-            </Col>
-            <Col sm={9}>
-              <ViewerComponent />
-            </Col>
-          </Row>
-        )}
-      </div>
+      <Row>
+        <Col sm={3}>
+          <SidebarContainer
+            categories={this.props.data.categories}
+            activeCategory={this.state.receivedData.activeCategory}
+            onSidebarChange={this.handleSidebarChange}
+          />
+        </Col>
+        <Col sm={9}>
+          <ViewerContainer
+            filteredItems={this.state.filteredData.items}
+            onItemClick={this.handleItemClick}
+            onAddToCartClick={this.handleAddToCart}
+          />
+        </Col>
+      </Row>
     );
   };
+
+  NoMatch = ({ location }) => (
+    <div className="text-center">
+      <div className="pb-2">
+        <h1>Error 404</h1>
+        <h3>This page doesn't exists.</h3>
+      </div>
+      <h3>
+        No match for <code>{location.pathname}</code>
+      </h3>
+    </div>
+  );
 
   render() {
     return (
@@ -238,39 +230,37 @@ class MainContainer extends Component {
               }
             />
           </Row>
-          <Route
-            exact
-            path="(/online-shop/|/online-shop/search)"
-            component={this.Viewer}
-          />
-          <Route
-            path="/online-shop/cart"
-            component={route => (
-              <CartContainer
-                cartItems={this.state.cartData.cartItems}
-                cartItemsSum={this.state.cartData.cartItemsSum}
-                initialData={this.state.initialData}
-                routeUrl={route.match.url}
-                onChangeItemQuantity={this.handleItemQuantityChange}
-                onRemoveCartItem={this.handleRemoveFromCart}
-                onPurchaseComplete={this.handlePurchaseComplete}
-              />
-            )}
-          />
-          <Route
-            path={
-              "/online-shop/item-details/item-id-" +
-              this.state.receivedData.activeItem.id
-            }
-            component={() => (
-              <ItemDetailsContainer
-                initialItems={this.state.initialData.items}
-                item={this.state.receivedData.activeItem}
-                onAddReview={this.handleAddReview}
-                onAddToCartClick={this.handleAddToCart}
-              />
-            )}
-          />
+          <Switch>
+            <Route exact path="(/|/search)" component={this.Viewer} />
+            <Route
+              path="/cart"
+              component={route => (
+                <CartContainer
+                  cartItems={this.state.cartData.cartItems}
+                  cartItemsSum={this.state.cartData.cartItemsSum}
+                  initialData={this.state.initialData}
+                  routeUrl={route.match.url}
+                  onChangeItemQuantity={this.handleItemQuantityChange}
+                  onRemoveCartItem={this.handleRemoveFromCart}
+                  onPurchaseComplete={this.handlePurchaseComplete}
+                />
+              )}
+            />
+            <Route
+              path={
+                "/item-details/item-id-" + this.state.receivedData.activeItem.id
+              }
+              component={() => (
+                <ItemDetailsContainer
+                  initialItems={this.state.initialData.items}
+                  item={this.state.receivedData.activeItem}
+                  onAddReview={this.handleAddReview}
+                  onAddToCartClick={this.handleAddToCart}
+                />
+              )}
+            />
+            <Route component={this.NoMatch} />
+          </Switch>
         </Container>
       </Router>
     );

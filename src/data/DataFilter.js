@@ -6,7 +6,7 @@ class DataFilter {
     activeCategory,
     activeFeatures
   ) {
-    let allFeaturesAreOff = activeFeatures.every(
+    const allFeaturesAreOff = activeFeatures.every(
       filter => filter.state === false
     );
 
@@ -28,7 +28,7 @@ class DataFilter {
   }
 
   static filterBySearchValue(initialItems, value) {
-    let searchedValue = value.toLowerCase();
+    const searchedValue = value.toLowerCase();
     return initialItems.filter(
       item =>
         item.name.toLowerCase().includes(searchedValue) ||
@@ -37,6 +37,18 @@ class DataFilter {
         item.price.toString().includes(searchedValue)
     );
   }
+
+  static filterByAllOptions = (
+    initialItems,
+    searchValue,
+    activeCategory,
+    activeFeatures
+  ) =>
+    DataFilter.filterByCategoryAndFeature(
+      DataFilter.filterBySearchValue(initialItems, searchValue),
+      activeCategory,
+      activeFeatures
+    );
 }
 
 export default DataFilter;

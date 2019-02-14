@@ -35,7 +35,7 @@ class ItemCard extends Component {
             <Row>
               <Col>
                 <Link
-                  to={"/online-shop/item-details/item-id-" + this.state.item.id}
+                  to={"/item-details/item-id-" + this.state.item.id}
                 >
                   <Button
                     className="float-left"

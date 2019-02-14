@@ -6,12 +6,15 @@ import CardGroups from "./CardGroups";
 import { Item } from "../../data/DataGenerator";
 
 class Viewer extends Component {
+  static viewerRows = 2;
+  static viewerColumns = 2;
+
   constructor(props) {
     super(props);
     this.state = {
       cardsData: {
-        rows: props.viewerRows,
-        columns: props.viewerColumns,
+        rows: Viewer.viewerRows,
+        columns: Viewer.viewerColumns,
         activePage: 0,
         firstItemNumOnActivePage: 0
       }
@@ -52,8 +55,6 @@ class Viewer extends Component {
 }
 
 Viewer.propTypes = {
-  viewerRows: PropTypes.number,
-  viewerColumns: PropTypes.number,
   filteredItems: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
   onItemClick: PropTypes.func
 };

@@ -35,9 +35,9 @@ class Pagination extends Component {
   };
 
   render() {
-    let props = this.props;
-    let isFirstPage = props.cardsData.activePage === 0;
-    let isLastPage =
+    const props = this.props;
+    const isFirstPage = props.cardsData.activePage === 0;
+    const isLastPage =
       props.cardsData.activePage ===
       PaginationUtils.getPagesLen(props.itemsLength, props.cardsData);
     return (

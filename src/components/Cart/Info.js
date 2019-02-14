@@ -30,13 +30,13 @@ class Info extends Component {
   };
 
   InfoView = () => {
-    let initialItems = this.props.initialItems;
-    let cartItems = this.props.cartItems;
+    const initialItems = this.props.initialItems;
+    const cartItems = this.props.cartItems;
     let cartItemsComponents = [];
 
     cartItems.forEach((cartItem, i) => {
-      let cartItemQuantityIsZero = cartItem.quantity === 0;
-      let item = initialItems.find(item => item.id === cartItem.itemId);
+      const cartItemQuantityIsZero = cartItem.quantity === 0;
+      const item = initialItems.find(item => item.id === cartItem.itemId);
       cartItemsComponents.push(
         <Container key={i}>
           <Row className="text-center">
@@ -91,7 +91,7 @@ class Info extends Component {
       );
     });
 
-    let sumIsZero = this.props.cartItemsSum === 0;
+    const sumIsZero = this.props.cartItemsSum === 0;
     return (
       <Container>
         <Row>{cartItemsComponents}</Row>
@@ -118,7 +118,7 @@ class Info extends Component {
   };
 
   render() {
-    let cartIsEmpty = this.props.cartItems.length === 0;
+    const cartIsEmpty = this.props.cartItems.length === 0;
     return (
       <Container>
         {cartIsEmpty ? (

@@ -18,7 +18,7 @@ React, Bootstrap
 
 npm
 
-### Build, run
+### Build, run, test
 
 Firstly: `npm install`
 
@@ -33,6 +33,8 @@ npm install -g serve
 serve -s build
 
 ```
+
+Test: `npm test`
 
 ### Latest version
 

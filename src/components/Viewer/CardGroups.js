@@ -14,14 +14,14 @@ class CardGroups extends Component {
   };
 
   CardGroups = () => {
-    let rows = this.props.cardsData.rows;
+    const rows = this.props.cardsData.rows;
     let firstItemOnActivePage = this.props.cardsData.firstItemNumOnActivePage;
 
     let cardGroups = [];
     for (let rowNum = 0; rowNum < rows; rowNum++) {
       let itemsGroup = [];
       for (let itemNum = 0; itemNum < this.props.cardsData.columns; itemNum++) {
-        let item = this.props.items[firstItemOnActivePage];
+        const item = this.props.items[firstItemOnActivePage];
         if (item !== undefined) {
           itemsGroup.push(
             <ItemCard

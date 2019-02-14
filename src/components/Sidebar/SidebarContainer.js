@@ -35,7 +35,7 @@ class SidebarContainer extends Component {
   };
 
   handleClickOnFeature = featureToSwitch => {
-    let newFeatures = this.state.activeFeatures;
+    let newFeatures = [...this.state.activeFeatures];
     newFeatures.find(f => f.name === featureToSwitch).switchState();
 
     this.setState(() => ({

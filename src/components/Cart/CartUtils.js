@@ -14,18 +14,20 @@ class CartUtils {
    */
   static recalculateOnAdd = (addedItemId, items, cartData) => {
     let isOk = false;
-    if (CartUtils.itemNotExistsInCart(cartData, addedItemId)) {
-      let item = DataUtils.getItemById(items, addedItemId);
-      if (item.quantityOnStock > 0) {
-        item.quantityOnStock -= 1;
+    const cartItem = CartUtils.findItemInCart(cartData, addedItemId);
+    const item = DataUtils.getItemById(items, addedItemId);
+
+    if (item.quantityOnStock > 0) {
+      item.quantityOnStock -= 1;
+      if (cartItem === undefined) {
         let newCartItem = new CartItem(addedItemId, item.price);
         newCartItem.setQuantity(1);
         cartData.cartItems.push(newCartItem);
-        cartData.cartItemsSum = CartUtils.recalculateTotalSum(
-          cartData.cartItems
-        );
-        isOk = true;
+      } else {
+        cartItem.setQuantity(cartItem.quantity + 1);
       }
+      cartData.cartItemsSum = CartUtils.recalculateTotalSum(cartData.cartItems);
+      isOk = true;
     }
 
     return {
@@ -38,13 +40,13 @@ class CartUtils {
    * Returns recalculated initialItems and cartData
    */
   static recalculateOnRemove = (cartItem, cartData, items) => {
-    let previousCartDataItems = cartData.cartItems;
+    const previousCartDataItems = cartData.cartItems;
     let item = DataUtils.getItemById(items, cartItem.itemId);
-    let cartItemIndex = cartData.cartItems
+    const cartItemIndex = cartData.cartItems
       .map(i => i.itemId)
       .indexOf(cartItem.itemId);
     let changedCartItem = cartData.cartItems[cartItemIndex];
-    let quantitiesToGiveBack = changedCartItem.quantity;
+    const quantitiesToGiveBack = changedCartItem.quantity;
     cartData.cartItems.splice(cartItemIndex, 1);
     cartData.cartItemsSum = CartUtils.recalculateTotalSum(
       previousCartDataItems
@@ -91,9 +93,8 @@ class CartUtils {
     };
   };
 
-  static itemNotExistsInCart = (cartData, itemId) =>
-    cartData.cartItems.find(cartItem => cartItem.itemId === itemId) ===
-    undefined;
+  static findItemInCart = (cartData, itemId) =>
+    cartData.cartItems.find(cartItem => cartItem.itemId === itemId);
 }
 
 export default CartUtils;
