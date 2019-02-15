@@ -41,14 +41,22 @@ class Info extends Component {
         <Container key={i}>
           <Row className="text-center">
             <Col xs={6} sm={2} className="pb-4 pb-sm-0">
-              <img
-                className="cartItemImage"
-                alt=""
-                src={item.imagesSources[0]}
-              />
+              <Link
+                to={process.env.PUBLIC_URL + "/item-details/item-id-" + item.id}
+              >
+                <img
+                  className="cartItemImage"
+                  alt=""
+                  src={item.imagesSources[0]}
+                />
+              </Link>
             </Col>
             <Col xs={6} sm={3} className="pb-4 pb-sm-0 align-self-center">
-              {item.name}
+              <Link
+                to={process.env.PUBLIC_URL + "/item-details/item-id-" + item.id}
+              >
+                {item.name}
+              </Link>
             </Col>
             <Col xs={12} sm={2} className="pb-4 pb-sm-0 align-self-center">
               <Row>

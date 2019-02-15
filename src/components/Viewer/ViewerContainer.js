@@ -21,10 +21,6 @@ class Viewer extends Component {
     };
   }
 
-  handleItemClick = item => {
-    this.props.onItemClick(item);
-  };
-
   handleActivepage = cardsData => {
     this.setState(() => ({
       cardsData
@@ -41,7 +37,6 @@ class Viewer extends Component {
         <CardGroups
           items={this.props.filteredItems}
           cardsData={this.state.cardsData}
-          onItemClick={this.handleItemClick}
           onAddToCartClick={this.handleAddToCart}
         />
         <Pagination
@@ -55,8 +50,7 @@ class Viewer extends Component {
 }
 
 Viewer.propTypes = {
-  filteredItems: PropTypes.arrayOf(PropTypes.instanceOf(Item)),
-  onItemClick: PropTypes.func
+  filteredItems: PropTypes.arrayOf(PropTypes.instanceOf(Item))
 };
 
 export default Viewer;

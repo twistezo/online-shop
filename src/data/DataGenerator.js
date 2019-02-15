@@ -1,6 +1,6 @@
 import DataUtils from "./DataUtils";
-import uuidv1 from "uuid/v1";
 import Chance from "chance";
+import uuidv1 from "uuid/v1";
 
 class DataGenerator {
   constructor() {

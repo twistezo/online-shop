@@ -26,11 +26,12 @@ class MenuContainer extends Component {
   };
 
   render() {
+    const publicURL = process.env.PUBLIC_URL;
     return (
       <Container className="menu">
         <Row>
           <Col xs={3} sm={4}>
-            <Link to="/">
+            <Link to={publicURL}>
               <Button
                 className="float-right"
                 variant="primary"
@@ -41,7 +42,7 @@ class MenuContainer extends Component {
             </Link>
           </Col>
           <Col className="text-center" xs={6} sm={4}>
-            <Link to="/search">
+            <Link to={publicURL + "/search"}>
               <Form.Control
                 type="text"
                 placeholder="Search"
@@ -51,7 +52,7 @@ class MenuContainer extends Component {
             </Link>
           </Col>
           <Col xs={3} sm={4}>
-            <Link to="/cart/info">
+            <Link to={publicURL + "/cart/info"}>
               <Button
                 variant="primary float-left"
                 onClick={() => this.props.onResetReceivedandFilteredData()}

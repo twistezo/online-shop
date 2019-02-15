@@ -28,11 +28,14 @@ class Summary extends Component {
           <Modal.Title>Online shop</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Your purchases are completed. This is the end of demo version. You
-          will be redirected fo main page.
+          <p>
+            Your purchases are completed. This is the end of demo version. You
+            will be redirected to main page.
+          </p>
+          <p>PS. Check available quantity of items which you just bought.</p>
         </Modal.Body>
         <Modal.Footer>
-          <Link to="/">
+          <Link to={process.env.PUBLIC_URL}>
             <Button variant="primary" onClick={this.handleCloseModal}>
               Ok
             </Button>
