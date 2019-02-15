@@ -1,5 +1,4 @@
 import DataUtils from "./DataUtils";
-import uuidv1 from "uuid/v1";
 import Chance from "chance";
 
 class DataGenerator {
@@ -48,7 +47,7 @@ class DataGenerator {
       const category = DataUtils.randomArrayItem(this.categories);
       this.data.push(
         new Item(
-          uuidv1(),
+          i,
           chance.capitalize(chance.word({ syllables: 2, lenth: 6 })) + " #" + i,
           DataUtils.roundToTwoDecimalPlaces(DataUtils.randomBetween(1, 1000)),
           chance.sentence({ words: 10 }),

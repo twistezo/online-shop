@@ -23,6 +23,10 @@ class DataUtils {
 
   static getItemById = (initialItems, itemId) =>
     initialItems.find(item => item.id === itemId);
+
+  static isValidNum(num) {
+    return !isNaN(num);
+  }
 }
 
 export default DataUtils;

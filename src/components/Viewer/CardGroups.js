@@ -5,10 +5,6 @@ import PropTypes from "prop-types";
 import ItemCard from "./ItemCard";
 
 class CardGroups extends Component {
-  handleItemClick = item => {
-    this.props.onItemClick(item);
-  };
-
   handleAddToCart = itemId => {
     this.props.onAddToCartClick(itemId);
   };
@@ -27,7 +23,6 @@ class CardGroups extends Component {
             <ItemCard
               item={item}
               key={item.id}
-              onItemClick={this.handleItemClick}
               onAddToCartClick={this.handleAddToCart}
             />
           );

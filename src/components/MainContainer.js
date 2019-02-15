@@ -24,8 +24,7 @@ class MainContainer extends Component {
       receivedData: {
         searchValue: "",
         activeCategory: "",
-        activeFeatures: [],
-        activeItem: {}
+        activeFeatures: []
       },
       filteredData: {
         items: []
@@ -74,16 +73,6 @@ class MainContainer extends Component {
           this.state.receivedData.activeCategory,
           this.state.receivedData.activeFeatures
         )
-      }
-    }));
-  };
-
-  handleItemClick = activeItem => {
-    this.handleResetReceivedandFilteredData();
-    this.setState(() => ({
-      receivedData: {
-        ...this.state.receivedData,
-        activeItem
       }
     }));
   };
@@ -161,8 +150,7 @@ class MainContainer extends Component {
       receivedData: {
         searchValue: "",
         activeCategory: this.props.data.categories[0].name,
-        activeFeatures: [],
-        activeItem: {}
+        activeFeatures: []
       },
       filteredData: {
         items: DataFilter.filterByCategoryAndFeature(
@@ -196,7 +184,6 @@ class MainContainer extends Component {
         <Col sm={9}>
           <ViewerContainer
             filteredItems={this.state.filteredData.items}
-            onItemClick={this.handleItemClick}
             onAddToCartClick={this.handleAddToCart}
           />
         </Col>
@@ -252,15 +239,11 @@ class MainContainer extends Component {
               )}
             />
             <Route
-              path={
-                publicURL +
-                "/item-details/item-id-" +
-                this.state.receivedData.activeItem.id
-              }
-              component={() => (
+              path={publicURL + "/item-details/item-id-:id"}
+              component={route => (
                 <ItemDetailsContainer
                   initialItems={this.state.initialData.items}
-                  item={this.state.receivedData.activeItem}
+                  routeParamId={route.match.params.id}
                   onAddReview={this.handleAddReview}
                   onAddToCartClick={this.handleAddToCart}
                 />

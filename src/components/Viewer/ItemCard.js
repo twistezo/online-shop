@@ -12,10 +12,6 @@ class ItemCard extends Component {
     };
   }
 
-  handleDetailsClick = () => {
-    this.props.onItemClick(this.state.item);
-  };
-
   handleAddToCart = () => {
     this.props.onAddToCartClick(this.state.item.id);
   };
@@ -71,8 +67,7 @@ class ItemCard extends Component {
 }
 
 ItemCard.propTypes = {
-  item: PropTypes.instanceOf(Item),
-  onItemClick: PropTypes.func
+  item: PropTypes.instanceOf(Item)
 };
 
 export default ItemCard;
