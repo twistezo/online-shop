@@ -35,7 +35,11 @@ class ItemCard extends Component {
             <Row>
               <Col>
                 <Link
-                  to={"/item-details/item-id-" + this.state.item.id}
+                  to={
+                    process.env.PUBLIC_URL +
+                    "/item-details/item-id-" +
+                    this.state.item.id
+                  }
                 >
                   <Button
                     className="float-left"

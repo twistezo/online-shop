@@ -217,6 +217,7 @@ class MainContainer extends Component {
   );
 
   render() {
+    const publicURL = process.env.PUBLIC_URL;
     return (
       <Router>
         <Container>
@@ -231,9 +232,13 @@ class MainContainer extends Component {
             />
           </Row>
           <Switch>
-            <Route exact path="(/|/search)" component={this.Viewer} />
             <Route
-              path="/cart"
+              exact
+              path={"(" + publicURL + "|" + publicURL + "/search)"}
+              component={this.Viewer}
+            />
+            <Route
+              path={publicURL + "/cart"}
               component={route => (
                 <CartContainer
                   cartItems={this.state.cartData.cartItems}
@@ -248,7 +253,9 @@ class MainContainer extends Component {
             />
             <Route
               path={
-                "/item-details/item-id-" + this.state.receivedData.activeItem.id
+                publicURL +
+                "/item-details/item-id-" +
+                this.state.receivedData.activeItem.id
               }
               component={() => (
                 <ItemDetailsContainer
