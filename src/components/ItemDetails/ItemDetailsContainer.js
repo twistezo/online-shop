@@ -30,7 +30,6 @@ class ItemDetailsContainer extends Component {
   );
 
   Container = props => {
-    const isOutOfStock = props.item.quantityOnStock === 0;
     return (
       <Container>
         <Row>
@@ -57,7 +56,7 @@ class ItemDetailsContainer extends Component {
                 <Col className="pr-0">
                   <Button
                     className="float-right"
-                    disabled={isOutOfStock}
+                    disabled={props.item.quantityOnStock === 0}
                     onClick={this.handleAddToCart}
                   >
                     Add &nbsp; <i className="fas fa-cart-arrow-down" />

@@ -10,6 +10,7 @@ import MenuContainer from "./Menu/MenuContainer";
 import CartContainer from "./Cart/CartContainer";
 import { Item, Category } from "../data/DataGenerator";
 import CartUtils from "./Cart/CartUtils";
+import DataUtils from "../data/DataUtils";
 
 class MainContainer extends Component {
   constructor(props) {
@@ -23,11 +24,15 @@ class MainContainer extends Component {
       },
       receivedData: {
         searchValue: "",
-        activeCategory: "",
+        activeCategory: this.props.data.categories[0].name,
         activeFeatures: []
       },
       filteredData: {
-        items: []
+        items: DataFilter.filterByCategoryAndFeature(
+          this.props.data.items,
+          this.props.data.categories[0].name,
+          []
+        )
       },
       cartData: {
         cartItems: [],
@@ -36,8 +41,8 @@ class MainContainer extends Component {
     };
   }
 
-  componentWillMount() {
-    this.handleResetReceivedandFilteredData();
+  componentDidMount() {
+    this.loadCartDataFromLocalStorage();
   }
 
   handleSidebarChange = (activeCategory, activeFeatures) => {
@@ -82,6 +87,7 @@ class MainContainer extends Component {
     let item = items.find(item => item.id === itemId);
     if (item.reviews.find(r => r.name === review.name) === undefined) {
       item.reviews.push(review);
+      DataUtils.saveToLocalStorage("items", items);
       this.setState(() => ({
         initialData: {
           ...this.state.initialData,
@@ -98,6 +104,8 @@ class MainContainer extends Component {
       this.state.cartData
     );
     if (result.isOk) {
+      DataUtils.saveToLocalStorage("items", this.state.initialData.items);
+      this.saveCartDataToLocalStorage(result.cartData);
       this.setState(() => ({
         cartData: result.cartData
       }));
@@ -110,6 +118,8 @@ class MainContainer extends Component {
       this.state.cartData,
       this.state.initialData.items
     );
+    DataUtils.saveToLocalStorage("items", this.state.initialData.items);
+    this.saveCartDataToLocalStorage(result.cartData);
     this.setState(() => ({
       initialData: {
         ...this.state.initialData,
@@ -131,7 +141,8 @@ class MainContainer extends Component {
       initialItemQuantyToAdd,
       cartItemQuantityToAdd
     );
-
+    DataUtils.saveToLocalStorage("items", result.items);
+    this.saveCartDataToLocalStorage(result.cartData);
     this.setState(() => ({
       initialData: {
         ...this.state.initialData,
@@ -142,7 +153,35 @@ class MainContainer extends Component {
   };
 
   handlePurchaseComplete = () => {
-    this.resetCart();
+    DataUtils.saveToLocalStorage("items", this.state.initialData.items);
+    DataUtils.saveToLocalStorage("cartItems", []);
+    DataUtils.saveToLocalStorage("cartItemsSum", 0);
+    this.setState(() => ({
+      cartData: {
+        cartItems: [],
+        cartItemsSum: 0
+      }
+    }));
+  };
+
+  loadCartDataFromLocalStorage = () => {
+    const cartData = {
+      cartItems: DataUtils.loadFromLocalStorage(
+        "cartItems",
+        DataUtils.rebuildCartItemsFromJson
+      ),
+      cartItemsSum: DataUtils.loadFromLocalStorage("cartItemsSum")
+    };
+    if (cartData.cartItems !== null && cartData.cartItemsSum !== null) {
+      this.setState({
+        cartData
+      });
+    }
+  };
+
+  saveCartDataToLocalStorage = cartData => {
+    DataUtils.saveToLocalStorage("cartItems", cartData.cartItems);
+    DataUtils.saveToLocalStorage("cartItemsSum", cartData.cartItemsSum);
   };
 
   handleResetReceivedandFilteredData = () => {
@@ -161,15 +200,6 @@ class MainContainer extends Component {
       }
     }));
   };
-
-  resetCart() {
-    this.setState(() => ({
-      cartData: {
-        cartItems: [],
-        cartItemsSum: 0
-      }
-    }));
-  }
 
   Viewer = () => {
     return (

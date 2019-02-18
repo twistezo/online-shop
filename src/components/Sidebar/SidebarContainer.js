@@ -50,7 +50,7 @@ class SidebarContainer extends Component {
 
   resetFeatures(activeFeatures) {
     activeFeatures.forEach(f => {
-      f.setState(false);
+      f.state = false;
     });
   }
 

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { DataGenerator } from "./data/DataGenerator";
+import DataUtils from "./data/DataUtils";
 import MainContainer from "./components/MainContainer";
 import "./App.scss";
 
@@ -12,7 +13,7 @@ class App extends Component {
       data: null,
       error: {
         occured: false,
-        text: ""
+        message: ""
       }
     };
   }
@@ -20,13 +21,20 @@ class App extends Component {
   componentDidMount() {
     this.generateData()
       .then(data => {
+        const items = DataUtils.loadFromLocalStorage(
+          "items",
+          DataUtils.rebuildItemsFromJson
+        );
+        items === null
+          ? DataUtils.saveToLocalStorage("items", data.items)
+          : (data.items = items);
         this.setState({ data });
       })
       .catch(err => {
         this.setState({
           error: {
             occured: true,
-            text: err.message
+            message: err.message
           }
         });
       });
@@ -47,7 +55,7 @@ class App extends Component {
       <div className="text-center pt-5">
         <div className="pb-2">
           <h2>Error while fetching data. Please reload the page.</h2>
-          <h5>Error message: "{this.state.error.text}"</h5>
+          <h5>Error message: "{this.state.error.message}"</h5>
         </div>
       </div>
     );

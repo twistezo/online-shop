@@ -13,7 +13,7 @@ it("conditional rendering without crashing", () => {
   // initial states
   expect(wrapper.state().data).toBe(null);
   expect(wrapper.state().error.occured).toBe(false);
-  expect(wrapper.state().error.text).toBe("");
+  expect(wrapper.state().error.message).toBe("");
 
   // WaitContainer on start
   wrapper.setState({});

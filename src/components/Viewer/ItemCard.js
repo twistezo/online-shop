@@ -17,6 +17,7 @@ class ItemCard extends Component {
   };
 
   render() {
+    const isOutOfStock = this.state.item.quantityOnStock === 0;
     return (
       <Card>
         <Card.Img
@@ -50,6 +51,7 @@ class ItemCard extends Component {
                 <Button
                   className="float-right"
                   variant="primary"
+                  disabled={isOutOfStock}
                   onClick={this.handleAddToCart}
                 >
                   <i className="fas fa-cart-arrow-down" />
@@ -57,7 +59,9 @@ class ItemCard extends Component {
               </Col>
             </Row>
             <Row className="pt-3 text-center">
-              <Col>{this.state.item.price + " EUR"}</Col>
+              <Col>
+                {isOutOfStock ? "Out of stock" : this.state.item.price + " EUR"}
+              </Col>
             </Row>
           </div>
         </Card.Body>
