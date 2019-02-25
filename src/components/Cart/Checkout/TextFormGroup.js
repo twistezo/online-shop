@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Form } from 'react-bootstrap'
 
 class TextFormGroup extends Component {
   handleChange = event => {
-    this.props.onChange(event);
-    event.persist();
-  };
+    this.props.onChange(event)
+    event.persist()
+  }
 
   render() {
     return (
@@ -21,11 +21,11 @@ class TextFormGroup extends Component {
           onChange={this.handleChange}
           pattern={this.props.pattern}
         />
-        <Form.Control.Feedback type="invalid">
+        <Form.Control.Feedback type='invalid'>
           {this.props.feedback}
         </Form.Control.Feedback>
       </Form.Group>
-    );
+    )
   }
 }
 
@@ -38,6 +38,6 @@ TextFormGroup.propTypes = {
   feedback: PropTypes.string,
   pattern: PropTypes.string,
   onChange: PropTypes.func
-};
+}
 
-export default TextFormGroup;
+export default TextFormGroup

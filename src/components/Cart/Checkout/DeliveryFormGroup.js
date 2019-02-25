@@ -1,37 +1,37 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Form } from 'react-bootstrap'
 
 class DeliveryFormGroup extends Component {
   handleChange = event => {
-    this.props.onChange(event);
-  };
+    this.props.onChange(event)
+  }
 
   DeliveryOptions = () => {
-    let options = [];
+    let options = []
     this.props.deliveryOptions.forEach((deliveryOption, i) => {
       options.push(
         <option key={i + 1} value={deliveryOption.name}>
-          {deliveryOption.name + " - " + deliveryOption.price + " EUR"}
+          {deliveryOption.name + ' - ' + deliveryOption.price + ' EUR'}
         </option>
-      );
-    });
-    return options;
-  };
+      )
+    })
+    return options
+  }
 
   render() {
     return (
       <Form.Group>
         <Form.Label>Delivery option</Form.Label>
         <Form.Control
-          as="select"
+          as='select'
           defaultValue={this.props.selectedOption}
           onChange={this.handleChange}
         >
           <this.DeliveryOptions />
         </Form.Control>
       </Form.Group>
-    );
+    )
   }
 }
 
@@ -44,6 +44,6 @@ DeliveryFormGroup.propTypes = {
   ),
   selectedOption: PropTypes.string,
   onDeliveryOptionChange: PropTypes.func
-};
+}
 
-export default DeliveryFormGroup;
+export default DeliveryFormGroup

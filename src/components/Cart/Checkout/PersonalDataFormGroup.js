@@ -1,47 +1,47 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import TextFormGroup from "./TextFormGroup";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import TextFormGroup from './TextFormGroup'
 
 class PersonalDataFormGroup extends Component {
   handleChange = event => {
-    this.props.onChange(event);
-  };
+    this.props.onChange(event)
+  }
 
   render() {
     return (
       <div>
         <TextFormGroup
-          label={"Full name"}
-          name={"name"}
-          type={"text"}
+          label={'Full name'}
+          name={'name'}
+          type={'text'}
           defaultValue={this.props.checkoutData.name}
-          placeholder={"Ex. John Smith"}
-          feedback={"This field is required."}
+          placeholder={'Ex. John Smith'}
+          feedback={'This field is required.'}
           pattern={null}
           onChange={this.handleChange}
         />
         <TextFormGroup
-          label={"Email"}
-          name={"email"}
-          type={"email"}
+          label={'Email'}
+          name={'email'}
+          type={'email'}
           defaultValue={this.props.checkoutData.email}
-          placeholder={"example@gmail.com"}
-          feedback={"Incorrect email format."}
+          placeholder={'example@gmail.com'}
+          feedback={'Incorrect email format.'}
           pattern={null}
           onChange={this.handleChange}
         />
         <TextFormGroup
-          label={"Address"}
-          name={"address"}
-          type={"text"}
+          label={'Address'}
+          name={'address'}
+          type={'text'}
           defaultValue={this.props.checkoutData.address}
-          placeholder={"Street, city, postalcode"}
-          feedback={"This field is required."}
+          placeholder={'Street, city, postalcode'}
+          feedback={'This field is required.'}
           pattern={null}
           onChange={this.handleChange}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -65,6 +65,6 @@ PersonalDataFormGroup.propTypes = {
     })
   }),
   onChange: PropTypes.func
-};
+}
 
-export default PersonalDataFormGroup;
+export default PersonalDataFormGroup

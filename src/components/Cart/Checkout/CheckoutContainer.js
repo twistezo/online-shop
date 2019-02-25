@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { Container, Col, Row, Button, Form } from "react-bootstrap";
-import DataUtils from "../../../data/DataUtils";
-import PaymentFormGroup from "./PaymentFormGroup";
-import DeliveryFormGroup from "./DeliveryFormGroup";
-import PersonalDataFormGroup from "./PersonalDataFormGroup";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+import { Container, Col, Row, Button, Form } from 'react-bootstrap'
+import DataUtils from '../../../data/DataUtils'
+import PaymentFormGroup from './PaymentFormGroup'
+import DeliveryFormGroup from './DeliveryFormGroup'
+import PersonalDataFormGroup from './PersonalDataFormGroup'
 
 class CheckoutContainer extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       checkoutData: props.checkoutData,
       deliveryPrice: props.checkoutData.deliveryOption.value.price,
@@ -18,10 +18,10 @@ class CheckoutContainer extends Component {
       isFormValid: false,
       regex: {
         creditCardNumber:
-          "^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35d{3})d{11})$",
-        creditCardExpirationDate: "^(0[1-9]|1[0-2])/?([0-9]{4}|[0-9]{2})$"
+          '^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35d{3})d{11})$',
+        creditCardExpirationDate: '^(0[1-9]|1[0-2])/?([0-9]{4}|[0-9]{2})$'
       }
-    };
+    }
   }
 
   handleTextFormGroupDataChange = event => {
@@ -32,74 +32,71 @@ class CheckoutContainer extends Component {
       },
       shouldCheckFieldValidity: true,
       isFormValid: this.isFormValid()
-    }));
-  };
+    }))
+  }
 
   handleDeliveryOptionChange = event => {
-    const targetValue = event.target.value;
-    const option = this.findDeliveryOptionByName(targetValue);
-    let checkoutData = { ...this.state.checkoutData };
-    checkoutData.deliveryOption.value = option;
-    checkoutData.deliveryOption.selected = targetValue;
+    const targetValue = event.target.value
+    const option = this.findDeliveryOptionByName(targetValue)
+    let checkoutData = { ...this.state.checkoutData }
+    checkoutData.deliveryOption.value = option
+    checkoutData.deliveryOption.selected = targetValue
 
     this.setState(() => ({
       checkoutData,
       deliveryPrice: option.price,
       shouldCheckFieldValidity: true
-    }));
-    this.recalculateTotalPriceWithDeliveryOption(option);
-  };
+    }))
+    this.recalculateTotalPriceWithDeliveryOption(option)
+  }
 
   handlePaymentMethodChange = event => {
-    const option = event.target.value;
-    let checkoutData = { ...this.state.checkoutData };
-    checkoutData.paymentMethod.value = option;
-    checkoutData.paymentMethod.selected = option;
+    const option = event.target.value
+    let checkoutData = { ...this.state.checkoutData }
+    checkoutData.paymentMethod.value = option
+    checkoutData.paymentMethod.selected = option
 
     this.setState(() => ({
       checkoutData,
       shouldCheckFieldValidity: true,
-      isFormValid: option !== "Credit Card"
-    }));
-  };
+      isFormValid: option !== 'Credit Card'
+    }))
+  }
 
   handleButton = () => {
-    this.props.onCheckoutDataChange(
-      this.state.checkoutData,
-      this.isFormValid()
-    );
-  };
+    this.props.onCheckoutDataChange(this.state.checkoutData, this.isFormValid())
+  }
 
   recalculateTotalPriceWithDeliveryOption = option => {
-    let newTotalPrice = this.props.cartItemsSum;
-    newTotalPrice += option.price;
-    newTotalPrice = DataUtils.roundToTwoDecimalPlaces(newTotalPrice);
+    let newTotalPrice = this.props.cartItemsSum
+    newTotalPrice += option.price
+    newTotalPrice = DataUtils.roundToTwoDecimalPlaces(newTotalPrice)
 
     this.setState(() => ({
       totalPrice: newTotalPrice
-    }));
-  };
+    }))
+  }
 
   findDeliveryOptionByName = name =>
     this.props.deliveryOptions.find(
       o => o.name.substring(0, 2) === name.substring(0, 2)
-    );
+    )
 
   isFormValid = () => {
-    const form = document.getElementById("checkoutForm");
-    let result = false;
-    if (form !== "undefinded" && form !== null) {
-      result = form.checkValidity();
+    const form = document.getElementById('checkoutForm')
+    let result = false
+    if (form !== 'undefinded' && form !== null) {
+      result = form.checkValidity()
     }
-    return result;
-  };
+    return result
+  }
 
   CheckoutView = () => {
     return (
       <Container>
-        <Col sm={5} className="col-centered">
+        <Col sm={5} className='col-centered'>
           <Form
-            id="checkoutForm"
+            id='checkoutForm'
             validated={this.state.shouldCheckFieldValidity}
           >
             <PersonalDataFormGroup
@@ -121,13 +118,13 @@ class CheckoutContainer extends Component {
               onChange={this.handleDeliveryOptionChange}
             />
 
-            <h5 className="text-center">
+            <h5 className='text-center'>
               {DataUtils.roundToTwoDecimalPlaces(
                 this.props.cartItemsSum + this.state.deliveryPrice
-              )}{" "}
+              )}{' '}
               EUR
             </h5>
-            <Row className="text-center pt-2">
+            <Row className='text-center pt-2'>
               <Col>
                 <Link to={`info`}>
                   <Button onClick={this.handleButton}>Back</Button>
@@ -147,11 +144,11 @@ class CheckoutContainer extends Component {
           </Form>
         </Col>
       </Container>
-    );
-  };
+    )
+  }
 
   render() {
-    return <this.CheckoutView />;
+    return <this.CheckoutView />
   }
 }
 
@@ -184,6 +181,6 @@ CheckoutContainer.propTypes = {
   ),
   routeUrl: PropTypes.string,
   onConfirmCheckoutData: PropTypes.func
-};
+}
 
-export default CheckoutContainer;
+export default CheckoutContainer

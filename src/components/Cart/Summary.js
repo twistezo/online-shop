@@ -1,25 +1,25 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { Container, Col, Row, Button, Modal } from "react-bootstrap";
-import DataUtils from "../../data/DataUtils";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+import { Container, Col, Row, Button, Modal } from 'react-bootstrap'
+import DataUtils from '../../data/DataUtils'
 
 class Summary extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       showModal: false
-    };
+    }
   }
 
   handleCloseModal = () => {
-    this.props.onPurchaseComplete();
-    this.setState({ showModal: false });
-  };
+    this.props.onPurchaseComplete()
+    this.setState({ showModal: false })
+  }
 
   handleShowModal = () => {
-    this.setState({ showModal: true });
-  };
+    this.setState({ showModal: true })
+  }
 
   EndOfDemoModal = () => {
     return (
@@ -36,74 +36,74 @@ class Summary extends Component {
         </Modal.Body>
         <Modal.Footer>
           <Link to={process.env.PUBLIC_URL}>
-            <Button variant="primary" onClick={this.handleCloseModal}>
+            <Button variant='primary' onClick={this.handleCloseModal}>
               Ok
             </Button>
           </Link>
         </Modal.Footer>
       </Modal>
-    );
-  };
+    )
+  }
 
   SummaryRow = props => {
     return (
       <Row>
-        <Col className="text-right">
+        <Col className='text-right'>
           <h6>{props.name}</h6>
         </Col>
-        <Col className="text-left">
+        <Col className='text-left'>
           <h6>{props.value}</h6>
         </Col>
       </Row>
-    );
-  };
+    )
+  }
 
   render() {
-    const checkoutData = this.props.checkoutData;
+    const checkoutData = this.props.checkoutData
     const showCreditCardExtraFields =
-      checkoutData.paymentMethod.value === "Credit Card";
+      checkoutData.paymentMethod.value === 'Credit Card'
     return (
       <Container>
-        <Col xs={12} sm={5} className="col-centered text-center">
-          <this.SummaryRow name={"Name:"} value={checkoutData.name} />
-          <this.SummaryRow name={"Email:"} value={checkoutData.email} />
-          <this.SummaryRow name={"Address:"} value={checkoutData.address} />
+        <Col xs={12} sm={5} className='col-centered text-center'>
+          <this.SummaryRow name={'Name:'} value={checkoutData.name} />
+          <this.SummaryRow name={'Email:'} value={checkoutData.email} />
+          <this.SummaryRow name={'Address:'} value={checkoutData.address} />
           <this.SummaryRow
-            name={"Payment method:"}
+            name={'Payment method:'}
             value={checkoutData.paymentMethod.value}
           />
           {showCreditCardExtraFields ? (
             <div>
               <this.SummaryRow
-                name={"Credit card number:"}
+                name={'Credit card number:'}
                 value={checkoutData.creditCardNumber}
               />
               <this.SummaryRow
-                name={"Credit card expiration date:"}
+                name={'Credit card expiration date:'}
                 value={checkoutData.creditCardExpirationDate}
               />
             </div>
           ) : (
-            ""
+            ''
           )}
           <this.SummaryRow
-            name={"Delivery option:"}
+            name={'Delivery option:'}
             value={
               checkoutData.deliveryOption.value.name +
-              " - " +
+              ' - ' +
               checkoutData.deliveryOption.value.price
             }
           />
           <this.SummaryRow
-            name={"Price to pay:"}
+            name={'Price to pay:'}
             value={
               DataUtils.roundToTwoDecimalPlaces(
                 this.props.cartItemsSum +
                   checkoutData.deliveryOption.value.price
-              ) + " EUR"
+              ) + ' EUR'
             }
           />
-          <Row className="text-center pt-2">
+          <Row className='text-center pt-2'>
             <Col>
               <Link to={`checkout`}>
                 <Button>Back</Button>
@@ -116,7 +116,7 @@ class Summary extends Component {
         </Col>
         <this.EndOfDemoModal />
       </Container>
-    );
+    )
   }
 }
 
@@ -142,6 +142,6 @@ Summary.propTypes = {
   }),
   routeUrl: PropTypes.string,
   onPurchaseComplete: PropTypes.func
-};
+}
 
-export default Summary;
+export default Summary

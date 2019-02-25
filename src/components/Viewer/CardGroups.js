@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import { CardDeck } from "react-bootstrap";
-import { Item } from "../../data/DataGenerator";
-import PropTypes from "prop-types";
-import ItemCard from "./ItemCard";
+import React, { Component } from 'react'
+import { CardDeck } from 'react-bootstrap'
+import { Item } from '../../data/DataGenerator'
+import PropTypes from 'prop-types'
+import ItemCard from './ItemCard'
 
 class CardGroups extends Component {
   handleAddToCart = itemId => {
-    this.props.onAddToCartClick(itemId);
-  };
+    this.props.onAddToCartClick(itemId)
+  }
 
   CardGroups = () => {
-    const rows = this.props.cardsData.rows;
-    let firstItemOnActivePage = this.props.cardsData.firstItemNumOnActivePage;
+    const rows = this.props.cardsData.rows
+    let firstItemOnActivePage = this.props.cardsData.firstItemNumOnActivePage
 
-    let cardGroups = [];
+    let cardGroups = []
     for (let rowNum = 0; rowNum < rows; rowNum++) {
-      let itemsGroup = [];
+      let itemsGroup = []
       for (let itemNum = 0; itemNum < this.props.cardsData.columns; itemNum++) {
-        const item = this.props.items[firstItemOnActivePage];
+        const item = this.props.items[firstItemOnActivePage]
         if (item !== undefined) {
           itemsGroup.push(
             <ItemCard
@@ -25,23 +25,23 @@ class CardGroups extends Component {
               key={item.id}
               onAddToCartClick={this.handleAddToCart}
             />
-          );
-          firstItemOnActivePage += 1;
+          )
+          firstItemOnActivePage += 1
         }
         if (itemNum % rows === 0) {
           cardGroups.push(
-            <CardDeck className="pb-2" key={rowNum}>
+            <CardDeck className='pb-2' key={rowNum}>
               {itemsGroup}
             </CardDeck>
-          );
+          )
         }
       }
     }
-    return cardGroups;
-  };
+    return cardGroups
+  }
 
   render() {
-    return <this.CardGroups />;
+    return <this.CardGroups />
   }
 }
 
@@ -53,6 +53,6 @@ CardGroups.propTypes = {
     activePage: PropTypes.number,
     firstItemNumOnActivePage: PropTypes.num
   })
-};
+}
 
-export default CardGroups;
+export default CardGroups

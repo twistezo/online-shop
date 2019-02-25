@@ -1,32 +1,32 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Route } from "react-router-dom";
-import { CartItem, Item, Category } from "../../data/DataGenerator";
-import Info from "./Info";
-import CheckoutContainer from "./Checkout/CheckoutContainer";
-import Summary from "./Summary";
-import { Container } from "react-bootstrap";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Route } from 'react-router-dom'
+import { CartItem, Item, Category } from '../../data/DataGenerator'
+import Info from './Info'
+import CheckoutContainer from './Checkout/CheckoutContainer'
+import Summary from './Summary'
+import { Container } from 'react-bootstrap'
 
 class CartContainer extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       checkoutData: {
-        name: "",
-        email: "",
-        address: "",
+        name: '',
+        email: '',
+        address: '',
         paymentMethod: {
           value: this.props.initialData.paymentMethods[0],
           selected: this.props.initialData.paymentMethods[0]
         },
-        creditCardNumber: "",
-        creditCardExpirationDate: "",
+        creditCardNumber: '',
+        creditCardExpirationDate: '',
         deliveryOption: {
           value: this.props.initialData.deliveryOptions[0],
           selected: this.props.initialData.deliveryOptions[0].name
         }
       }
-    };
+    }
   }
 
   handleQuantityChange = (
@@ -38,20 +38,20 @@ class CartContainer extends Component {
       cartItem,
       initialItemQuantyToAdd,
       cartItemQuantityToAdd
-    );
-  };
+    )
+  }
 
   handleRemove = cartItem => {
-    this.props.onRemoveCartItem(cartItem);
-  };
+    this.props.onRemoveCartItem(cartItem)
+  }
 
   handleCheckoutDataChange = checkoutData => {
-    this.setState(() => ({ checkoutData }));
-  };
+    this.setState(() => ({ checkoutData }))
+  }
 
   handlePurchaseComplete = () => {
-    this.props.onPurchaseComplete();
-  };
+    this.props.onPurchaseComplete()
+  }
 
   render() {
     return (
@@ -97,7 +97,7 @@ class CartContainer extends Component {
           )}
         />
       </Container>
-    );
+    )
   }
 }
 
@@ -119,6 +119,6 @@ CartContainer.propTypes = {
   onChangeItemQuantity: PropTypes.func,
   onRemoveCartItem: PropTypes.func,
   onPurchaseComplete: PropTypes.func
-};
+}
 
-export default CartContainer;
+export default CartContainer

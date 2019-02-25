@@ -1,41 +1,41 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
-import TextFormGroup from "./TextFormGroup";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Form } from 'react-bootstrap'
+import TextFormGroup from './TextFormGroup'
 
 class PaymentFormGroup extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       showTotalPrice: false,
       showCreditCardExtraFields:
-        this.props.checkoutData.paymentMethod.value === "Credit Card"
-    };
+        this.props.checkoutData.paymentMethod.value === 'Credit Card'
+    }
   }
 
   handleChange = event => {
-    this.props.onChange(event);
-  };
+    this.props.onChange(event)
+  }
 
   handlePaymentMethodChange = event => {
-    const showCreditCardExtraFields = event.target.value === "Credit Card";
+    const showCreditCardExtraFields = event.target.value === 'Credit Card'
     this.setState(() => ({
       showCreditCardExtraFields
-    }));
-    this.props.onPaymenthMethodChange(event);
-  };
+    }))
+    this.props.onPaymenthMethodChange(event)
+  }
 
   PaymentMethods = () => {
-    let options = [];
+    let options = []
     this.props.paymentMethods.forEach((paymentMethod, i) => {
       options.push(
         <option key={i + 1} value={paymentMethod}>
           {paymentMethod}
         </option>
-      );
-    });
-    return options;
-  };
+      )
+    })
+    return options
+  }
 
   render() {
     return (
@@ -43,7 +43,7 @@ class PaymentFormGroup extends Component {
         <Form.Group>
           <Form.Label>Payment method</Form.Label>
           <Form.Control
-            as="select"
+            as='select'
             defaultValue={this.props.selectedOption}
             onChange={this.handlePaymentMethodChange}
           >
@@ -52,30 +52,30 @@ class PaymentFormGroup extends Component {
         </Form.Group>
         {this.state.showCreditCardExtraFields && (
           <TextFormGroup
-            label={"Credit card number"}
-            name={"creditCardNumber"}
-            type={"text"}
+            label={'Credit card number'}
+            name={'creditCardNumber'}
+            type={'text'}
             defaultValue={this.props.checkoutData.creditCardNumber}
-            placeholder={"Ex. 5500000000000004"}
-            feedback={"Invalid format. Ex. 5500000000000004"}
+            placeholder={'Ex. 5500000000000004'}
+            feedback={'Invalid format. Ex. 5500000000000004'}
             pattern={this.props.creditCardNumRegex}
             onChange={this.handleChange}
           />
         )}
         {this.state.showCreditCardExtraFields && (
           <TextFormGroup
-            label={"Credit card expiration date"}
-            name={"creditCardExpirationDate"}
-            type={"text"}
+            label={'Credit card expiration date'}
+            name={'creditCardExpirationDate'}
+            type={'text'}
             defaultValue={this.props.checkoutData.creditCardExpirationDate}
-            placeholder={"Ex. 02/19"}
-            feedback={"Invalid format. Ex. 02/19"}
+            placeholder={'Ex. 02/19'}
+            feedback={'Invalid format. Ex. 02/19'}
             pattern={this.props.creditCardExpDateRegex}
             onChange={this.handleChange}
           />
         )}
       </div>
-    );
+    )
   }
 }
 
@@ -104,6 +104,6 @@ PaymentFormGroup.propTypes = {
   selectedOption: PropTypes.string,
   onPaymenthMethodChange: PropTypes.func,
   onChange: PropTypes.func
-};
+}
 
-export default PaymentFormGroup;
+export default PaymentFormGroup

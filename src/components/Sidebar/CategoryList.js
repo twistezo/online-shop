@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { ListGroup } from "react-bootstrap";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { ListGroup } from 'react-bootstrap'
 
 class CategoryList extends Component {
   handleClick = activeCategory => {
-    this.props.onItemClick(activeCategory);
-  };
+    this.props.onItemClick(activeCategory)
+  }
 
   handleActive(value, index) {
     if (
       this.props.activeCategory === value ||
       (this.props.activeCategory === null && index === 0)
     )
-      return "active";
+      return 'active'
   }
 
   render() {
@@ -20,14 +20,14 @@ class CategoryList extends Component {
       <ListGroup.Item
         action
         onClick={() => {
-          this.handleClick(c);
+          this.handleClick(c)
         }}
         className={this.handleActive(c, index)}
         key={c}
       >
         {c}
       </ListGroup.Item>
-    ));
+    ))
   }
 }
 
@@ -35,6 +35,6 @@ CategoryList.propTypes = {
   categoriesNames: PropTypes.arrayOf(PropTypes.string),
   activeCategory: PropTypes.string,
   onItemClick: PropTypes.func
-};
+}
 
-export default CategoryList;
+export default CategoryList

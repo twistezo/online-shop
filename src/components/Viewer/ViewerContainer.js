@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Container } from "react-bootstrap";
-import Pagination from "./Pagination";
-import CardGroups from "./CardGroups";
-import { Item } from "../../data/DataGenerator";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Container } from 'react-bootstrap'
+import Pagination from './Pagination'
+import CardGroups from './CardGroups'
+import { Item } from '../../data/DataGenerator'
 
 class Viewer extends Component {
-  static viewerRows = 2;
-  static viewerColumns = 2;
+  static viewerRows = 2
+  static viewerColumns = 2
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       cardsData: {
         rows: Viewer.viewerRows,
@@ -18,18 +18,18 @@ class Viewer extends Component {
         activePage: 0,
         firstItemNumOnActivePage: 0
       }
-    };
+    }
   }
 
   handleActivepage = cardsData => {
     this.setState(() => ({
       cardsData
-    }));
-  };
+    }))
+  }
 
   handleAddToCart = itemId => {
-    this.props.onAddToCartClick(itemId);
-  };
+    this.props.onAddToCartClick(itemId)
+  }
 
   render() {
     return (
@@ -45,12 +45,12 @@ class Viewer extends Component {
           onItemClick={this.handleActivepage}
         />
       </Container>
-    );
+    )
   }
 }
 
 Viewer.propTypes = {
   filteredItems: PropTypes.arrayOf(PropTypes.instanceOf(Item))
-};
+}
 
-export default Viewer;
+export default Viewer

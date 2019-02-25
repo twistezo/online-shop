@@ -1,34 +1,34 @@
-import React, { Component } from "react";
-import { DataGenerator } from "./data/DataGenerator";
-import DataUtils from "./data/DataUtils";
-import MainContainer from "./components/MainContainer";
-import "./App.scss";
+import React, { Component } from 'react'
+import { DataGenerator } from './data/DataGenerator'
+import DataUtils from './data/DataUtils'
+import MainContainer from './components/MainContainer'
+import './App.scss'
 
 class App extends Component {
-  static dataQuantity = 200;
+  static dataQuantity = 200
 
   constructor() {
-    super();
+    super()
     this.state = {
       data: null,
       error: {
         occured: false,
-        message: ""
+        message: ''
       }
-    };
+    }
   }
 
   componentDidMount() {
     this.generateData()
       .then(data => {
         const items = DataUtils.loadFromLocalStorage(
-          "items",
+          'items',
           DataUtils.rebuildItemsFromJson
-        );
+        )
         items === null
-          ? DataUtils.saveToLocalStorage("items", data.items)
-          : (data.items = items);
-        this.setState({ data });
+          ? DataUtils.saveToLocalStorage('items', data.items)
+          : (data.items = items)
+        this.setState({ data })
       })
       .catch(err => {
         this.setState({
@@ -36,19 +36,19 @@ class App extends Component {
             occured: true,
             message: err.message
           }
-        });
-      });
+        })
+      })
   }
 
   generateData = () =>
     new Promise((resolve, reject) => {
-      const data = new DataGenerator().generate(App.dataQuantity);
+      const data = new DataGenerator().generate(App.dataQuantity)
       if (data instanceof Error) {
-        reject(new Error("Generate mocks with DataGenerator failed."));
+        reject(new Error('Generate mocks with DataGenerator failed.'))
       } else {
-        resolve(new DataGenerator().generate(App.dataQuantity));
+        resolve(new DataGenerator().generate(App.dataQuantity))
       }
-    });
+    })
 
   ErrorContainer = () => {
     return (
@@ -58,8 +58,8 @@ class App extends Component {
           <h5>Error message: "{this.state.error.message}"</h5>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   WaitContainer = () => {
     return (
@@ -68,8 +68,8 @@ class App extends Component {
           <h2>Downloading data...</h2>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   render() {
     if (
@@ -77,13 +77,13 @@ class App extends Component {
       this.state.data !== undefined &&
       !this.state.error.occured
     ) {
-      return <MainContainer data={this.state.data} />;
+      return <MainContainer data={this.state.data} />
     } else if (this.state.error.occured) {
-      return <this.ErrorContainer />;
+      return <this.ErrorContainer />
     } else {
-      return <this.WaitContainer />;
+      return <this.WaitContainer />
     }
   }
 }
 
-export default App;
+export default App
