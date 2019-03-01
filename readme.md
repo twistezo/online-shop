@@ -20,7 +20,7 @@ Note:
 
 ### Tools
 
-React, Bootstrap
+React 16, Bootstrap 4
 
 ### Requirements
 
