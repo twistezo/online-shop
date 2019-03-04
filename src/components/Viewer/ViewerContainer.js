@@ -31,7 +31,18 @@ class Viewer extends Component {
     this.props.onAddToCartClick(itemId)
   }
 
+  Empty = () => {
+    return (
+      <div className='text-center pt-5'>
+        <div className='pb-2'>
+          <h2>There is nothing...</h2>
+        </div>
+      </div>
+    )
+  }
+
   render() {
+    if (this.props.filteredItems.length === 0) return <this.Empty />
     return (
       <Container>
         <CardGroups
