@@ -28,7 +28,7 @@ class MenuContainer extends Component {
   render() {
     const publicURL = process.env.PUBLIC_URL
     return (
-      <Container className='menu'>
+      <Container className='menu pb-3'>
         <Row>
           <Col xs={3} sm={4}>
             <Link to={publicURL}>

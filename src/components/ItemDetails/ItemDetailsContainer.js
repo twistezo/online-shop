@@ -66,7 +66,7 @@ class ItemDetailsContainer extends Component {
             </Container>
           </Col>
         </Row>
-        <Row className='pt-3'>
+        <Row className='pt-5'>
           <Container className='pl-15'>
             <h4>Reviews</h4>
             <ReviewsList item={props.item} initialItems={props.initialItems} />

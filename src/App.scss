@@ -4,7 +4,7 @@
 $headings-font-family: Quicksand;
 $enable-grid-classes: false;
 $primary: #ff2243;
-$secondary: #cacaca;
+$secondary: #dfdfdf;
 $success: green;
 $danger: $primary;
 $info: #0f81c7;
@@ -26,6 +26,29 @@ $btn-border-radius: 0;
 
 html {
   overflow-y: scroll;
+
+  img {
+    width: 100%;
+    height: 200px;
+  }
+
+  hr {
+    background-color: $secondary;
+    border: 0 none;
+    color: $secondary;
+    height: 1px;
+  }
+
+  input,
+  select {
+    border-radius: 0px !important;
+  }
+
+  input {
+    &:focus {
+      box-shadow: 0 0 0 0rem $secondary !important;
+    }
+  }
 }
 
 .menu {
@@ -45,22 +68,22 @@ html {
   height: 120px;
 }
 
+.card {
+  &:hover {
+    box-shadow: 0px 0px 2px 2px $secondary;
+  }
+}
+
+.list-group-item {
+  &:focus {
+    outline: none;
+  }
+}
+
 .cartItemImage {
   height: 60px;
 }
 
 .viewerCardImage {
   padding-top: 20px;
-}
-
-img {
-  width: 100%;
-  height: 200px;
-}
-
-hr {
-  background-color: $secondary;
-  border: 0 none;
-  color: $secondary;
-  height: 1px;
 }
