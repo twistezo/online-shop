@@ -64,7 +64,7 @@ class MenuContainer extends Component {
             </Link>
           </Col>
         </Row>
-        <hr />
+        <hr className='mt-4' />
       </Container>
     )
   }

@@ -31,9 +31,9 @@ class ItemDetailsContainer extends Component {
 
   Container = props => {
     return (
-      <Container>
+      <Container className='pb-5'>
         <Row>
-          <Col className='pb-3' sm={6}>
+          <Col sm={6} className='pb-4 pb-sm-0'>
             <Images imagesSources={props.item.imagesSources} />
           </Col>
           <Col sm={6}>
@@ -66,10 +66,12 @@ class ItemDetailsContainer extends Component {
             </Container>
           </Col>
         </Row>
-        <Row className='pt-5'>
+        <hr className='mt-4 mb-4' />
+        <Row>
           <Container className='pl-15'>
             <h4>Reviews</h4>
             <ReviewsList item={props.item} initialItems={props.initialItems} />
+
             <ReviewsForm onAddReview={this.handleAddReview} />
           </Container>
         </Row>

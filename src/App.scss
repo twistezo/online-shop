@@ -40,13 +40,18 @@ html {
   }
 
   input,
-  select {
+  select,
+  textarea {
     border-radius: 0px !important;
   }
 
-  input {
+  input,
+  textarea {
     &:focus {
       box-shadow: 0 0 0 0rem $secondary !important;
+    }
+    &:hover {
+      border: 1px solid $primary !important;
     }
   }
 }
@@ -70,7 +75,7 @@ html {
 
 .card {
   &:hover {
-    box-shadow: 0px 0px 2px 2px $secondary;
+    box-shadow: 0px 0px 1px 1px $secondary;
   }
 }
 

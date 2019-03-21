@@ -61,6 +61,7 @@ class ReviewsForm extends Component {
     return (
       <div>
         <Col sm={6} className='pt-4 pl-0'>
+          <hr className='mb-4' />
           <h4>Add your review</h4>
           <Form className='pt-3' validated={this.state.isFieldValidated}>
             <Form.Group>

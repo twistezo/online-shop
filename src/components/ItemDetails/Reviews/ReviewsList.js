@@ -15,7 +15,7 @@ class ReviewsList extends Component {
           <Container className='pt-3'>
             <Row>
               {review.name} -{' '}
-              {review.date.toLocaleString('pl-PL', {
+              {new Date(review.date).toLocaleString('pl-PL', {
                 day: 'numeric',
                 month: 'numeric',
                 year: 'numeric'

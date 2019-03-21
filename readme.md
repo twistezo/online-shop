@@ -15,8 +15,9 @@ Online-shop created with React.
 
 Note:
 
-1. Built-in mock `DataGenerator` create and store random products data on client side. So during the first run time app saves generated data in user browser local storage. This prevents to losing data when user refreshes page and storing user movements like holding products in cart or add products review.
-2. Component `/src/App.js` fetches data from `DataGenerator` in async way and returns one of three Container depends on Promise status (WaitContainer, ErrorContainer, MainContainer).
+1. This project is deliberately written without Redux.
+2. Built-in mock `DataGenerator` create and store random products data on client side. So during the first run time app saves generated data in user browser local storage. This prevents to losing data when user refreshes page and storing user movements like holding products in cart or add products review.
+3. Component `/src/App.js` fetches data from `DataGenerator` in async way and returns one of three Container depends on Promise status (WaitContainer, ErrorContainer, MainContainer).
 
 ### Tools
 
@@ -39,7 +40,6 @@ To run locally prod mode:
 ```
 npm install -g serve
 serve -s build
-
 ```
 
 Test: `npm test`

@@ -55,7 +55,7 @@ class CartContainer extends Component {
 
   render() {
     return (
-      <Container>
+      <Container className='pb-5'>
         <Route
           exact
           path={`${this.props.routeUrl}/info`}
