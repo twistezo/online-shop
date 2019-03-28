@@ -2,7 +2,9 @@
 
 ### Description
 
-Online-shop created with React.
+Online-shop with minimalist design and built-in mock products generator.
+
+Latest version: https://twistezo.github.io/online-shop/
 
 ### Features
 
@@ -21,21 +23,17 @@ Note:
 
 ### Tools
 
-React 16, Bootstrap 4
-
-### Requirements
-
-npm
+React, Bootstrap
 
 ### Build, run, test
 
-Firstly: `npm install`
+Build: `npm install`
 
-To run in development mode: `npm start`
+Run in development mode: `npm start`
 
-To build in production mode: `npm run build`
+Build in production mode: `npm run build`
 
-To run locally prod mode:
+Run locally in production mode:
 
 ```
 npm install -g serve
@@ -44,6 +42,3 @@ serve -s build
 
 Test: `npm test`
 
-### Latest version
-
-https://twistezo.github.io/online-shop/
